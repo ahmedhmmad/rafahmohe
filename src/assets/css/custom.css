@@ -1,0 +1,9 @@
+.topfixedBanner{
+    background-image: url(../images/banner.png);
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    min-height: 550px;
+}
