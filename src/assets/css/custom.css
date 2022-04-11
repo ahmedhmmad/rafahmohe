@@ -4,6 +4,18 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    
+
     min-height: 550px;
+}
+.topBannerOverlay{
+    background-color: rgba(105, 102, 102, 0.5);
+    min-height: 550px;
+    width: 100%;
+}
+
+.topContent{
+    font-family: 'Tajawal', sans-serif;
+    padding-top: 250px;
+    padding-bottom: 100px;
+    color: aliceblue;
 }
