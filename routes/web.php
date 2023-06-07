@@ -13,42 +13,55 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/welcome', function () {
-        return view('welcome');
+Route::middleware(['auth','role:Administrator'])->group(function () {
+    Route::get('/welcome2', function () {
+        return view('welcome2');
     })->name('home');
 
 });
 
-Route::middleware(['auth'])->prefix('employee')->group(function ()
+Route::middleware(['auth','role:Employee'])->group(function ()
 {
-    Route::get('/enterplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'index'])
+    Route::get('/welcome', function () {
+        return view('welcome');
+    })->name('home');
+
+    Route::get('/employee/enterplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'index'])
         ->name('employee.select-month-year-plan');
-    Route::get('/createplan/{month}/{year}',[App\Http\Controllers\Employee\MonthlyPlan::class,'create'])
+    Route::get('/employee/createplan/{month}/{year}',[App\Http\Controllers\Employee\MonthlyPlan::class,'create'])
         ->name('employee.create-plan');
 
-    Route::post('/storeplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'store'])
+    Route::post('/employee/storeplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'store'])
         ->name('employee.store-plan');
 
-    Route::get('/showplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'show'])
+    Route::get('/employee/showplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'show'])
         ->name('employee.show-plan');
-    Route::get('/showonlyplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'showonly'])
+    Route::get('/employee/showonlyplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'showonly'])
         ->name('employee.showonly-plan');
 
-    Route::get('editplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'edit'])
+    Route::get('/employee/editplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'edit'])
         ->name('employee.edit-plan');
 
-    Route::get('deleteplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'destroy'])
+    Route::get('/employee/deleteplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'destroy'])
         ->name('employee.delete-plan');
 
-    Route::post('updateplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'update'])
+    Route::post('/employee/updateplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'update'])
         ->name('employee.update-plan');
 
-    Route::get('/addDay/{date}',[App\Http\Controllers\Employee\MonthlyPlan::class,'addDay'])
+    Route::get('/employee/addDay/{date}',[App\Http\Controllers\Employee\MonthlyPlan::class,'addDay'])
         ->name('employee.add-day');
-    Route::post('/storeDay',[App\Http\Controllers\Employee\MonthlyPlan::class,'storeDay'])
+    Route::post('/employee/storeDay',[App\Http\Controllers\Employee\MonthlyPlan::class,'storeDay'])
         ->name('employee.store-day');
 
+
+});
+
+
+Route::middleware(['auth','role:Department_Head'])->prefix('head')->group(function ()
+{
+
+    Route::get('/showplan',[App\Http\Controllers\Head\MonthlyPlan::class,'show'])
+        ->name('head.show-plan');
 
 });
 
