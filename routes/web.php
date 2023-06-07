@@ -23,7 +23,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->prefix('employee')->group(function ()
 {
     Route::get('/enterplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'index'])
-    ->name('employee.select-month-year-plan');
+        ->name('employee.select-month-year-plan');
     Route::get('/createplan/{month}/{year}',[App\Http\Controllers\Employee\MonthlyPlan::class,'create'])
         ->name('employee.create-plan');
 
@@ -32,6 +32,8 @@ Route::middleware(['auth'])->prefix('employee')->group(function ()
 
     Route::get('/showplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'show'])
         ->name('employee.show-plan');
+    Route::get('/showonlyplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'showonly'])
+        ->name('employee.showonly-plan');
 
     Route::get('editplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'edit'])
         ->name('employee.edit-plan');
@@ -52,4 +54,3 @@ Route::middleware(['auth'])->prefix('employee')->group(function ()
 
 
 Route::get('/logout', [\App\Http\Controllers\Auth\LogoutController::class,'index'])->name('auth.logout');
-

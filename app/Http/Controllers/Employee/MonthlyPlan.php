@@ -59,13 +59,15 @@ class MonthlyPlan extends Controller
 
     public function show()
     {
+        $user = Auth::user();
 
         // Get the start and end dates of the recent month
         $startOfMonth = now()->startOfMonth();
         $endOfMonth = now()->endOfMonth();
 
         // Retrieve the plans for the recent month and order them by date
-        $plans = Plan::whereBetween('start', [$startOfMonth, $endOfMonth])
+        $plans = Plan::where('user_id', $user->id)
+            ->whereBetween('start', [$startOfMonth, $endOfMonth])
             ->orderBy('start')
             ->get();
 
@@ -88,41 +90,114 @@ class MonthlyPlan extends Controller
         return view('employee.show-plan', compact('plans', 'workingDays'));
     }
 
+    public function showonly()
+    {
+        $user = Auth::user();
+
+        // Get the start and end dates of the recent month
+        $startOfMonth = now()->startOfMonth();
+        $endOfMonth = now()->endOfMonth();
+
+        // Retrieve the plans for the recent month and order them by date
+        $plans = Plan::where('user_id', $user->id)
+            ->whereBetween('start', [$startOfMonth, $endOfMonth])
+            ->orderBy('start')
+            ->get();
+
+        // Generate an array of working days for the recent month
+        $workingDays = [];
+        $currentDay = $startOfMonth->copy();
+
+        while ($currentDay <= $endOfMonth) {
+            // Check if the current day is a working day
+            // You can modify this condition based on your business logic
+            if ($currentDay->isWeekday()) {
+                $workingDays[] = $currentDay->format('Y-m-d');
+            }
+
+            $currentDay->addDay();
+        }
+
+
+
+        return view('employee.showonly-plan', compact('plans', 'workingDays'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        $plan = Plan::findOrFail($id);
+        try {
+            // Find the plan by ID and eager load the 'schools' relationship
+            $plan = Plan::with('schools')->findOrFail($id);
 
-       return view('employee.edit-plan',compact('plan'));
+            // Retrieve the list of schools
+            $schools = School::all();
+
+            // Retrieve the selected schools for the plan
+            $selectedSchool = $plan->schools->pluck('id')->first();
+
+            // Pass the plan, schools, and selectedSchools to the view
+            return view('employee.edit-plan', compact('plan', 'schools', 'selectedSchool'));
+        } catch (\Exception $e) {
+            // Handle any exceptions that occur during the process
+            return back()->with('error', 'حدث خطأ أثناء تحميل البيانات. الرجاء المحاولة مرة أخرى.');
+        }
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+//    public function update(Request $request, Plan $plan)
+//    {
+//        // Validate the request data
+//        $validatedData = $request->validate([
+//            'date' => 'required|date',
+//            'schools' => 'nullable|array',
+//            'schools.*' => 'exists:schools,id',
+//        ]);
+//
+//        try {
+//            // Update the plan's date
+//            $plan->start = $validatedData['date'];
+//            $plan->save();
+//
+//            // Update the plan's schools
+//            $plan->schools()->sync($validatedData['schools']);
+//
+//            // Redirect to the view page or any other appropriate action
+//            return redirect()->route('employee.view-plan')->with('success', 'تم تحديث الخطة الشهرية بنجاح!');
+//        } catch (\Exception $e) {
+//            // Handle any exceptions that occur during the update process
+//            return back()->with('error', 'حدث خطأ أثناء تحديث الخطة الشهرية. الرجاء المحاولة مرة أخرى.');
+//        }
+//    }
+
+    public function update(Request $request, Plan $plan)
     {
         // Validate the request data
         $validatedData = $request->validate([
             'date' => 'required|date',
-            'schools' => 'nullable|array',
-            'schools.*' => 'exists:schools,id',
+            'school' => 'nullable|exists:schools,id',
         ]);
 
         try {
-            // Find the plan by ID
-            $plan = Plan::findOrFail($id);
-
             // Update the plan's date
             $plan->start = $validatedData['date'];
+
+            // Update the plan's school
+            if ($validatedData['school']) {
+                $plan->school_id = $validatedData['school'];
+            } else {
+                $plan->school_id = null;
+            }
+
             $plan->save();
 
-            // Update the plan's schools
-            $plan->schools()->sync($validatedData['schools']);
-
             // Redirect to the view page or any other appropriate action
-            return redirect()->route('employee.view-plan')->with('success', 'تم تحديث الخطة الشهرية بنجاح!');
+            return redirect()->route('employee.show-plan')->with('success', 'تم تحديث الخطة الشهرية بنجاح!');
         } catch (\Exception $e) {
             // Handle any exceptions that occur during the update process
             return back()->with('error', 'حدث خطأ أثناء تحديث الخطة الشهرية. الرجاء المحاولة مرة أخرى.');
@@ -130,20 +205,31 @@ class MonthlyPlan extends Controller
     }
 
 
+
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        $plan = Plan::findOrFail($id);
+        try{
 
-        // Delete the plan
-        $plan->delete();
+            $plan = Plan::findOrFail($id);
 
-        session()->flash('success', 'تم الحذف بنجاح');
+            // Delete the plan
+            $plan->delete();
 
-        // Redirect to a success page or return a response
-        return redirect()->route('employee.show-plan');
+            session()->flash('success', 'تم الحذف بنجاح');
+
+            // Redirect to a success page or return a response
+            return redirect()->route('employee.show-plan');
+
+        }
+        catch(\Exception $e){
+
+            return back()->with('error', 'حدث خطأ أثناء حذف الخطة الشهرية. الرجاء المحاولة مرة أخرى.');
+        }
+
     }
 
     //Add single day to plan

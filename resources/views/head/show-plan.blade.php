@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="container">
+    <div class="container py-4">
         <div class="row">
             <div class="col-md-12">
                 <h3>عرض الخطة الشهرية</h3>
@@ -32,24 +32,23 @@
                                     <td>لا توجد مدارس</td>
                                     <td>
                                         {{-- Add the appropriate action for adding schools --}}
-                                        <a href="{{ route('employee.add-day', $workingDay) }}" class="btn btn-success">إضافة مدرسة</a>
+                                        <a href="" class="btn btn-success">إضافة مدرسة</a>
                                     </td>
                                 </tr>
                             @endif
                         @endforeach
 
-                        @if ($plan->schools)
+                        @if ($plan->school)
                             <tr>
                                 <td>
                                     @if ($plan->start !== $previousDate)
                                         <strong>{{ $plan->start }}</strong>
                                     @endif
                                 </td>
-                                <td>{{ $plan->schools->name }}</td>
+                                <td>{{ $plan->school->name }}</td>
                                 <td>
                                     <a href="{{ route('employee.edit-plan', $plan->id) }}" class="btn btn-primary">تعديل</a>
                                     <a href="{{ route('employee.delete-plan', $plan->id) }}" class="btn btn-danger">حذف</a>
-                                    <a href="{{ route('employee.add-day', $plan->start) }}" class="btn btn-success">إضافة مدرسة</a>
                                 </td>
                             </tr>
                         @endif
@@ -67,7 +66,7 @@
                                 <td>لا توجد مدارس</td>
                                 <td>
                                     {{-- Add the appropriate action for adding schools --}}
-                                    <a href="{{ route('employee.add-day', $workingDay) }}" class="btn btn-success">إضافة مدرسة</a>
+                                    <a href="" class="btn btn-success">إضافة مدرسة</a>
                                 </td>
                             </tr>
                         @endif

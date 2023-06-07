@@ -17,7 +17,7 @@
                             @csrf
                             <div class="form-group">
                                 <label for="id" class="sr-only">رقم الهوية</label>
-                                <input type="number" name="id" id="id" class="form-control is-invalid"
+                                <input type="number" name="id" id="id" class="form-control is-invalid text-center"
                                        placeholder="رقم الهوية">
                                 @error('id')
                                 <span class="invalid-feedback is-invalid" role="alert">

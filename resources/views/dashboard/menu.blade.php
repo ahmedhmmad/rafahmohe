@@ -94,7 +94,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{route('employee.show-plan')}}" class="menu-link">
+                    <a href="{{route('employee.showonly-plan')}}" class="menu-link">
                         <div data-i18n="Without footer">عرض الخطة الشهرية</div>
                     </a>
                 </li>
