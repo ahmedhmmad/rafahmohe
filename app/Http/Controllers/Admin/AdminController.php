@@ -17,7 +17,10 @@ class AdminController extends Controller
 
         // Perform the search based on the provided criteria
         $employees = User::when($employeeName, function ($query) use ($employeeName) {
-            return $query->where('name', 'LIKE', '%' . $employeeName . '%');
+            $terms = explode(' ', $employeeName);
+            $searchTerm = implode('%', $terms);
+
+            $query->where('name', 'LIKE', '%' . $searchTerm . '%');
         })->when($departmentId, function ($query) use ($departmentId) {
             return $query->where('department_id', $departmentId);
         })->get();
@@ -25,6 +28,10 @@ class AdminController extends Controller
         // Pass the search results to another blade
         return view('admin.search-results', compact('employees'));
     }
+
+
+
+
 
 
 
