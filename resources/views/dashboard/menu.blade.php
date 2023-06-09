@@ -76,6 +76,7 @@
         </li>
 
         <!-- Layouts -->
+        @if(!\Illuminate\Support\Facades\Auth::user()->hasRole('Administrator'))
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
@@ -102,6 +103,7 @@
 
             </ul>
         </li>
+        @endif
 
         @if(\Illuminate\Support\Facades\Auth::user()->hasRole('Department_Head'))
 
@@ -165,12 +167,17 @@
                         </li>
                     <li class="menu-item">
                         <a href="{{route('admin.search-plan-school-date')}}" class="menu-link">
+                            <div> حسب المدرسة و التاريخ</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{route('admin.search-plan-school')}}" class="menu-link">
                             <div> حسب المدرسة</div>
                         </a>
                     </li>
                     <li class="menu-item">
 
-                        <a href="{{route('admin.search-plan')}}" class="menu-link">
+                        <a href="{{route('admin.search-plan-date')}}" class="menu-link">
                             <div>  حسب التاريخ</div>
                         </a>
                     </li>

@@ -123,4 +123,9 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
 
     Route::get('/admin/showplan/{id}',[App\Http\Controllers\Admin\AdminController::class,'show'])
         ->name('admin.show-plan');
+
+    Route::get('/admin/search-plan-school', [App\Http\Controllers\Admin\AdminController::class, 'searchPlanBySchool'])->name('admin.search-plan-school');
+
+    Route::get('/admin/search-plan-date', [App\Http\Controllers\Admin\AdminController::class, 'searchPlanByDate'])->name('admin.search-plan-date');
+
 });

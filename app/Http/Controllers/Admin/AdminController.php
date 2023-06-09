@@ -71,26 +71,47 @@ class AdminController extends Controller
     public function searchSchoolDate(Request $request)
     {
         $schools = School::all();
-        $schoolId = $request->input('school_name');
-        $visitDate = $request->input('visit_date');
+//        $visits = null;
+//        $visitCount = 0;
+//
+//        if ($request->filled('school_name') || $request->filled('visit_date')) {
+//            $schoolId = $request->input('school_name');
+//            $visitDate = $request->input('visit_date');
+//
+//            $visits = Plan::when($schoolId, function ($query) use ($schoolId) {
+//                return $query->where('school_id', $schoolId);
+//            })->when($visitDate, function ($query) use ($visitDate) {
+//                return $query->where('start', $visitDate);
+//            })->with('visitor')->get();
+//
+//            $visitCount = $visits->count();
+//        }
+//
+//        return view('admin.search-plan-school-date', compact('visits', 'schools', 'visitCount'));
+//
+        $visits = null;
+        $visitCount = 0;
 
-        // Perform the search based on the provided criteria
-        $visits = Plan::when($schoolId, function ($query) use ($schoolId) {
-            return $query->where('school_id', $schoolId);
-        })->when($visitDate, function ($query) use ($visitDate) {
-            return $query->where('start', $visitDate);
-        })->with('visitor')->get();
-        $visitors=$visits->toArray();
+        if ($request->filled('school_name') || $request->filled('visit_date')) {
+            $schoolId = $request->input('school_name');
+            $visitDate = $request->input('visit_date');
 
-        // Calculate the visitor count for each visit
-        $visitCount = $visits->count();
+            $query = Plan::query();
 
-//        dd($visitors);
-//        dd($visits->toArray());
+            if ($schoolId) {
+                $query->where('school_id', $schoolId);
+            }
 
+            if ($visitDate) {
+                $query->where('start', $visitDate);
+            }
 
-        // Pass the search results and counts to the blade
-        return view('admin.search-plan-school-date', compact('visits','visitors', 'schools', 'visitCount'));
+            $visits = $query->with('visitor')->get();
+            $visitCount = $visits->count();
+        }
+
+        return view('admin.search-plan-school-date', compact('visits', 'schools', 'visitCount'));
+
     }
 
 
@@ -147,4 +168,37 @@ class AdminController extends Controller
 
         return view('admin.show-plan', compact('plans', 'workingDays','userName'));
     }
+
+    public function searchPlanBySchool(Request $request)
+    {
+        $schools = School::all();
+        $schoolId = $request->input('school_name');
+
+        $visits = null;
+        if ($request->filled('school_name')) {
+            $visits = Plan::where('school_id', $schoolId)
+                ->with(['schools', 'visitor'])
+                ->orderBy('start', 'asc')
+                ->get();
+        }
+
+        return view('admin.search-plan-school', compact('visits', 'schools'));
+    }
+
+    public function searchPlanByDate(Request $request)
+    {
+        $schools = School::all();
+        $visitDate = $request->input('visit_date');
+        $visits = null;
+        if ($request->filled('visit_date')) {
+            $visits = Plan::where('start', $visitDate)
+                ->with(['schools', 'visitor'])
+                ->orderBy('start', 'asc')
+                ->get();
+        }
+
+        return view('admin.search-plan-date', compact('visits', 'schools'));
+    }
+
+
 }
