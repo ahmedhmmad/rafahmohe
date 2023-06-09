@@ -5,12 +5,12 @@
         <div class="card login-card">
             <div class="row no-gutters">
                 <div class="col-md-5">
-                    <img src="/img/login.jpg" alt="login" class="login-card-img">
+                    <img src="{{url('/img/login.jpg')}}"  alt="login" class="login-card-img">
                 </div>
                 <div class="col-md-7">
                     <div class="card-body">
                         <div class="brand-wrapper">
-                            <img src="/img/logo.png" alt="logo" class="logo">
+                            <img src="{{url('/img/logo1.png')}}" alt="logo" class="logo">
                         </div>
                         <p class="login-card-description">استعادة كلمة المرور</p>
                         @if(session('status'))
@@ -21,7 +21,7 @@
                         <form method="POST" action="{{ route('password.request') }}">
                             @csrf
                             <div class="form-group">
-                                <label for="email" class="sr-only">Email</label>
+                                <label for="email" class="sr-only">الايميل</label>
                                 <input type="email" name="email" id="" class="form-control is-invalid"
                                        placeholder="Email address">
                                 @error('email')

@@ -102,6 +102,73 @@
 
             </ul>
         </li>
+
+        @if(\Illuminate\Support\Facades\Auth::user()->hasRole('Department_Head'))
+
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div data-i18n="Layouts">خطط موظفي القسم</div>
+            </a>
+
+            <ul class="menu-sub">
+
+{{--                <li class="menu-item">--}}
+{{--                    <a href="{{route('employee.select-month-year-plan')}}" class="menu-link">--}}
+{{--                        <div data-i18n="Without menu">عرض الخطة الشهرية</div>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+
+                @php
+                    $departmentId = \Illuminate\Support\Facades\Auth::user()->department_id;
+                    $loggedUserId = \Illuminate\Support\Facades\Auth::user()->id;
+                    $departmentEmployees = \App\Models\User::where('department_id', $departmentId)
+                        ->where('id', '!=', $loggedUserId)
+                        ->orderBy('name', 'asc')
+                        ->get();
+                @endphp
+
+                @foreach ($departmentEmployees as $employee)
+                    <li class="menu-item">
+                        <a href="{{ route('head.show-plan', $employee->id)}}" class="menu-link">
+                            <div>{{ $employee->name }}</div>
+                        </a>
+                    </li>
+                @endforeach
+
+
+
+            </ul>
+        </li>
+        @endif
+
+        @if(\Illuminate\Support\Facades\Auth::user()->hasRole('Administrator'))
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <div data-i18n="Layouts">خطط موظفي الأقسام</div>
+                </a>
+
+                <ul class="menu-sub">
+{{--                    @php--}}
+{{--                        $departmentId = \Illuminate\Support\Facades\Auth::user()->department_id;--}}
+{{--                        $departmentEmployees = \App\Models\User::where('department_id', $departmentId)--}}
+{{--                            ->orderBy('name', 'asc')--}}
+{{--                            ->get();--}}
+{{--                    @endphp--}}
+
+{{--                    @foreach ($departmentEmployees as $employee)--}}
+                        <li class="menu-item">
+                            <a href="{{route('admin.search-plan')}}" class="menu-link">
+                                <div>استعراض</div>
+                            </a>
+                        </li>
+{{--                    @endforeach--}}
+                </ul>
+            </li>
+        @endif
+
+
     </ul>
 
 

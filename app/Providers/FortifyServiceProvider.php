@@ -10,7 +10,9 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
+use Illuminate\Support\Facades\View;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -70,7 +72,11 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::twoFactorChallengeView(function () {
             return view('auth.two-factor-challenge');
         });
+        Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
+
+
     }
 
 
 }
+
