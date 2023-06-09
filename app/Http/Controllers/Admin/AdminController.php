@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Plan;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -50,6 +51,49 @@ class AdminController extends Controller
         // Pass the search results to the same blade view
         return view('admin.search-plan', compact('employees','departments'));
     }
+
+//    public function searchSchoolDate(Request $request)
+//    {
+//        $schools=School::all();
+//        $schoolId = $request->input('school_name');
+//        $visitDate = $request->input('visit_date');
+//
+//        // Perform the search based on the provided criteria
+//        $visits = Plan::when($schoolId, function ($query) use ($schoolId) {
+//            return $query->where('school_id', $schoolId);
+//        })->when($visitDate, function ($query) use ($visitDate) {
+//            return $query->where('start', $visitDate);
+//        })->get();
+//
+//        // Pass the search results to the blade
+//        return view('admin.search-plan-school-date', compact('visits','schools'));
+//    }
+    public function searchSchoolDate(Request $request)
+    {
+        $schools = School::all();
+        $schoolId = $request->input('school_name');
+        $visitDate = $request->input('visit_date');
+
+        // Perform the search based on the provided criteria
+        $visits = Plan::when($schoolId, function ($query) use ($schoolId) {
+            return $query->where('school_id', $schoolId);
+        })->when($visitDate, function ($query) use ($visitDate) {
+            return $query->where('start', $visitDate);
+        })->with('visitor')->get();
+        $visitors=$visits->toArray();
+
+        // Calculate the visitor count for each visit
+        $visitCount = $visits->count();
+
+//        dd($visitors);
+//        dd($visits->toArray());
+
+
+        // Pass the search results and counts to the blade
+        return view('admin.search-plan-school-date', compact('visits','visitors', 'schools', 'visitCount'));
+    }
+
+
 
 
 

@@ -18,7 +18,9 @@ Route::get('/logout', [\App\Http\Controllers\Auth\LogoutController::class,'index
 
 Route::middleware(['auth'])->group(function()
 {
-
+    Route::get('/welcome', function () {
+        return view('welcome');
+    })->name('home');
     Route::get('/employee/enterplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'index'])
         ->name('employee.select-month-year-plan');
 
@@ -117,6 +119,10 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
 
     Route::get('/admin/search', [App\Http\Controllers\Admin\AdminController::class, 'search'])
         ->name('admin.search-plan');
+
+    Route::get('/admin/searchschooldate', [App\Http\Controllers\Admin\AdminController::class, 'searchSchoolDate'])
+        ->name('admin.search-plan-school-date');
+
 
     Route::get('/admin/showplan/{id}',[App\Http\Controllers\Admin\AdminController::class,'show'])
         ->name('admin.show-plan');

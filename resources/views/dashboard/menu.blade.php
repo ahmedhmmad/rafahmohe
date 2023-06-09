@@ -160,9 +160,20 @@
 {{--                    @foreach ($departmentEmployees as $employee)--}}
                         <li class="menu-item">
                             <a href="{{route('admin.search-plan')}}" class="menu-link">
-                                <div>استعراض</div>
+                                <div> حسب الاسم أو القسم</div>
                             </a>
                         </li>
+                    <li class="menu-item">
+                        <a href="{{route('admin.search-plan-school-date')}}" class="menu-link">
+                            <div> حسب المدرسة</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+
+                        <a href="{{route('admin.search-plan')}}" class="menu-link">
+                            <div>  حسب التاريخ</div>
+                        </a>
+                    </li>
 {{--                    @endforeach--}}
                 </ul>
             </li>
