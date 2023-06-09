@@ -10,8 +10,30 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+//    public function search(Request $request)
+//    {
+//        $employeeName = $request->input('employee_name');
+//        $departmentId = $request->input('department_name');
+//
+//        // Perform the search based on the provided criteria
+//        $employees = User::when($employeeName, function ($query) use ($employeeName) {
+//            $terms = explode(' ', $employeeName);
+//            $searchTerm = implode('%', $terms);
+//
+//            $query->where('name', 'LIKE', '%' . $searchTerm . '%');
+//        })->when($departmentId, function ($query) use ($departmentId) {
+//            return $query->where('department_id', $departmentId);
+//        })->get();
+//
+//        // Pass the search results to another blade
+//        return view('admin.search-results', compact('employees'));
+//    }
+
+
+
     public function search(Request $request)
     {
+        $departments=Department::all();
         $employeeName = $request->input('employee_name');
         $departmentId = $request->input('department_name');
 
@@ -25,12 +47,9 @@ class AdminController extends Controller
             return $query->where('department_id', $departmentId);
         })->get();
 
-        // Pass the search results to another blade
-        return view('admin.search-results', compact('employees'));
+        // Pass the search results to the same blade view
+        return view('admin.search-plan', compact('employees','departments'));
     }
-
-
-
 
 
 

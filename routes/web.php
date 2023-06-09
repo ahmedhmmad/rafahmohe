@@ -107,14 +107,16 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
     Route::get('/', function () {
         return view('welcome');
     })->name('home');
-    Route::get('/admin/search-names', [AdminController::class, 'searchNames'])->name('admin.search-names');
 
-    Route::get('/admin/search',function(){
-        return view('admin.search-plan')->with('departments',\App\Models\Department::all());
-    })->name('admin.search-plan');
+//    Route::get('/admin/search',function(){
+//        return view('admin.search-plan')->with('departments',\App\Models\Department::all());
+//    })->name('admin.search-plan');
+//
+//    Route::get('/admin/searchresults',[App\Http\Controllers\Admin\AdminController::class,'search'])
+//        ->name('admin.search-results');
 
-    Route::get('/admin/searchresults',[App\Http\Controllers\Admin\AdminController::class,'search'])
-        ->name('admin.search-results');
+    Route::get('/admin/search', [App\Http\Controllers\Admin\AdminController::class, 'search'])
+        ->name('admin.search-plan');
 
     Route::get('/admin/showplan/{id}',[App\Http\Controllers\Admin\AdminController::class,'show'])
         ->name('admin.show-plan');
