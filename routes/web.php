@@ -18,9 +18,16 @@ Route::get('/logout', [\App\Http\Controllers\Auth\LogoutController::class,'index
 
 Route::middleware(['auth'])->group(function()
 {
-    Route::get('/welcome', function () {
+//    Route::get('/welcome', function () {
+//        return view('welcome');
+//    })->name('home');
+
+    Route::get('/', function () {
         return view('welcome');
     })->name('home');
+
+
+
     Route::get('/employee/enterplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'index'])
         ->name('employee.select-month-year-plan');
 
@@ -41,7 +48,7 @@ Route::middleware(['auth'])->group(function()
     Route::get('/employee/deleteplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'destroy'])
         ->name('employee.delete-plan');
 
-    Route::post('/employee/updateplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'update'])
+    Route::put('/employee/updateplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'update'])
         ->name('employee.update-plan');
 
     Route::get('/employee/addDay/{date}',[App\Http\Controllers\Employee\MonthlyPlan::class,'addDay'])
@@ -53,24 +60,14 @@ Route::middleware(['auth'])->group(function()
 
 //Employee Routes
 Route::middleware(['auth', 'role:Employee'])->group(function ()
+
 {
-    Route::get('/welcome', function () {
-        return view('welcome');
-    })->name('home');
-
-
-
-
-
 
 });
 
 //Department Head Routes
 Route::middleware(['auth', 'role:Department_Head'])->group(function ()
 {
-    Route::get('/', function () {
-        return view('welcome');
-    })->name('home');
 
     Route::get('/head/showplan/{id}',[App\Http\Controllers\Head\HeadController::class,'show'])
         ->name('head.show-plan');
@@ -106,9 +103,9 @@ Route::middleware(['auth', 'role:Department_Head'])->group(function ()
 //Admin Routes
 Route::middleware(['auth', 'role:Administrator'])->group(function ()
 {
-    Route::get('/', function () {
-        return view('welcome');
-    })->name('home');
+//    Route::get('/', function () {
+//        return view('welcome');
+//    })->name('home');
 
 //    Route::get('/admin/search',function(){
 //        return view('admin.search-plan')->with('departments',\App\Models\Department::all());

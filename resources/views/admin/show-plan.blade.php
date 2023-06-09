@@ -6,7 +6,8 @@
         <div class="row">
             <div class="card mt-4 mx-2">
                 <div class="col-md-12">
-                    <h3 class="pt-2 ">عرض الخطة الشهرية</h3>
+                    <h3 class="pt-2 "> عرض الخطة الشهرية:  <span class="text-info">{{$userName}}</span></h3>
+
                     <table class="table table-hover">
                         <thead>
                         <tr>

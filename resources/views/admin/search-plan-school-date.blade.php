@@ -152,13 +152,20 @@
         <td>
 
             @foreach($visits as $user)
-                {{ $user->user->name }}
+                {{ $user->user->name }} ({{ $user->user->department->name }})
                 @if(!$loop->last)
                     ,
                 @endif
             @endforeach
         </td>
-        <td>{{ $visitCount }}</td>
+{{--        <td>{{ $visitCount }}</td>--}}
+        <td>
+        @if ($visitCount >= 3)
+            <div class="rounded-circle bg-danger text-center text-white p-2">{{ $visitCount }}</div>
+        @else
+            {{ $visitCount }}
+        @endif
+        </td>
     </tr>
         @break
 @endforeach

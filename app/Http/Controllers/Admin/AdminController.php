@@ -131,6 +131,7 @@ class AdminController extends Controller
         // Generate an array of working days for the recent month
         $workingDays = [];
         $currentDay = $startOfMonth->copy();
+            $userName=User::where('id',$id)->first()->name;
 
         while ($currentDay <= $endOfMonth) {
             // Check if the current day is a working day
@@ -144,6 +145,6 @@ class AdminController extends Controller
 
 
 
-        return view('admin.show-plan', compact('plans', 'workingDays'));
+        return view('admin.show-plan', compact('plans', 'workingDays','userName'));
     }
 }
