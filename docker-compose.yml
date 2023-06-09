@@ -1,0 +1,80 @@
+version: '3'
+services:
+
+    php:
+        build:
+            args:
+                user: syam
+                uid: 1000
+            context: .
+            dockerfile: ./docker/Dockerfile
+        volumes:
+            - ./:/var/www/
+            - $HOME/.composer/:$HOME/.composer/
+        networks:
+            - service-network
+
+    nginx:
+        image: nginx:latest
+        container_name: web-server
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d/
+            - ./data/certbot/conf:/etc/letsencrypt
+            - ./data/certbot/www:/var/www/certbot
+        networks:
+            - service-network
+    #CertBot
+    certbot:
+        image: certbot/certbot
+        volumes:
+            - ./data/certbot/conf:/etc/letsencrypt
+            - ./data/certbot/www:/var/www/certbot
+
+    #MYSQL
+    mysql:
+        image: mariadb:10.5.8
+        volumes:
+            - mysqldata:/var/lib/mysql
+        environment:
+            - "MYSQL_ROOT_PASSWORD=${DB_PASSWORD}"
+            - "MYSQL_DATABASE=${DB_DATABASE}"
+            - "MYSQL_USER=${DB_USERNAME}"
+            - "MYSQL_PASSWORD=${DB_PASSWORD}"
+        ports:
+            - "3306:3306"
+        networks:
+            - service-network
+        env_file:
+            - ./docker-compose.env
+
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 8001:80
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=mysql
+        networks:
+            - service-network
+    redis:
+        image: redis:4.0-alpine
+        command: redis-server --appendonly yes
+        ports:
+            - "6379:6379"
+        networks:
+            - service-network
+
+volumes:
+    mysqldata:
+
+networks:
+    service-network:
+        driver: bridge
+
