@@ -15,6 +15,15 @@
                                 <option value="1">يناير</option>
                                 <option value="2">فبراير</option>
                                 <option value="3">مارس</option>
+                                <option value="4">ابريل</option>
+                                <option value="5">مايو</option>
+                                <option value="6">يونيو</option>
+                                <option value="7">يوليو</option>
+                                <option value="8">اغسطس</option>
+                                <option value="9">سبتمبر</option>
+                                <option value="10">اكتوبر</option>
+                                <option value="11">نوفمبر</option>
+                                <option value="12">ديسمبر</option>
                                 <!-- Add options for the rest of the months -->
                             </select>
                         </div>
@@ -22,9 +31,9 @@
                             <label for="year" class="form-label"><strong>السنة</strong></label>
                             <select class="form-select" name="year" id="year" aria-label="Default select example">
                                 <option value="" selected>اختر السنة</option>
-                                <option value="2022">2022</option>
                                 <option value="2023">2023</option>
                                 <option value="2024">2024</option>
+                                <option value="2025">2025</option>
                                 <!-- Add options for the desired years -->
                             </select>
                         </div>
