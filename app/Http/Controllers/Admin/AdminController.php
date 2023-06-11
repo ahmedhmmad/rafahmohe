@@ -173,10 +173,12 @@ class AdminController extends Controller
     {
         $schools = School::all();
         $schoolId = $request->input('school_name');
+        $selectedMonth = $request->input('month') ?? date('m');
 
         $visits = null;
         if ($request->filled('school_name')) {
             $visits = Plan::where('school_id', $schoolId)
+                ->whereMonth('start', $selectedMonth)
                 ->with(['schools', 'visitor'])
                 ->orderBy('start', 'asc')
                 ->get();
@@ -184,6 +186,7 @@ class AdminController extends Controller
 
         return view('admin.search-plan-school', compact('visits', 'schools'));
     }
+
 
     public function searchPlanByDate(Request $request)
     {
