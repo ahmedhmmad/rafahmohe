@@ -27,6 +27,10 @@ Route::middleware(['auth'])->group(function()
     })->name('home');
 
 
+    Route::get('/employee/monthly-plan', [\App\Http\Controllers\Employee\MonthlyPlan::class,'monthlyPlan'])->name('employee.monthly-plan');
+
+
+
 
     Route::get('/employee/enterplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'index'])
         ->name('employee.select-month-year-plan');
