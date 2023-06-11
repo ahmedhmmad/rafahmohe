@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\School;
 use Illuminate\Support\Facades\Auth;
@@ -261,5 +262,46 @@ class MonthlyPlan extends Controller
         session()->flash('success', 'تم الحفظ بنجاح');
 
         return redirect()->route('employee.show-plan');
+    }
+
+    public function monthlyPlan(Request $request)
+    {
+        $month = $request->input('month');
+        $year = $request->input('year');
+        $user = Auth::user()->id;
+
+        // Validate the month and year inputs here if needed
+
+        // Create a Carbon instance for the selected month and year
+        $date = Carbon::create($year, $month);
+
+        // Retrieve the monthly plans for the selected month and year
+        $plans = Plan::whereYear('start', $year)
+            ->where('user_id',$user)
+            ->whereMonth('start', $month)
+            ->get();
+
+        // Generate the working days array for the selected month
+        $workingDays = $this->generateWorkingDays($month, $year);
+
+        return view('employee.monthly-plan', compact('plans', 'workingDays', 'date'));
+    }
+
+    private function generateWorkingDays($month, $year)
+    {
+        $workingDays = [];
+        $totalDays = Carbon::create($year, $month)->daysInMonth;
+
+        // Loop through each day of the month
+        for ($day = 1; $day <= $totalDays; $day++) {
+            $date = Carbon::create($year, $month, $day);
+
+            // Check if the day is a working day (Monday to Friday)
+            if ($date->isWeekday()) {
+                $workingDays[] = $date->toDateString();
+            }
+        }
+
+        return $workingDays;
     }
 }
