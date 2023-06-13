@@ -152,6 +152,11 @@
                 </a>
 
                 <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{route('admin.search-all-schools')}}" class="menu-link">
+                            <div> جميع المدارس</div>
+                        </a>
+                    </li>
 {{--                    @php--}}
 {{--                        $departmentId = \Illuminate\Support\Facades\Auth::user()->department_id;--}}
 {{--                        $departmentEmployees = \App\Models\User::where('department_id', $departmentId)--}}

@@ -132,4 +132,6 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
 
     Route::get('/admin/search-plan-date', [App\Http\Controllers\Admin\AdminController::class, 'searchPlanByDate'])->name('admin.search-plan-date');
 
+    Route::get('/admin/allschools', [App\Http\Controllers\Admin\AdminController::class, 'searchAllSchool'])->name('admin.search-all-schools');
+
 });
