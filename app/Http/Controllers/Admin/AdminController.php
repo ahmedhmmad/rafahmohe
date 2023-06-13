@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\Plan;
 use App\Models\School;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -202,6 +203,28 @@ class AdminController extends Controller
 
         return view('admin.search-plan-date', compact('visits', 'schools'));
     }
+    public function searchAllSchool(Request $request)
+    {
+
+                $currentMonth = Carbon::now()->month;
+
+                $month = $request->input('month', $currentMonth);
+
+                // Get all schools
+                $schools = School::all();
+
+                // Get the plans for the selected month
+                $plans = Plan::whereMonth('start', $month)->get();
+
+                // Group plans by school
+                $groupedPlans = $plans->groupBy('school_id');
+
+                return view('admin.search-all-schools', compact('schools', 'groupedPlans', 'month'));
+            }
+
+
+
+
 
 
 }
