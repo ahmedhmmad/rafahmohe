@@ -219,7 +219,12 @@ class AdminController extends Controller
                 // Group plans by school
                 $groupedPlans = $plans->groupBy('school_id');
 
-                return view('admin.search-all-schools', compact('schools', 'groupedPlans', 'month'));
+                 $visitedSchoolIds = $groupedPlans->keys();
+
+        // Get the unvisited schools
+        $unvisitedSchools = $schools->whereNotIn('id', $visitedSchoolIds);
+
+                return view('admin.search-all-schools', compact('schools', 'groupedPlans', 'month', 'unvisitedSchools'));
             }
 
 
