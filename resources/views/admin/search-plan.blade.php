@@ -16,7 +16,9 @@
                             <select class="form-select" name="department_name" id="department_name" aria-label="Default select example">
                                 <option value="" selected>اختر القسم</option>
                                 @foreach($departments as $department)
-                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                    @if($department->name != 'مدارس')
+                                        <option value="{{ $department->name }}">{{ $department->name }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
