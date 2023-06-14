@@ -15755,6 +15755,7 @@ html:not(.layout-footer-fixed) .content-wrapper {
   flex-shrink: 0;
   overflow: hidden;
   min-height: 1px;
+
 }
 .app-brand-logo img,
 .app-brand-logo svg {
