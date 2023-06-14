@@ -1,8 +1,47 @@
-@extends('layouts.template')
+<html class="light-style layout-menu-fixed" dir="rtl" lang="ar">
+<head>
 
-@section('content')
+
+    <meta charset="utf-8" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>مديرية التربية والتعليم رفح</title>
+
+    <link rel="icon" type="image/x-icon" href="{{url('/img/favicon.ico')}}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+{{--    <link rel="stylesheet" href="{{url('/assets/vendor/fonts/boxicons.css')}}" />--}}
+
+    <!-- RTL -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css" integrity="sha384-gXt9imSW0VcJVHezoNQsP+TNrjYXoGcrqBZJpry9zJt8PCQjobwmhMGaDHTASo9N" crossorigin="anonymous">
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{{url('/assets/vendor/css/core.css')}}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{url('/assets/vendor/css/theme-default.css')}}" class="template-customizer-theme-css" />
+
+
+</head>
+
+
+<body>
     <div class="container-sm">
         <div class="row align-items-center">
+            <div class="col d-none d-md-block">
+                {{--                <div class="card">--}}
+                <img class="figure-img img-fluid rounded" src="{{url('/img/login.webp')}}" alt="">
+                {{--                </div>--}}
+            </div>
 
             <div class="col">
                 <div class="authentication-wrapper authentication-basic container-p-y">
@@ -67,12 +106,7 @@
                                     </div>
                                 </form>
 
-                                {{-- <p class="text-center">
-                                    <span>لا يوجد لدي حساب؟</span>
-                                    <a href="{{route('register')}}">
-                                        <span>أنشئ حساب جديد</span>
-                                    </a>
-                                </p> --}}
+
                             </div>
                         </div>
                         <!-- /Register -->
@@ -80,12 +114,11 @@
                 </div>
             </div>
 
-            <div class="col d-none d-md-block">
-                <div class="card">
-                    <img width="81%" class="figure-img img-fluid rounded" src="{{url('/img/login.webp')}}" alt="">
-                </div>
-            </div>
+
 
         </div>
     </div>
-@endsection
+    <script src="{{url('/assets/vendor/js/bootstrap.js')}}"></script>
+
+</body>
+</html>
