@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +20,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('/plans', \App\Http\Controllers\Api\AdminController::class);
+
+Route::middleware(['auth:sanctum','role:Administrator'])->group(function () {
+    Route::resource('/plans', \App\Http\Controllers\Api\AdminController::class);
+
+});
+
+Route::middleware(['auth:sanctum','role:Employee'])->group(function () {
+//    Route::resource('/plans', \App\Http\Controllers\Api\AdminController::class);
+    Route::get('/employee/showplan', [\App\Http\Controllers\Api\EmployeeController::class,'show']);
+});
+
+Route::middleware(['auth:sanctum','role:Department_Head'])->group(function () {
+//    Route::resource('/plans', \App\Http\Controllers\Api\AdminController::class);
+    Route::get('/head/dep-users', [\App\Http\Controllers\Api\HeadController::class,'showDepartmentEmp']);
+
+});
+
+
+
+Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class,'login']);
+Route::post('/auth/logout', [\App\Http\Controllers\Api\AuthController::class,'logout']);
+
