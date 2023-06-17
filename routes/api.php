@@ -16,6 +16,11 @@ use Illuminate\Validation\ValidationException;
 |
 */
 
+
+Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class,'login']);
+Route::post('/auth/logout', [\App\Http\Controllers\Api\AuthController::class,'logout']);
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -38,7 +43,4 @@ Route::middleware(['auth:sanctum','role:Department_Head'])->group(function () {
 });
 
 
-
-Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class,'login']);
-Route::post('/auth/logout', [\App\Http\Controllers\Api\AuthController::class,'logout']);
 
