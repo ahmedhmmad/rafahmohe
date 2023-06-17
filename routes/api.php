@@ -17,10 +17,9 @@ use Illuminate\Validation\ValidationException;
 */
 
 
-Route::get('/welcome', function () {
-    echo "welcome";
-});
-Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class,'login']);
+Route::post('/login', [\App\Http\Controllers\Api\AuthController::class,'login']);
+
+//Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class,'login']);
 Route::post('/auth/logout', [\App\Http\Controllers\Api\AuthController::class,'logout']);
 
 
