@@ -56,49 +56,6 @@
 
                             <h4 class="card-title text-center">مديرية التربية والتعليم رفح</h4>
 
-{{--                            <form id="formAuthentication" class="mb-3" action="{{route('login')}}" method="POST">--}}
-{{--                                @csrf--}}
-{{--                                <p class="card-text text-center">من فضلك، أدخل بيانات الدخول</p>--}}
-{{--                                <div class="mb-3">--}}
-{{--                                    <label for="id" class="form-label">رقم الهوية</label>--}}
-{{--                                    <input--}}
-{{--                                        type="text"--}}
-{{--                                        class="form-control"--}}
-{{--                                        id="id"--}}
-{{--                                        name="id"--}}
-{{--                                        placeholder="رقم الهوية"--}}
-{{--                                        autofocus--}}
-{{--                                    />--}}
-{{--                                </div>--}}
-{{--                                <div class="mb-3 form-password-toggle">--}}
-{{--                                    <div class="d-flex justify-content-between">--}}
-{{--                                        <label class="form-label" for="password">كلمة المرور</label>--}}
-{{--                                        <a href="{{ route('password.request') }}">--}}
-{{--                                            <small>نسيت كلمة المرور</small>--}}
-{{--                                        </a>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="input-group input-group-merge">--}}
-{{--                                        <input--}}
-{{--                                            type="password"--}}
-{{--                                            id="password"--}}
-{{--                                            class="form-control"--}}
-{{--                                            name="password"--}}
-{{--                                            placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"--}}
-{{--                                            aria-describedby="password"--}}
-{{--                                        />--}}
-{{--                                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                                --}}{{-- <div class="mb-3">--}}
-{{--                                    <div class="form-check">--}}
-{{--                                        <input class="form-check-input" type="checkbox" id="remember-me" />--}}
-{{--                                        <label class="form-check-label" for="remember-me"> تذكرني </label>--}}
-{{--                                    </div>--}}
-{{--                                </div> --}}
-{{--                                <div class="mb-3">--}}
-{{--                                    <button class="btn btn-primary d-grid w-100" type="submit">تسجيل الدخول</button>--}}
-{{--                                </div>--}}
-{{--                            </form>--}}
                             <form method="POST" action="{{ route('password.update') }}">
                                 @csrf
                                 <input type="hidden" name="token" value="{{ $request->route('token') }}">
