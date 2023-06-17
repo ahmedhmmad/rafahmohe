@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -17,10 +18,10 @@ use Illuminate\Validation\ValidationException;
 */
 
 
-Route::post('/login', [\App\Http\Controllers\Api\AuthController::class,'login']);
 
-//Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class,'login']);
-Route::post('/auth/logout', [\App\Http\Controllers\Api\AuthController::class,'logout']);
+
+Route::post('/auth/login', [AuthController::class,'login']);
+Route::post('/auth/logout', [AuthController::class,'logout']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
