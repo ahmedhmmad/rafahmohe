@@ -17,7 +17,24 @@ use Illuminate\Validation\ValidationException;
 */
 
 
-Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class,'login']);
+//Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class,'login']);
+Route::post('/auth/login', function (Request $request) {
+    $request->validate([
+        'id' => 'required',
+        'password' => 'required',
+        'device_name' => 'required',
+    ]);
+
+    $user = \App\Models\User::where('id', $request->id)->first();
+
+    if (! $user || ! Hash::check($request->password, $user->password)) {
+        throw ValidationException::withMessages([
+            'id' => ['The provided credentials are incorrect.'],
+        ]);
+    }
+
+    return $user->createToken($request->device_name)->plainTextToken;
+});
 Route::post('/auth/logout', [\App\Http\Controllers\Api\AuthController::class,'logout']);
 
 
