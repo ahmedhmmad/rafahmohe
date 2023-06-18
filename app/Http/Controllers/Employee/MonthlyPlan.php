@@ -57,7 +57,6 @@ class MonthlyPlan extends Controller
 
         return redirect()->route('home');
     }
-
     public function show()
     {
         $user = Auth::user();
@@ -77,19 +76,19 @@ class MonthlyPlan extends Controller
         $currentDay = $startOfMonth->copy();
 
         while ($currentDay <= $endOfMonth) {
-            // Check if the current day is a working day
-            // You can modify this condition based on your business logic
-            if ($currentDay->isWeekday()) {
+            // Check if the current day is a working day (excluding Fridays and Saturdays)
+            if (!$currentDay->isFriday() && !$currentDay->isSaturday()) {
                 $workingDays[] = $currentDay->format('Y-m-d');
             }
 
             $currentDay->addDay();
         }
 
-
+//        dd($workingDays);
 
         return view('employee.show-plan', compact('plans', 'workingDays'));
     }
+
 
     public function showonly()
     {
@@ -112,7 +111,7 @@ class MonthlyPlan extends Controller
         while ($currentDay <= $endOfMonth) {
             // Check if the current day is a working day
             // You can modify this condition based on your business logic
-            if ($currentDay->isWeekday()) {
+            if (!$currentDay->isFriday() && !$currentDay->isSaturday()) {
                 $workingDays[] = $currentDay->format('Y-m-d');
             }
 
