@@ -158,7 +158,7 @@ class AdminController extends Controller
         while ($currentDay <= $endOfMonth) {
             // Check if the current day is a working day
             // You can modify this condition based on your business logic
-            if ($currentDay->isWeekday()) {
+            if (!$currentDay->isFriday() && !$currentDay->isSaturday()) {
                 $workingDays[] = $currentDay->format('Y-m-d');
             }
 
