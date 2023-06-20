@@ -296,7 +296,8 @@ class MonthlyPlan extends Controller
             $date = Carbon::create($year, $month, $day);
 
             // Check if the day is a working day (Monday to Friday)
-            if ($date->isWeekday()) {
+
+            if (!$date->isFriday() && !$date->isSaturday()) {
                 $workingDays[] = $date->toDateString();
             }
         }
