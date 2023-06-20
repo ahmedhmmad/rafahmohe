@@ -33,10 +33,11 @@
                                 @if ($workingDay > $previousDate && $workingDay < $currentDate && date('N', strtotime($workingDay)) != 5 && date('N', strtotime($workingDay)) != 6)
                                     <tr>
                                         <td><strong>{{ $dayNames[date('N', strtotime($workingDay)) - 1] }}</strong></td>
+                                        <td>{{ date('Y/m/d', strtotime($workingDay)) }}</td>
                                         <td>لا توجد مدارس</td>
                                         <td>
                                             {{-- Add the appropriate action for adding schools --}}
-                                            <a href="" class="btn btn-success">إضافة مدرسة</a>
+{{--                                            <a href="" class="btn btn-success">إضافة مدرسة</a>--}}
                                         </td>
                                     </tr>
                                 @endif
@@ -49,7 +50,7 @@
                                             <strong>{{ $dayNames[date('N', strtotime($plan->start)) - 1] }}</strong>
                                         @endif
                                     </td>
-                                    <td>{{ $plan->start }}</td>
+                                    <td>{{ date('Y/m/d', strtotime($plan->start)) }}</td>
                                     <td>{{ $plan->schools->name }}</td>
                                     <td>
                                         {{-- Add the appropriate action for adding schools --}}
@@ -70,6 +71,7 @@
                             @if ($workingDay > $previousDate && date('N', strtotime($workingDay)) != 5 && date('N', strtotime($workingDay)) != 6)
                                 <tr>
                                     <td><strong>{{ $dayNames[date('N', strtotime($workingDay)) - 1] }}</strong></td>
+                                    <td>{{ date('Y/m/d', strtotime($workingDay)) }}</td>
                                     <td>لا توجد مدارس</td>
                                     <td>
                                         {{-- Add the appropriate action for adding schools --}}
