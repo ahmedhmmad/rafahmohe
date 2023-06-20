@@ -21,6 +21,7 @@
                         @php
                             $previousDate = null;
                             $currentDate = null;
+                            $dayNames = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
                         @endphp
                         @foreach ($plans as $plan)
                             @php
@@ -31,7 +32,7 @@
                             @foreach ($workingDays as $workingDay)
                                 @if ($workingDay > $previousDate && $workingDay < $currentDate && date('N', strtotime($workingDay)) != 5 && date('N', strtotime($workingDay)) != 6)
                                     <tr>
-                                        <td><strong>{{ $workingDay }}</strong></td>
+                                        <td><strong>{{ $dayNames[date('N', strtotime($workingDay)) - 1] }}</strong></td>
                                         <td>لا توجد مدارس</td>
                                         <td>
                                             {{-- Add the appropriate action for adding schools --}}
@@ -43,15 +44,15 @@
 
                             @if ($plan->schools)
                                 <tr>
-
                                     <td>
                                         @if ($plan->start !== $previousDate)
-
-                                            <strong>{{ $plan->start }}</strong>
+                                            <strong>{{ $dayNames[date('N', strtotime($plan->start)) - 1] }}</strong>
                                         @endif
                                     </td>
+                                    <td>{{ $plan->start }}</td>
                                     <td>{{ $plan->schools->name }}</td>
                                     <td>
+                                        {{-- Add the appropriate action for adding schools --}}
                                         {{--                                    <a href="" class="btn btn-primary">تعديل</a>--}}
                                         {{--                                    <a href="" class="btn btn-danger">حذف</a>--}}
                                         {{--                                    <a href="" class="btn btn-success">إضافة مدرسة</a>--}}
@@ -68,7 +69,7 @@
                         @foreach ($workingDays as $workingDay)
                             @if ($workingDay > $previousDate && date('N', strtotime($workingDay)) != 5 && date('N', strtotime($workingDay)) != 6)
                                 <tr>
-                                    <td><strong>{{ $workingDay }}</strong></td>
+                                    <td><strong>{{ $dayNames[date('N', strtotime($workingDay)) - 1] }}</strong></td>
                                     <td>لا توجد مدارس</td>
                                     <td>
                                         {{-- Add the appropriate action for adding schools --}}
