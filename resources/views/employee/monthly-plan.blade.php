@@ -30,7 +30,7 @@
                             <label for="year" class="form-label"><strong>السنة</strong></label>
 
                             <select class="form-select" name="year" id="year" aria-label="Default select example">
-                                <option selected>اختر السنة </option>
+                                <option selected>اختر السنة</option>
                                 <option value="2023">2023</option>
                                 <option value="2024">2024</option>
                                 <option value="2025">2025</option>
@@ -46,6 +46,7 @@
                 <table class="table">
                     <thead>
                     <tr>
+                        <th>اليوم</th>
                         <th>التاريخ</th>
                         <th>المدارس</th>
                     </tr>
@@ -54,6 +55,7 @@
                     @php
                         $previousDate = null;
                         $currentDate = null;
+                        $dayNames = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
                     @endphp
                     @foreach ($plans as $plan)
                         @php
@@ -64,6 +66,7 @@
                         @foreach ($workingDays as $workingDay)
                             @if ($workingDay > $previousDate && $workingDay < $currentDate && date('N', strtotime($workingDay)) != 5 && date('N', strtotime($workingDay)) != 6)
                                 <tr>
+                                    <td>{{ $dayNames[date('N', strtotime($workingDay)) - 1] }}</td>
                                     <td><strong>{{ $workingDay }}</strong></td>
                                     <td>لا توجد مدارس</td>
                                 </tr>
@@ -72,6 +75,7 @@
 
                         @if ($plan->schools)
                             <tr>
+                                <td>{{ $dayNames[date('N', strtotime($plan->start)) - 1] }}</td>
                                 <td>
                                     @if ($plan->start !== $previousDate)
                                         <strong>{{ $plan->start }}</strong>
@@ -90,6 +94,7 @@
                     @foreach ($workingDays as $workingDay)
                         @if ($workingDay > $previousDate && date('N', strtotime($workingDay)) != 5 && date('N', strtotime($workingDay)) != 6)
                             <tr>
+                                <td>{{ $dayNames[date('N', strtotime($workingDay)) - 1] }}</td>
                                 <td><strong>{{ $workingDay }}</strong></td>
                                 <td>لا توجد مدارس</td>
                             </tr>
