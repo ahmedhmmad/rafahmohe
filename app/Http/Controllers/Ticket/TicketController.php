@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ticket;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,10 +44,14 @@ class TicketController extends Controller
         $tickets = Ticket::where('department_id', $department_id)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
+        $users = User::where('department_id', $department_id)
+            ->where('id', '!=', $user->id)
+            ->get();
+
 
         return view('head.show-tickets', [
             'tickets' => $tickets,
-
+            'users'=>$users
         ]);
 
 
@@ -59,7 +64,10 @@ class TicketController extends Controller
     public function create()
     {
         $departments = \App\Models\Department::all();
-        return view('ticket.create-ticket')->with('departments',$departments);
+        return view('ticket.create-ticket', [
+            'departments' => $departments,
+            'users'=>$users
+        ]);
     }
 
     /**

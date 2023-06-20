@@ -47,6 +47,7 @@
                             <th scope="col"> المدرسة</th>
                             <th scope="col">موضوع الطلب</th>
                             <th scope="col">حالة الطلب</th>
+                            <th scope="col">التعيين</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -57,11 +58,55 @@
                                 <td>{{ $ticket->user->name }}</td>
                                 <td>{{ $ticket->subject }}</td>
                                 <td>
+                                    <span class="badge {{ getStatusStyle($ticket->status) }}">
+                                        {{ getStatusName($ticket->status) }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary">
+التعيين لنفسي                                    </button>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                        التعيين لموظف آخر
 
-                                  <span class="badge {{ getStatusStyle($ticket->status) }}">
+                                    </button>
+                                    <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel1">تعيين موظف للمهمة</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col mb-3">
+                                                            <label for="userSelect" class="form-label">اختر موظفاً</label>
+                                                            <select id="userSelect" class="form-select">
+                                                               @foreach($users as $user)
+                                                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                               @endforeach
+                                                                <!-- Add the list of users here -->
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">الغاء</button>
+                                                    <button type="button" class="btn btn-primary">حفظ</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                            {{ getStatusName($ticket->status) }}
-                                        </span>
+
+
+
+                                    {{--                                    <div class="assign-modal d-none" data-ticket-id="{{ $ticket->id }}">--}}
+{{--                                        <select class="form-select">--}}
+{{--                                            <option value="">اختر موظفًا آخر</option>--}}
+{{--                                            <!-- Add the list of department employees here -->--}}
+{{--                                        </select>--}}
+{{--                                        <button class="btn btn-primary assign-submit">تعيين</button>--}}
+{{--                                    </div>--}}
                                 </td>
                             </tr>
                         @endforeach
@@ -72,6 +117,35 @@
         @endif
     </div>
 @endsection
+
+@push('scripts')
+       <script>
+        $(document).ready(function() {
+            $('.assign-select').change(function() {
+                var selectedValue = $(this).val();
+                var ticketId = $(this).data('ticket-id');
+                var assignModal = $('.assign-modal[data-ticket-id="' + ticketId + '"]');
+
+                if (selectedValue === 'self') {
+                    assignModal.addClass('d-none');
+                    // Perform self-assignment logic here
+                } else if (selectedValue === 'others') {
+                    assignModal.removeClass('d-none');
+                }
+            });
+
+            $('.assign-submit').click(function() {
+                var ticketId = $(this).closest('.assign-modal').data('ticket-id');
+                var selectedEmployee = $(this).closest('.assign-modal').find('select').val();
+
+                // Perform assignment logic here using the ticketId and selectedEmployee
+
+                $(this).closest('.assign-modal').addClass('d-none');
+            });
+        });
+    </script>
+@endpush
+
 @php
     function getStatusStyle($status) {
         switch ($status) {
@@ -87,6 +161,7 @@
                 return '';
         }
     }
+
     function getStatusName($status) {
         switch ($status) {
             case 'open':
@@ -100,7 +175,5 @@
             default:
                 return '';
         }
-        }
+    }
 @endphp
-
-
