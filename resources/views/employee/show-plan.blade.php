@@ -9,6 +9,7 @@
                 <table class="table">
                     <thead>
                     <tr>
+                        <th>اليوم</th>
                         <th>التاريخ</th>
                         <th>المدارس</th>
                         <th>عمليات</th>
@@ -18,6 +19,7 @@
                     @php
                         $previousDate = null;
                         $currentDate = null;
+                        $dayNames = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
                     @endphp
                     @foreach ($plans as $plan)
                         @php
@@ -28,6 +30,7 @@
                         @foreach ($workingDays as $workingDay)
                             @if ($workingDay > $previousDate && $workingDay < $currentDate && date('N', strtotime($workingDay)) != 5 && date('N', strtotime($workingDay)) != 6)
                                 <tr>
+                                    <td>{{ $dayNames[date('N', strtotime($workingDay)) - 1] }}</td>
                                     <td><strong>{{ $workingDay }}</strong></td>
                                     <td>لا توجد مدارس</td>
                                     <td>
@@ -40,6 +43,7 @@
 
                         @if ($plan->schools)
                             <tr>
+                                <td>{{ $dayNames[date('N', strtotime($plan->start)) - 1] }}</td>
                                 <td>
                                     @if ($plan->start !== $previousDate)
                                         <strong>{{ $plan->start }}</strong>
@@ -63,6 +67,7 @@
                     @foreach ($workingDays as $workingDay)
                         @if ($workingDay > $previousDate && date('N', strtotime($workingDay)) != 5 && date('N', strtotime($workingDay)) != 6)
                             <tr>
+                                <td>{{ $dayNames[date('N', strtotime($workingDay)) - 1] }}</td>
                                 <td><strong>{{ $workingDay }}</strong></td>
                                 <td>لا توجد مدارس</td>
                                 <td>
