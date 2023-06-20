@@ -135,3 +135,10 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
     Route::get('/admin/allschools', [App\Http\Controllers\Admin\AdminController::class, 'searchAllSchool'])->name('admin.search-all-schools');
 
 });
+Route::middleware(['auth', 'role:School'])->group(function () {
+
+    Route::get('/school/show-tickets', [App\Http\Controllers\Ticket\TicketController::class, 'index'])->name('school.show-tickets');
+    Route::get('/school/create-ticket', [App\Http\Controllers\Ticket\TicketController::class, 'create'])->name('school.create-ticket');
+    Route::post('/school/store-ticket', [App\Http\Controllers\Ticket\TicketController::class, 'store'])->name('school.store-ticket');
+
+});
