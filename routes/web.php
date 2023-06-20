@@ -75,6 +75,8 @@ Route::middleware(['auth', 'role:Department_Head'])->group(function ()
 
     Route::get('/head/showplan/{id}',[App\Http\Controllers\Head\HeadController::class,'show'])
         ->name('head.show-plan');
+
+    Route::get('/head/show-tickets', [App\Http\Controllers\Ticket\TicketController::class, 'showDepTickets'])->name('head.show-tickets');
 //
 //    Route::get('/employee/enterplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'index'])
 //        ->name('employee.select-month-year-plan');

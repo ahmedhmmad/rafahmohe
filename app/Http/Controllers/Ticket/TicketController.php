@@ -32,6 +32,26 @@ class TicketController extends Controller
 
 
     }
+    public function showDepTickets()
+    {
+
+        $user = Auth::user();
+        $department_id = $user->department_id;
+
+
+        // Retrieve the tickets belonging to the user
+        $tickets = Ticket::where('department_id', $department_id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('head.show-tickets', [
+            'tickets' => $tickets,
+
+        ]);
+
+
+
+    }
 
     /**
      * Show the form for creating a new resource.

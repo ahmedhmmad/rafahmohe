@@ -21,17 +21,7 @@
                             <label for="date" class="form-label"><strong>تصنيف حسب التاريخ</strong></label>
                             <input type="date" class="form-control" id="date" name="date" value="{{ request('date') }}">
                         </div>
-                        <div class="col-md-3">
-                            <label for="department" class="form-label"><strong>تصنيف حسب القسم</strong></label>
-                            <select class="form-select" name="department" id="department" aria-label="Default select example">
-                                <option value="">الكل</option>
-                                @foreach($departments as $department)
-                                    <option value="{{ $department->id }}" {{ request('department') == $department->id ? 'selected' : '' }}>
-                                        {{ $department->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+
                         <div class="col-md-3">
                             <button type="submit" class="btn btn-primary mt-4 px-lg-4" style="transform:translatex(0px) translatey(5px);">تصفية</button>
                         </div>
@@ -54,6 +44,7 @@
                         <tr>
                             <th scope="col">رقم الطلب</th>
                             <th scope="col">تاريخ الطلب</th>
+                            <th scope="col"> المدرسة</th>
                             <th scope="col">موضوع الطلب</th>
                             <th scope="col">حالة الطلب</th>
                         </tr>
@@ -63,6 +54,7 @@
                             <tr>
                                 <td>{{ $ticket->id }}</td>
                                 <td>{{ $ticket->created_at->format('Y-m-d') }}</td>
+                                <td>{{ $ticket->user->name }}</td>
                                 <td>{{ $ticket->subject }}</td>
                                 <td>
 
