@@ -64,7 +64,17 @@
 
                                 <form id="formAuthentication" class="mb-3" action="{{route('login')}}" method="POST">
                                     @csrf
+
                                     <p class="card-text text-center">من فضلك، أدخل بيانات الدخول</p>
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
                                     <div class="mb-3">
                                         <label for="id" class="form-label">رقم الهوية</label>
                                         <input
