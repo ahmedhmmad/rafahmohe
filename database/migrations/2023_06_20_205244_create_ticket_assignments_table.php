@@ -23,6 +23,8 @@ return new class extends Migration
             $table->foreign('ticket_id')->references('id')->on('tickets');
             $table->foreign('user_id')->references('id')->on('users');
         });
+
+
     }
 
     public function down()

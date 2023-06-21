@@ -63,50 +63,96 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-primary">
-التعيين لنفسي                                    </button>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
-                                        التعيين لموظف آخر
+{{--                                    <div class="row gy-3">--}}
 
-                                    </button>
-                                    <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
+{{--                                        <form action="{{ route('head.tickets.assign', $ticket->id) }}" method="POST">--}}
+{{--                                            @csrf--}}
+{{--                                            <div class="demo-inline-spacing">--}}
+{{--                                                <button type="submit" name="assign_to" value="self" class="btn btn-primary">--}}
+{{--                                                    <span class="tf-icons bx bx-magnet"></span>&nbsp; التعيين لنفسي--}}
+{{--                                                </button>--}}
+{{--                                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#basicModal">--}}
+{{--                                                    <span class="tf-icons bx bx-export"></span>&nbsp; التعيين لموظف آخر--}}
+{{--                                                </button>--}}
+{{--                                            </div>--}}
+{{--                                        </form>--}}
+
+{{--                                    </div>--}}
+
+{{--                                    <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">--}}
+{{--                                        <div class="modal-dialog" role="document">--}}
+{{--                                            <div class="modal-content">--}}
+{{--                                                <div class="modal-header">--}}
+{{--                                                    <h5 class="modal-title" id="exampleModalLabel1">تعيين موظف للمهمة</h5>--}}
+{{--                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>--}}
+{{--                                                </div>--}}
+{{--                                                <form id="assignForm" method="POST" action="{{ route('head.tickets.assign', $ticket->id) }}">--}}
+{{--                                                @csrf--}}
+{{--                                                    <div class="modal-body">--}}
+{{--                                                        <div class="row">--}}
+{{--                                                            <div class="col mb-3">--}}
+{{--                                                                <label for="userSelect" class="form-label">اختر موظفاً</label>--}}
+{{--                                                                <select id="userSelect" name="user_id" class="form-select">--}}
+{{--                                                                    @foreach($users as $user)--}}
+{{--                                                                        <option value="{{ $user->id }}">{{ $user->name }}</option>--}}
+{{--                                                                    @endforeach--}}
+{{--                                                                </select>--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="modal-footer">--}}
+{{--                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">الغاء</button>--}}
+{{--                                                        <button type="submit" class="btn btn-primary">حفظ</button>--}}
+{{--                                                    </div>--}}
+{{--                                                </form>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+                                    <!-- Form for assigning the ticket to yourself -->
+                                    <form action="{{ route('head.tickets.assign', $ticket->id) }}" method="POST" id="selfAssignForm">
+                                        @csrf
+                                        <div class="demo-inline-spacing">
+                                            <button type="submit" name="assign_to" value="self" class="btn btn-primary">
+                                                <span class="tf-icons bx bx-magnet"></span>&nbsp; التعيين لنفسي
+                                            </button>
+                                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#assignModal-{{ $ticket->id }}">
+                                                <span class="tf-icons bx bx-export"></span>&nbsp; التعيين لموظف آخر
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                    <!-- Modal for assigning the ticket to another user -->
+                                    <div class="modal fade" id="assignModal-{{ $ticket->id }}" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel1">تعيين موظف للمهمة</h5>
+                                                    <h5 class="modal-title" id="assignModalLabel-{{ $ticket->id }}">تعيين موظف للمهمة</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body">
-                                                    <div class="row">
-                                                        <div class="col mb-3">
-                                                            <label for="userSelect" class="form-label">اختر موظفاً</label>
-                                                            <select id="userSelect" class="form-select">
-                                                               @foreach($users as $user)
-                                                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                                               @endforeach
-                                                                <!-- Add the list of users here -->
-                                                            </select>
+                                                <form action="{{ route('head.tickets.assign', $ticket->id) }}" method="POST" id="assignModalForm-{{ $ticket->id }}">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col mb-3">
+                                                                <label for="userSelect-{{ $ticket->id }}" class="form-label">اختر موظفاً</label>
+                                                                <select id="userSelect-{{ $ticket->id }}" name="user_id" class="form-select">
+                                                                    @foreach($users as $user)
+                                                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">الغاء</button>
-                                                    <button type="button" class="btn btn-primary">حفظ</button>
-                                                </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">الغاء</button>
+                                                        <button type="submit" class="btn btn-primary">حفظ</button>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
 
 
-
-
-                                    {{--                                    <div class="assign-modal d-none" data-ticket-id="{{ $ticket->id }}">--}}
-{{--                                        <select class="form-select">--}}
-{{--                                            <option value="">اختر موظفًا آخر</option>--}}
-{{--                                            <!-- Add the list of department employees here -->--}}
-{{--                                        </select>--}}
-{{--                                        <button class="btn btn-primary assign-submit">تعيين</button>--}}
-{{--                                    </div>--}}
                                 </td>
                             </tr>
                         @endforeach

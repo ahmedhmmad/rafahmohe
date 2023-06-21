@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ticket;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Ticket;
+use App\Models\TicketAssignment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -66,7 +67,7 @@ class TicketController extends Controller
         $departments = \App\Models\Department::all();
         return view('ticket.create-ticket', [
             'departments' => $departments,
-            'users'=>$users
+
         ]);
     }
 
@@ -133,4 +134,36 @@ class TicketController extends Controller
     {
         //
     }
+    public function assignTicket(Request $request, $ticketId)
+    {
+
+        $selectedValue = $request->input('assign_to');
+        if ($selectedValue === 'self') {
+
+            $assignedUserId = auth()->user()->id;
+
+        } else {
+            $assignedUserId = $request->input('user_id');
+        }
+
+        $ticket = Ticket::find($ticketId);
+        $ticket->assigned_to = $assignedUserId;
+        $ticket->status = 'assigned';
+        $ticket->save();
+
+
+        // Create a new TicketAssignment record
+        $ticketAssignment = new TicketAssignment();
+        $ticketAssignment->ticket_id = $ticketId;
+        $ticketAssignment->user_id = $assignedUserId;
+
+        $ticketAssignment->save();
+        //dd($ticketAssignment);
+
+        return redirect()->back()->with('success', 'تم تعيين المهمة بنجاح');
+
+
+
+    }
+
 }
