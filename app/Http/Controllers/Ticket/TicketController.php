@@ -34,6 +34,25 @@ class TicketController extends Controller
 
 
     }
+
+    public function showAssignedTickets()
+    {
+
+        $user = Auth::user();
+        $assignedTickets = TicketAssignment::join('tickets', 'ticket_assignments.ticket_id', '=', 'tickets.id')
+            ->where('ticket_assignments.user_id', $user->id)
+            ->orderBy('ticket_assignments.created_at', 'desc')
+            ->select('ticket_assignments.*', 'tickets.subject', 'tickets.status')
+            ->paginate(10);
+
+
+
+        return view('employee.show-assigned-tickets', ['tickets' => $assignedTickets]);
+
+
+
+
+    }
     public function showDepTickets()
     {
 
@@ -108,6 +127,37 @@ class TicketController extends Controller
     {
         //
     }
+
+    public function viewTicket($ticketId)
+    {
+        $ticket = Ticket::findOrFail($ticketId);
+        if (!$ticket) {
+            // Handle the case where the ticket is not found
+            // For example, you can redirect back with an error message
+            return redirect()->back()->with('error', 'Ticket not found.');
+        }
+
+
+
+        return view('employee.view-ticket', compact('ticket'));
+    }
+
+    public function changeStatus(Request $request, $ticketId)
+    {
+        $ticket = Ticket::findOrFail($ticketId);
+
+        $status = $request->input('status');
+
+        // Perform necessary validation and logic here
+
+        // Update the status of the ticket
+        $ticket->status = $status;
+        $ticket->save();
+
+        // Redirect back or to another route as needed
+        return redirect()->back()->with('success', 'تم تغيير حالة التذكرة بنجاح.');
+    }
+
 
 
 
