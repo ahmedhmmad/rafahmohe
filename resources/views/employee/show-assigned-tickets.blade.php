@@ -34,13 +34,13 @@
                                         <a href="{{ route('employee.view-ticket', $ticket->ticket?->id) }}" class="btn btn-primary">فتح التذكرة</a>
                                     @elseif($ticket->status === 'assigned')
                                         <a href="{{ route('employee.view-ticket', $ticket->ticket?->id) }}" class="btn btn-primary">فتح التذكرة</a>
-                                        <form action="{{ route('employee.tickets.changeStatus', $ticket->id) }}" method="POST" style="display: inline-block;">
+                                        <form action="{{ route('employee.tickets.changeStatus', $ticket->ticket?->id) }}" method="POST" style="display: inline-block;">
                                             @csrf
                                             <button type="submit" class="btn btn-warning" name="status" value="on-progress">تغيير الحالة إلى قيد التنفيذ</button>
                                         </form>
                                     @elseif($ticket->status === 'on-progress')
-                                        <a href="{{ route('employee.tickets.view', $ticket->id) }}" class="btn btn-primary">فتح التذكرة</a>
-                                        <form action="{{ route('employee.tickets.changeStatus', $ticket->id) }}" method="POST" style="display: inline-block;">
+                                        <a href="{{ route('employee.view-ticket', $ticket->ticket?->id) }}" class="btn btn-primary">فتح التذكرة</a>
+                                        <form action="{{ route('employee.tickets.changeStatus', $ticket->ticket?->id) }}" method="POST" style="display: inline-block;">
                                             @csrf
                                             <button type="submit" class="btn btn-danger" name="status" value="closed">تغيير الحالة إلى مغلقة</button>
                                         </form>

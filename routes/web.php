@@ -33,7 +33,7 @@ Route::middleware(['auth'])->group(function()
     Route::get('/employee/view-ticket/{ticketId}', [TicketController::class,'viewTicket'])
         ->name('employee.view-ticket');
 
-    Route::post('/tickets/{ticketId}/status', 'EmployeeController@changeTicketStatus')->name('employee.tickets.changeStatus');
+    Route::post('/tickets/{ticketId}/status', [TicketController::class,'changeStatus'])->name('employee.tickets.changeStatus');
 
 
 
