@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('school_id');
-            $table->foreign('school_id')->references('id')->on('schools');
+            $table->string('subject');
             $table->unsignedBigInteger('department_id');
             $table->foreign('department_id')->references('id')->on('departments');
-            $table->unsignedBigInteger('assigned_to')->nullable();
-            $table->foreign('assigned_to')->references('id')->on('users');
-            $table->string('subject');
             $table->text('description');
-            $table->enum('status', ['open', 'in_progress', 'closed'])->default('open');
+            $table->string('attachment')->nullable();
+            $table->enum('status', ['open', 'assigned', 'in_progress', 'closed'])->default('open');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

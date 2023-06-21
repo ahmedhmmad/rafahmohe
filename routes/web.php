@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Ticket\TicketController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -75,6 +76,13 @@ Route::middleware(['auth', 'role:Department_Head'])->group(function ()
 
     Route::get('/head/showplan/{id}',[App\Http\Controllers\Head\HeadController::class,'show'])
         ->name('head.show-plan');
+
+    Route::get('/head/show-tickets', [TicketController::class, 'showDepTickets'])
+        ->name('head.show-tickets');
+
+    Route::post('/tickets/{ticketId}/assign', [TicketController::class, 'assignTicket'])
+        ->name('head.tickets.assign');
+
 //
 //    Route::get('/employee/enterplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'index'])
 //        ->name('employee.select-month-year-plan');
@@ -133,5 +141,12 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
     Route::get('/admin/search-plan-date', [App\Http\Controllers\Admin\AdminController::class, 'searchPlanByDate'])->name('admin.search-plan-date');
 
     Route::get('/admin/allschools', [App\Http\Controllers\Admin\AdminController::class, 'searchAllSchool'])->name('admin.search-all-schools');
+
+});
+Route::middleware(['auth', 'role:School'])->group(function () {
+
+    Route::get('/school/show-tickets', [App\Http\Controllers\Ticket\TicketController::class, 'index'])->name('school.show-tickets');
+    Route::get('/school/create-ticket', [App\Http\Controllers\Ticket\TicketController::class, 'create'])->name('school.create-ticket');
+    Route::post('/school/store-ticket', [App\Http\Controllers\Ticket\TicketController::class, 'store'])->name('school.store-ticket');
 
 });

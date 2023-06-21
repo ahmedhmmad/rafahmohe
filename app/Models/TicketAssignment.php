@@ -5,20 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ticket extends Model
+class TicketAssignment extends Model
 {
     use HasFactory;
-    protected $fillable = ['subject', 'user_id','department_id', 'description', 'attachment', 'status'];
+    protected $fillable = ['ticket_id', 'user_id', 'comments', 'attachment'];
 
-    public function department()
+    public function ticket()
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Ticket::class);
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-
 }
