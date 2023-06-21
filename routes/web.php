@@ -27,6 +27,15 @@ Route::middleware(['auth'])->group(function()
         return view('welcome');
     })->name('home');
 
+    Route::get('/employee/show-assigned-tickets', [TicketController::class,'showAssignedTickets'])
+        ->name('employee.show-assigned-tickets');
+
+    Route::get('/employee/view-ticket/{ticketId}', [TicketController::class,'viewTicket'])
+        ->name('employee.view-ticket');
+
+    Route::post('/tickets/{ticketId}/status', [TicketController::class,'changeStatus'])->name('employee.tickets.changeStatus');
+
+
 
     Route::get('/employee/monthly-plan', [\App\Http\Controllers\Employee\MonthlyPlan::class,'monthlyPlan'])->name('employee.monthly-plan');
 

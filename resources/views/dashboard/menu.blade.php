@@ -126,6 +126,26 @@
 
             </ul>
         </li>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <div data-i18n="Layouts">طلبات المدارس</div>
+                </a>
+
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{route('employee.show-assigned-tickets')}}" class="menu-link">
+                            <div> متابعة الطلبات</div>
+                        </a>
+                    </li>
+{{--                    <li class="menu-item">--}}
+{{--                        <a href="{{route('school.show-tickets')}}" class="menu-link">--}}
+{{--                            <div> متابعة الطلبات</div>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+
+                </ul>
+            </li>
         @endif
 
         @if(\Illuminate\Support\Facades\Auth::user()->hasRole('Department_Head'))
@@ -178,7 +198,7 @@
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="{{route('school.show-tickets')}}" class="menu-link">
+                        <a href="{{url('/employee/show-assigned-tickets')}}" class="menu-link">
                             <div> متابعة الطلبات</div>
                         </a>
                     </li>
