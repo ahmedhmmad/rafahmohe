@@ -75,8 +75,40 @@
                         @endforeach
                         </tbody>
                     </table>
+
                 </div>
+
             </div>
+                              <div class="row">
+                        <div class="col">
+
+                            <div class="demo-inline-spacing">
+                                <!-- Basic Pagination -->
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        <li class="page-item {{ $tickets->onFirstPage() ? 'disabled' : '' }}">
+                                            <a class="page-link" href="{{ $tickets->previousPageUrl() }}" aria-label="Previous">
+                                                <i class="tf-icon bx bx-chevrons-right">السابق</i>
+                                            </a>
+                                        </li>
+                                        @for($i = 1; $i <= $tickets->lastPage(); $i++)
+                                            <li class="page-item {{ $tickets->currentPage() == $i ? 'active' : '' }}">
+                                                <a class="page-link" href="{{ $tickets->url($i) }}">{{ $i }}</a>
+                                            </li>
+                                        @endfor
+                                        <li class="page-item {{ $tickets->hasMorePages() ? '' : 'disabled' }}">
+                                            <a class="page-link" href="{{ $tickets->nextPageUrl() }}" aria-label="Next">
+                                                <i class="tf-icon bx bx-chevron-left">التالي</i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                                <!--/ Basic Pagination -->
+                            </div>
+                        </div>
+                    </div>
+
+
         @endif
     </div>
 @endsection
