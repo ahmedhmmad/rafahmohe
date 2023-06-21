@@ -144,6 +144,7 @@ class TicketController extends Controller
 
     public function changeStatus(Request $request, $ticketId)
     {
+
         $ticket = Ticket::findOrFail($ticketId);
 
         $status = $request->input('status');

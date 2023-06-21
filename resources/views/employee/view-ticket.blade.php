@@ -47,23 +47,49 @@
                         </td>
                     </tr>
                 </table>
+            </div>
+        </div>
+{{--                <div class="container py-2">--}}
+{{--                    <div class="card px-2">--}}
 
+{{--                <h4 class="p-2">تغيير حالة التذكرة</h4>--}}
+{{--                <form action="{{ route('employee.tickets.changeStatus', $ticket->id) }}" method="POST">--}}
+{{--                    @csrf--}}
+{{--                    <div class="form-group">--}}
+{{--                        <label for="status">تغيير الحالة:</label>--}}
+{{--                        <select class="form-control" name="status" id="status">--}}
+{{--                            <option value="on-progress">بدء التنفيذ</option>--}}
+{{--                            <option value="closed">إغلاق</option>--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                    <button type="submit" class="btn btn-primary">حفظ</button>--}}
+{{--                </form>--}}
+{{--            </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+
+
+        <div class="container py-2">
+            <div class="card px-2 ">
                 <h4 class="p-2">تغيير حالة التذكرة</h4>
                 <form action="{{ route('employee.tickets.changeStatus', $ticket->id) }}" method="POST">
                     @csrf
-                    <div class="form-group">
-                        <label for="status">تغيير الحالة:</label>
-                        <select class="form-control" name="status" id="status">
-                            <option value="on-progress">بدء التنفيذ</option>
-                            <option value="closed">إغلاق</option>
-                        </select>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <select class="form-select" name="status" id="status">--}}
+                                                        <option value="on-progress">بدء التنفيذ</option>
+                                                        <option value="closed">إغلاق</option>
+                                                    </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary">حفظ</button>
                     </div>
-                    <button type="submit" class="btn btn-primary">حفظ</button>
+
                 </form>
             </div>
         </div>
-    </div>
-@endsection
+
+        @endsection
 
 @push('scripts')
     <script>
