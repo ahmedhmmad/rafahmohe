@@ -87,10 +87,6 @@ class TicketController extends Controller
             ->where('id', '!=', $user->id)
             ->get();
 
-//        return view('head.show-tickets', [
-//            'tickets' => $tickets,
-//            'users'=>$users
-//        ]);
         $assignedUserNames = [];
         foreach ($tickets as $ticket) {
             $assignedUserId = $ticket->assigned_to;
