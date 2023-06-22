@@ -79,7 +79,6 @@ class TicketController extends Controller
         $user = Auth::user();
         $department_id = $user->department_id;
 
-
         // Retrieve the tickets belonging to the user
         $tickets = Ticket::where('department_id', $department_id)
             ->orderBy('created_at', 'desc')
@@ -88,14 +87,29 @@ class TicketController extends Controller
             ->where('id', '!=', $user->id)
             ->get();
 
+//        return view('head.show-tickets', [
+//            'tickets' => $tickets,
+//            'users'=>$users
+//        ]);
+        $assignedUserNames = [];
+        foreach ($tickets as $ticket) {
+            $assignedUserId = $ticket->assigned_to;
+            $assignedUser = User::find($assignedUserId);
+
+            $assignedUserName = $assignedUser ? $assignedUser->name : '';
+            $parts = explode(' ', $assignedUserName);
+            $firstName = $parts[0] ?? '';
+            $lastName = end($parts) ?? '';
+            $fullName = $firstName . ' ' . $lastName;
+            $assignedUserNames[$ticket->id] = $fullName;
+        }
+       // dd($assignedUserNames);
 
         return view('head.show-tickets', [
             'tickets' => $tickets,
-            'users'=>$users
+            'users' => $users,
+            'assignedUserNames' => $assignedUserNames,
         ]);
-
-
-
     }
 
     /**
@@ -229,7 +243,7 @@ class TicketController extends Controller
         $ticketAssignment->user_id = $assignedUserId;
 
         $ticketAssignment->save();
-        //dd($ticketAssignment);
+        //return employee name who has been assigned
 
         return redirect()->back()->with('success', 'تم تعيين المهمة بنجاح');
 

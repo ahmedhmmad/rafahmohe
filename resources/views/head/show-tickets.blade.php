@@ -30,6 +30,7 @@
             </div>
         </div>
 
+
         @if($tickets->isEmpty())
             <div class="container py-2">
                 <div class="card px-2">
@@ -61,6 +62,13 @@
                                     <span class="badge {{ getStatusStyle($ticket->status) }}">
                                         {{ getStatusName($ticket->status) }}
                                     </span>
+                                    @if ($ticket->assigned_to && ($ticket->status == 'assigned'|| $ticket->status == 'on-progress'))
+                                        <div class="assigned-employee mt-2">
+{{--                                            <span class="badge bg-primary">معينة لـ</span>--}}
+                                            <span class="badge bg-secondary">{{ $assignedUserNames[$ticket->id] }}</span>
+
+                                        </div>
+                                    @endif
                                 </td>
                                 <td>
 {{--                                    <div class="row gy-3">--}}
