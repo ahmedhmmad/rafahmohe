@@ -248,7 +248,7 @@
     function getStatusName($status) {
         switch ($status) {
             case 'open':
-                return 'قيد الانتظار';
+                return 'جديدة';
             case 'assigned':
                 return 'تم التعيين';
             case 'on-progress':
