@@ -135,6 +135,12 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
 //    Route::get('/admin/searchresults',[App\Http\Controllers\Admin\AdminController::class,'search'])
 //        ->name('admin.search-results');
 
+    Route::get('/admin/show-tickets', [TicketController::class, 'showTicketsAdmin'])
+        ->name('admin.show-tickets');
+
+    Route::post('/tickets/{ticketId}/assign', [TicketController::class, 'assignTicketDepAdmin'])
+        ->name('admin.tickets.assign');
+
     Route::get('/admin/search', [App\Http\Controllers\Admin\AdminController::class, 'search'])
         ->name('admin.search-plan');
 

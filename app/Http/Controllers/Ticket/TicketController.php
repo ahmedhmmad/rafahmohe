@@ -34,6 +34,26 @@ class TicketController extends Controller
 
 
     }
+    public function showTicketsAdmin()
+    {
+        // Retrieve the tickets belonging to the user
+        $tickets = Ticket::orderBy('created_at', 'desc')->paginate(10);
+        $departments = Department::all();
+
+        // Calculate ticket counts
+        $openTicketsCount = Ticket::where('status', 'open')->count();
+        $onProgressTicketsCount = Ticket::where('status', 'on-progress')->count();
+        $closedTicketsCount = Ticket::where('status', 'closed')->count();
+
+        return view('admin.show-tickets', [
+            'tickets' => $tickets,
+            'departments' => $departments,
+            'openTicketsCount' => $openTicketsCount,
+            'onProgressTicketsCount' => $onProgressTicketsCount,
+            'closedTicketsCount' => $closedTicketsCount,
+        ]);
+    }
+
 
     public function showAssignedTickets()
     {
@@ -213,8 +233,22 @@ class TicketController extends Controller
 
         return redirect()->back()->with('success', 'تم تعيين المهمة بنجاح');
 
-
-
     }
+    public function assignTicketDepAdmin(Request $request, $ticketId)
+    {
+        $department_id = $request->input('department_id');
+
+        $ticket = Ticket::find($ticketId);
+        $ticket->department_id = $department_id;
+
+        $ticket->save();
+
+
+        return redirect()->back()->with('success', 'تم تعيين المهمة بنجاح');
+    }
+
+
+
+
 
 }

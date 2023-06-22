@@ -253,6 +253,21 @@
 {{--                    @endforeach--}}
                 </ul>
             </li>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <div data-i18n="Layouts">طلبات المدارس</div>
+                </a>
+
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{route('admin.show-tickets')}}" class="menu-link">
+                            <div> عرض الطلبات</div>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
         @endif
 
 
