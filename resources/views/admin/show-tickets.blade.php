@@ -5,11 +5,11 @@
         <h2 class="p-4">عرض التذاكر المقدمة</h2>
         <div class="container py-2">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card px-2 text-center">
                         <div class="card-body">
-                            <h5 class="card-title">التذاكر المفتوحة</h5>
-                            <p class="card-text">عدد التذاكر المفتوحة:
+                            <h5 class="card-title">الطلبات الجديدة</h5>
+                            <p class="card-text">عدد الطلبات الجديدة:
                             <h1>
                             <span class="badge badge-center rounded-pill bg-label-success">
                             {{ $openTicketsCount }}
@@ -18,11 +18,26 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card px-2 text-center">
                         <div class="card-body">
-                            <h5 class="card-title">التذاكر قيد التنفيذ</h5>
-                            <p class="card-text">عدد التذاكر قيد التنفيذ:
+                            <h5 class="card-title">الطلبات التي تم تعيينها</h5>
+                            <p class="card-text">عدد الطلبات قيد الانتظار:
+                            <h1>
+                            <span class="badge badge-center rounded-pill bg-label-info">
+
+                            {{ $assignedTicketsCount }}
+                            </span></h1>
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card px-2 text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">الطلبات قيد التنفيذ</h5>
+                            <p class="card-text">عدد الطلبات قيد التنفيذ:
                             <h1>
                             <span class="badge badge-center rounded-pill bg-label-warning">
 
@@ -33,11 +48,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card px-2 text-center">
                         <div class="card-body">
-                            <h5 class="card-title">التذاكر المغلقة</h5>
-                            <p class="card-text">عدد التذاكر المغلقة:
+                            <h5 class="card-title">الطلبات المغلقة</h5>
+                            <p class="card-text">عدد الطلبات المغلقة:
                             <h1>
                             <span class="badge badge-center rounded-pill bg-label-danger">
 

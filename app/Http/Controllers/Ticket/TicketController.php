@@ -42,6 +42,7 @@ class TicketController extends Controller
 
         // Calculate ticket counts
         $openTicketsCount = Ticket::where('status', 'open')->count();
+        $assignedTicketsCount = Ticket::where('status', 'assigned')->count();
         $onProgressTicketsCount = Ticket::where('status', 'on-progress')->count();
         $closedTicketsCount = Ticket::where('status', 'closed')->count();
 
@@ -49,6 +50,7 @@ class TicketController extends Controller
             'tickets' => $tickets,
             'departments' => $departments,
             'openTicketsCount' => $openTicketsCount,
+            'assignedTicketsCount' => $assignedTicketsCount,
             'onProgressTicketsCount' => $onProgressTicketsCount,
             'closedTicketsCount' => $closedTicketsCount,
         ]);
@@ -80,6 +82,8 @@ class TicketController extends Controller
         // Calculate ticket counts for the department
         $openTicketsCount = Ticket::where('department_id', $department_id)
             ->where('status', 'open')->count();
+        $assignedTicketsCount = Ticket::where('department_id', $department_id)
+            ->where('status', 'assigned')->count();
         $onProgressTicketsCount = Ticket::where('department_id', $department_id)
             ->where('status', 'on-progress')->count();
         $closedTicketsCount = Ticket::where('department_id', $department_id)
@@ -89,8 +93,10 @@ class TicketController extends Controller
             'tickets' => $tickets,
             'assignedUserNames' => $assignedUserNames,
             'openTicketsCount' => $openTicketsCount,
+            'assignedTicketsCount' => $assignedTicketsCount,
             'onProgressTicketsCount' => $onProgressTicketsCount,
             'closedTicketsCount' => $closedTicketsCount,
+
         ]);
     }
 
