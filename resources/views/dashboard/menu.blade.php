@@ -100,32 +100,32 @@
 
         @if(\Illuminate\Support\Facades\Auth::user()->hasRole('Employee') || \Illuminate\Support\Facades\Auth::user()->hasRole('Department_Head'))
 
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">الخطة الشهرية</div>
-            </a>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <div data-i18n="Layouts">الخطة الشهرية</div>
+                </a>
 
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{route('employee.select-month-year-plan')}}" class="menu-link">
-                        <div data-i18n="Without menu">ادخال الخطة الشهرية</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{route('employee.show-plan')}}" class="menu-link">
-                        <div data-i18n="Without navbar">تعديل الخطة الشهرية</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{route('employee.showonly-plan')}}" class="menu-link">
-                        <div data-i18n="Without footer">عرض الخطة الشهرية</div>
-                    </a>
-                </li>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{route('employee.select-month-year-plan')}}" class="menu-link">
+                            <div data-i18n="Without menu">ادخال الخطة الشهرية</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{route('employee.show-plan')}}" class="menu-link">
+                            <div data-i18n="Without navbar">تعديل الخطة الشهرية</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{route('employee.showonly-plan')}}" class="menu-link">
+                            <div data-i18n="Without footer">عرض الخطة الشهرية</div>
+                        </a>
+                    </li>
 
 
-            </ul>
-        </li>
+                </ul>
+            </li>
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-layout"></i>
@@ -138,11 +138,11 @@
                             <div> متابعة الطلبات</div>
                         </a>
                     </li>
-{{--                    <li class="menu-item">--}}
-{{--                        <a href="{{route('school.show-tickets')}}" class="menu-link">--}}
-{{--                            <div> متابعة الطلبات</div>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
+                    {{--                    <li class="menu-item">--}}
+                    {{--                        <a href="{{route('school.show-tickets')}}" class="menu-link">--}}
+                    {{--                            <div> متابعة الطلبات</div>--}}
+                    {{--                        </a>--}}
+                    {{--                    </li>--}}
 
                 </ul>
             </li>
@@ -150,41 +150,41 @@
 
         @if(\Illuminate\Support\Facades\Auth::user()->hasRole('Department_Head'))
 
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">خطط موظفي القسم</div>
-            </a>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <div data-i18n="Layouts">خطط موظفي القسم</div>
+                </a>
 
-            <ul class="menu-sub">
+                <ul class="menu-sub">
 
-{{--                <li class="menu-item">--}}
-{{--                    <a href="{{route('employee.select-month-year-plan')}}" class="menu-link">--}}
-{{--                        <div data-i18n="Without menu">عرض الخطة الشهرية</div>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
+                    {{--                <li class="menu-item">--}}
+                    {{--                    <a href="{{route('employee.select-month-year-plan')}}" class="menu-link">--}}
+                    {{--                        <div data-i18n="Without menu">عرض الخطة الشهرية</div>--}}
+                    {{--                    </a>--}}
+                    {{--                </li>--}}
 
-                @php
-                    $departmentId = \Illuminate\Support\Facades\Auth::user()->department_id;
-                    $loggedUserId = \Illuminate\Support\Facades\Auth::user()->id;
-                    $departmentEmployees = \App\Models\User::where('department_id', $departmentId)
-                        ->where('id', '!=', $loggedUserId)
-                        ->orderBy('name', 'asc')
-                        ->get();
-                @endphp
+                    @php
+                        $departmentId = \Illuminate\Support\Facades\Auth::user()->department_id;
+                        $loggedUserId = \Illuminate\Support\Facades\Auth::user()->id;
+                        $departmentEmployees = \App\Models\User::where('department_id', $departmentId)
+                            ->where('id', '!=', $loggedUserId)
+                            ->orderBy('name', 'asc')
+                            ->get();
+                    @endphp
 
-                @foreach ($departmentEmployees as $employee)
-                    <li class="menu-item">
-                        <a href="{{ route('head.show-plan', $employee->id)}}" class="menu-link">
-                            <div>{{ $employee->name }}</div>
-                        </a>
-                    </li>
-                @endforeach
+                    @foreach ($departmentEmployees as $employee)
+                        <li class="menu-item">
+                            <a href="{{ route('head.show-plan', $employee->id)}}" class="menu-link">
+                                <div>{{ $employee->name }}</div>
+                            </a>
+                        </li>
+                    @endforeach
 
 
 
-            </ul>
-        </li>
+                </ul>
+            </li>
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-layout"></i>
@@ -192,7 +192,7 @@
                 </a>
 
                 <ul class="menu-sub">
-                       <li class="menu-item">
+                    <li class="menu-item">
                         <a href="{{url('/head/show-tickets')}}" class="menu-link">
                             <div> عرض الطلبات</div>
                         </a>
@@ -221,19 +221,19 @@
                             <div> جميع المدارس</div>
                         </a>
                     </li>
-{{--                    @php--}}
-{{--                        $departmentId = \Illuminate\Support\Facades\Auth::user()->department_id;--}}
-{{--                        $departmentEmployees = \App\Models\User::where('department_id', $departmentId)--}}
-{{--                            ->orderBy('name', 'asc')--}}
-{{--                            ->get();--}}
-{{--                    @endphp--}}
+                    {{--                    @php--}}
+                    {{--                        $departmentId = \Illuminate\Support\Facades\Auth::user()->department_id;--}}
+                    {{--                        $departmentEmployees = \App\Models\User::where('department_id', $departmentId)--}}
+                    {{--                            ->orderBy('name', 'asc')--}}
+                    {{--                            ->get();--}}
+                    {{--                    @endphp--}}
 
-{{--                    @foreach ($departmentEmployees as $employee)--}}
-                        <li class="menu-item">
-                            <a href="{{route('admin.search-plan')}}" class="menu-link">
-                                <div> حسب الاسم أو القسم</div>
-                            </a>
-                        </li>
+                    {{--                    @foreach ($departmentEmployees as $employee)--}}
+                    <li class="menu-item">
+                        <a href="{{route('admin.search-plan')}}" class="menu-link">
+                            <div> حسب الاسم أو القسم</div>
+                        </a>
+                    </li>
                     <li class="menu-item">
                         <a href="{{route('admin.search-plan-school-date')}}" class="menu-link">
                             <div> حسب المدرسة و التاريخ</div>
@@ -250,7 +250,7 @@
                             <div>  حسب التاريخ</div>
                         </a>
                     </li>
-{{--                    @endforeach--}}
+                    {{--                    @endforeach--}}
                 </ul>
             </li>
             <li class="menu-item">

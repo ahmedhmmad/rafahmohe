@@ -89,7 +89,7 @@ Route::middleware(['auth', 'role:Department_Head'])->group(function ()
     Route::get('/head/show-tickets', [TicketController::class, 'showDepTickets'])
         ->name('head.show-tickets');
 
-    Route::post('/tickets/{ticketId}/assign', [TicketController::class, 'assignTicket'])
+    Route::post('/head/assignticket/{ticketId}', [TicketController::class, 'assignTicket'])
         ->name('head.tickets.assign');
 
 //
