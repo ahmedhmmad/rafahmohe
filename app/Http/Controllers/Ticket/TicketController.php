@@ -40,11 +40,20 @@ class TicketController extends Controller
         $tickets = Ticket::orderBy('created_at', 'desc')->paginate(10);
         $departments = Department::all();
 
+        // Calculate ticket counts
+        $openTicketsCount = Ticket::where('status', 'open')->count();
+        $onProgressTicketsCount = Ticket::where('status', 'on-progress')->count();
+        $closedTicketsCount = Ticket::where('status', 'closed')->count();
+
         return view('admin.show-tickets', [
             'tickets' => $tickets,
-            'departments' => $departments
+            'departments' => $departments,
+            'openTicketsCount' => $openTicketsCount,
+            'onProgressTicketsCount' => $onProgressTicketsCount,
+            'closedTicketsCount' => $closedTicketsCount,
         ]);
     }
+
 
     public function showAssignedTickets()
     {

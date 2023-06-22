@@ -4,6 +4,55 @@
     <div class="p-2">
         <h2 class="p-4">عرض التذاكر المقدمة</h2>
         <div class="container py-2">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card px-2 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">التذاكر المفتوحة</h5>
+                        <p class="card-text">عدد التذاكر المفتوحة:
+                            <h2>
+                            <span class="badge badge-center rounded-pill bg-danger">
+                            {{ $openTicketsCount }}
+                            </span></h2>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card px-2 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">التذاكر قيد التنفيذ</h5>
+                        <p class="card-text">عدد التذاكر قيد التنفيذ:
+                        <h2>
+                            <span class="badge badge-center rounded-pill bg-warning">
+
+                            {{ $onProgressTicketsCount }}
+                            </span></h2>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card px-2 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">التذاكر المغلقة</h5>
+                        <p class="card-text">عدد التذاكر المغلقة:
+                            <h2>
+                            <span class="badge badge-center rounded-pill bg-success">
+
+                            {{ $closedTicketsCount }}
+                            </span></h2>
+
+
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container py-2">
             <div class="card px-2">
                 <form method="GET" action="">
                     <div class="row py-4">
