@@ -53,6 +53,46 @@ class TicketController extends Controller
             'closedTicketsCount' => $closedTicketsCount,
         ]);
     }
+    public function showTicketsDep()
+    {
+        // Retrieve the tickets belonging to the user department
+        $user = Auth::user();
+        $department_id = $user->department_id;
+
+        $tickets = Ticket::where('department_id', $department_id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+         $assignedUserNames = [];
+        foreach ($tickets as $ticket) {
+            $assignedUserId = $ticket->assigned_to;
+            $assignedUser = User::find($assignedUserId);
+
+            $assignedUserName = $assignedUser ? $assignedUser->name : '';
+            $parts = explode(' ', $assignedUserName);
+            $firstName = $parts[0] ?? '';
+            $lastName = end($parts) ?? '';
+            $fullName = $firstName . ' ' . $lastName;
+            $assignedUserNames[$ticket->id] = $fullName;
+        }
+
+
+        // Calculate ticket counts for the department
+        $openTicketsCount = Ticket::where('department_id', $department_id)
+            ->where('status', 'open')->count();
+        $onProgressTicketsCount = Ticket::where('department_id', $department_id)
+            ->where('status', 'on-progress')->count();
+        $closedTicketsCount = Ticket::where('department_id', $department_id)
+            ->where('status', 'closed')->count();
+
+        return view('head.show-assigned-tickets', [
+            'tickets' => $tickets,
+            'assignedUserNames' => $assignedUserNames,
+            'openTicketsCount' => $openTicketsCount,
+            'onProgressTicketsCount' => $onProgressTicketsCount,
+            'closedTicketsCount' => $closedTicketsCount,
+        ]);
+    }
 
 
     public function showAssignedTickets()

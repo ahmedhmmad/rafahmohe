@@ -95,7 +95,7 @@
                             <th scope="col">تاريخ الطلب</th>
                             <th scope="col"> المدرسة</th>
                             <th scope="col">موضوع الطلب</th>
-                            <th scope="col">القسم</th>
+
                             <th scope="col">حالة الطلب</th>
                             <th scope="col">التعيين</th>
                         </tr>
@@ -107,58 +107,18 @@
                                 <td>{{ $ticket->created_at->format('Y-m-d') }}</td>
                                 <td>{{ $ticket->user->name }}</td>
                                 <td>{{ $ticket->subject }}</td>
-                                <td>{{ $ticket->department->name }}</td>
+
                                 <td>
                                     <span class="badge {{ getStatusStyle($ticket->status) }}">
                                         {{ getStatusName($ticket->status) }}
                                     </span>
-                                </td>
-                                <td>
+                                    @if ($ticket->assigned_to && ($ticket->status == 'assigned'|| $ticket->status == 'on-progress'))
+                                        <div class="assigned-employee mt-2">
+                                            {{--                                            <span class="badge bg-primary">معينة لـ</span>--}}
+                                            <span class="badge bg-secondary">{{ $assignedUserNames[$ticket->id] }}</span>
 
-                                    <form action="{{ route('admin.tickets.assign', $ticket->id) }}" method="POST" id="selfAssignForm">
-                                        @csrf
-                                        <div class="demo-inline-spacing">
-                                            {{--                                            <button type="submit" name="assign_to" value="self" class="btn btn-primary">--}}
-                                            {{--                                                <span class="tf-icons bx bx-magnet"></span>&nbsp; التعيين لنفسي--}}
-                                            {{--                                            </button>--}}
-                                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#assignModal-{{ $ticket->id }}">
-                                                <span class="tf-icons bx bx-export"></span>&nbsp; التعيين لقسم
-                                            </button>
                                         </div>
-                                    </form>
-
-                                    <!-- Modal for assigning the ticket to another user -->
-                                    <div class="modal fade" id="assignModal-{{ $ticket->id }}" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="assignModalLabel-{{ $ticket->id }}">تعيين قسم للمهمة</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <form action="{{ route('admin.tickets.assign', $ticket->id) }}" method="POST" id="assignModalForm-{{ $ticket->id }}">
-                                                    @csrf
-                                                    <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col mb-3">
-                                                                <label for="userSelect-{{ $ticket->id }}" class="form-label">اختر قسماً</label>
-                                                                <select id="userSelect-{{ $ticket->id }}" name="department_id" class="form-select">
-                                                                    @foreach($departments as $department)
-                                                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">الغاء</button>
-                                                        <button type="submit" class="btn btn-primary">حفظ</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

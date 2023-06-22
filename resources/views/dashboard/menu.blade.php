@@ -198,7 +198,7 @@
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="{{url('/employee/show-assigned-tickets')}}" class="menu-link">
+                        <a href="{{route('head.show-assigend-tickets')}}" class="menu-link">
                             <div> متابعة الطلبات</div>
                         </a>
                     </li>
