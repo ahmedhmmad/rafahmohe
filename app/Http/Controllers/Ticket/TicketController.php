@@ -34,6 +34,17 @@ class TicketController extends Controller
 
 
     }
+    public function showTicketsAdmin()
+    {
+        // Retrieve the tickets belonging to the user
+        $tickets = Ticket::orderBy('created_at', 'desc')->paginate(10);
+        $departments = Department::all();
+
+        return view('admin.show-tickets', [
+            'tickets' => $tickets,
+            'departments' => $departments
+        ]);
+    }
 
     public function showAssignedTickets()
     {
@@ -213,8 +224,22 @@ class TicketController extends Controller
 
         return redirect()->back()->with('success', 'تم تعيين المهمة بنجاح');
 
-
-
     }
+    public function assignTicketDepAdmin(Request $request, $ticketId)
+    {
+        $department_id = $request->input('department_id');
+
+        $ticket = Ticket::find($ticketId);
+        $ticket->department_id = $department_id;
+
+        $ticket->save();
+
+
+        return redirect()->back()->with('success', 'تم تعيين المهمة بنجاح');
+    }
+
+
+
+
 
 }
