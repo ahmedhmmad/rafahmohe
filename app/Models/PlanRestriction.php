@@ -22,4 +22,9 @@ class PlanRestriction extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function overrideDepartment()
+    {
+        return $this->belongsTo(Department::class, 'override_department_id');
+    }
 }
