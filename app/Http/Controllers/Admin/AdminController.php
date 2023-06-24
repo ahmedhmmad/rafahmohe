@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Plan;
+use App\Models\PlanRestriction;
 use App\Models\School;
 use App\Models\User;
 use Carbon\Carbon;
@@ -75,27 +76,45 @@ class AdminController extends Controller
 
 
 
-    public function overridePlanRestrictions(Request $request, $userId)
+    public function overridePlanRestrictions(Request $request)
     {
-        dd($request->all());
-        // Validate the input
-        $validatedData = $request->validate([
-            'can_override_last_week' => 'required|boolean',
-            'can_override_department' => 'required|boolean',
+        //dd($request->all());
+        $selectedUserOrDepartment = $request->selected_user_or_department;
+       // dd($selectedUserOrDepartment);
+
+        $request->validate([
+            'can_override_last_week' => 'nullable|boolean',
+            'can_override_department' => 'nullable|boolean',
             'override_start_date' => 'nullable|date',
             'override_end_date' => 'nullable|date',
             'override_week_number' => 'nullable|integer',
             'override_department_id' => 'nullable|exists:departments,id',
         ]);
 
-        // Find the user
-        $user = User::findOrFail($userId);
+        $validatedData = $request->all();
+        $validatedData['can_override_last_week'] = $validatedData['can_override_last_week'] ?? false;
+        $validatedData['can_override_department'] = $validatedData['can_override_department'] ?? false;
 
-        // Update the plan restrictions for the user
-        $user->planRestrictions()->updateOrCreate([], $validatedData);
+        if ($selectedUserOrDepartment === 'user') {
+           $userId= json_decode($request->input('selected_user_id'))->id;
 
-        return redirect()->back()->with('success', 'Plan restrictions overridden successfully.');
+            $user = User::findOrFail($userId);
+           PlanRestriction::updateOrCreate(['user_id' => $user->id], $validatedData);
+
+
+           // PlanRestriction::updateOrCreate(['user_id' => $userId], $validatedData);
+        } elseif ($selectedUserOrDepartment === 'department') {
+            $departmentId = json_decode($request->input('selected_department_id'))->id;
+            $users = User::where('department_id', $departmentId)->get();
+            foreach ($users as $user) {
+                PlanRestriction::updateOrCreate(['user_id' => $user->id], $validatedData);
+            }
+        }
+
+
+        return redirect()->back()->with('success', 'تم استثناء قيود الخطة بنجاح.');
     }
+
 
     public function search(Request $request)
     {

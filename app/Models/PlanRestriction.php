@@ -17,4 +17,9 @@ class PlanRestriction extends Model
         'override_week_number',
         'override_department_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -59,6 +59,10 @@ class User extends Authenticatable
         return $this->role->name === $roleName;
     }
 
+    public function planRestrictions()
+    {
+        return $this->hasMany(PlanRestriction::class);
+    }
 
 
 }
