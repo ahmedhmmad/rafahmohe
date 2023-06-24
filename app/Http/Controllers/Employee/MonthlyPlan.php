@@ -56,16 +56,22 @@ class MonthlyPlan extends Controller
         // Check if the current date is within the allowed range for entering the plan
         $currentDate = now();
 
-        if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
-                        // Redirect the user or display an error message indicating that the plan can only be entered during the last week of the current month
-            $errors->push('يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+        $planrestrictions=Auth::user()->planrestrictions;
+        if (!$planrestrictions[0]->can_override_last_week) {
+
+            if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+
+                // Redirect the user or display an error message indicating that the plan can only be entered during the last week of the current month
+                $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+            }
+
+            // Check if the current date is in the last week of the current month
+            if ($currentDate->addWeek()->month != $month) {
+
+                $errors->push(' لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+            }
         }
 
-        // Check if the current date is in the last week of the current month
-        if ($currentDate->addWeek()->month != $month) {
-
-            $errors->push('يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
-        }
         if ($errors->isNotEmpty()) {
             return redirect()->back()->withErrors($errors);
         }
