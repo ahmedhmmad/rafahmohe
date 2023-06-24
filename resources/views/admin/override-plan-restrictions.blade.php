@@ -58,50 +58,91 @@
 
                         @if ($selectedUserOrDepartment == 'user')
                             <input type="hidden" name="selected_user_id" value="{{ $selectedUser }}">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="can_override_last_week" class="form-label fw-bold">السماح باستثناء الأسبوع الماضي</label>
+                                        <select name="can_override_last_week" id="can_override_last_week" class="form-control" required>
+                                            <option value="1" {{ old('can_override_last_week')== '1' ? 'selected' : '' }}>نعم</option>
+                                            <option value="0" {{ old('can_override_last_week') == '0' ? 'selected' : '' }}>لا</option>
+                                        </select>
+                                        @error('can_override_last_week')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="override_start_date" class="form-label fw-bold">تاريخ بدء الاستثناء</label>
+                                        <input type="date" name="override_start_date" id="override_start_date" class="form-control" value="{{ old('override_start_date') }}">
+                                        @error('override_start_date')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="can_override_department" class="form-label fw-bold">السماح باستثناء أكثر من موظف للقسم</label>
+                                        <select name="can_override_department" id="can_override_department" class="form-control" required>
+                                            <option value="1" {{ old('can_override_department') == '1' ? 'selected' : '' }}>نعم</option>
+                                            <option value="0" {{ old('can_override_department') == '0' ? 'selected' : '' }}>لا</option>
+                                        </select>
+                                        @error('can_override_department')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="override_end_date" class="form-label fw-bold">تاريخ انتهاء الاستثناء</label>
+                                        <input type="date" name="override_end_date" id="override_end_date" class="form-control" value="{{ old('override_end_date') }}">
+                                        @error('override_end_date')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
                         @elseif ($selectedUserOrDepartment == 'department')
                             <input type="hidden" name="selected_department_id" value="{{ $selectedDepartment }}">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="can_override_last_week" class="form-label fw-bold">السماح باستثناء الأسبوع الماضي</label>
+                                        <select name="can_override_last_week" id="can_override_last_week" class="form-control" required>
+                                            <option value="1" {{ old('can_override_last_week')== '1' ? 'selected' : '' }}>نعم</option>
+                                            <option value="0" {{ old('can_override_last_week') == '0' ? 'selected' : '' }}>لا</option>
+                                        </select>
+                                        @error('can_override_last_week')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="override_start_date" class="form-label fw-bold">تاريخ بدء الاستثناء</label>
+                                        <input type="date" name="override_start_date" id="override_start_date" class="form-control" value="{{ old('override_start_date') }}">
+                                        @error('override_start_date')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="can_override_department" class="form-label fw-bold">السماح باستثناء كافة موظفي القسم</label>
+                                        <select name="can_override_department" id="can_override_department" class="form-control" required>
+                                            <option value="1" {{ old('can_override_department') == '1' ? 'selected' : '' }}>نعم</option>
+                                            <option value="0" {{ old('can_override_department') == '0' ? 'selected' : '' }}>لا</option>
+                                        </select>
+                                        @error('can_override_department')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="override_end_date" class="form-label fw-bold">تاريخ انتهاء الاستثناء</label>
+                                        <input type="date" name="override_end_date" id="override_end_date" class="form-control" value="{{ old('override_end_date') }}">
+                                        @error('override_end_date')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
                         @endif
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="can_override_last_week" class="form-label fw-bold">السماح باستثناء الأسبوع الماضي</label>
-                                    <select name="can_override_last_week" id="can_override_last_week" class="form-control" required>
-                                        <option value="1" {{ old('can_override_last_week')== '1' ? 'selected' : '' }}>نعم</option>
-                                        <option value="0" {{ old('can_override_last_week') == '0' ? 'selected' : '' }}>لا</option>
-                                    </select>
-                                    @error('can_override_last_week')
-                                    <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="override_start_date" class="form-label fw-bold">تاريخ بدء الاستثناء</label>
-                                    <input type="date" name="override_start_date" id="override_start_date" class="form-control" value="{{ old('override_start_date') }}">
-                                    @error('override_start_date')
-                                    <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="can_override_department" class="form-label fw-bold">السماح باستثناء كافة موظفي القسم</label>
-                                    <select name="can_override_department" id="can_override_department" class="form-control" required>
-                                        <option value="1" {{ old('can_override_department') == '1' ? 'selected' : '' }}>نعم</option>
-                                        <option value="0" {{ old('can_override_department') == '0' ? 'selected' : '' }}>لا</option>
-                                    </select>
-                                    @error('can_override_department')
-                                    <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="override_end_date" class="form-label fw-bold">تاريخ انتهاء الاستثناء</label>
-                                    <input type="date" name="override_end_date" id="override_end_date" class="form-control" value="{{ old('override_end_date') }}">
-                                    @error('override_end_date')
-                                    <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
+
                                                <div class="row">
                             <div class="col-md-12 text-end">
                                 <button type="submit" class="btn btn-primary">تطبيق الاستثناءات</button>
