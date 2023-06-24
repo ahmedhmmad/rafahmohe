@@ -220,6 +220,13 @@
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <div class="mb-3">
+                                    <label for="override_start_date" class="form-label fw-bold">تاريخ بدء الاستثناء</label>
+                                    <input type="date" name="override_start_date" id="override_start_date" class="form-control" value="{{ old('override_start_date') }}">
+                                    @error('override_start_date')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -232,21 +239,16 @@
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="reason" class="form-label fw-bold">السبب</label>
-                                    <textarea name="reason" id="reason" class="form-control" rows="4" required>{{ old('reason') }}</textarea>
-                                    @error('reason')
+                                    <label for="override_end_date" class="form-label fw-bold">تاريخ انتهاء الاستثناء</label>
+                                    <input type="date" name="override_end_date" id="override_end_date" class="form-control" value="{{ old('override_end_date') }}">
+                                    @error('override_end_date')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
                         </div>
-
-                        <div class="row">
+                                               <div class="row">
                             <div class="col-md-12 text-end">
                                 <button type="submit" class="btn btn-primary">تطبيق الاستثناءات</button>
                             </div>

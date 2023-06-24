@@ -105,21 +105,15 @@ class AdminController extends Controller
            // PlanRestriction::updateOrCreate(['user_id' => $userId], $validatedData);
         } elseif ($selectedUserOrDepartment === 'department') {
             $departmentId = json_decode($request->input('selected_department_id'))->id;
-            //$departmentId = $request->input('selected_department_id');
-
-            PlanRestriction::whereHas('user', function ($query) use ($departmentId) {
-                $query->where('department_id', $departmentId);
-            })->update($validatedData);
+            $users = User::where('department_id', $departmentId)->get();
+            foreach ($users as $user) {
+                PlanRestriction::updateOrCreate(['user_id' => $user->id], $validatedData);
+            }
         }
+
 
         return redirect()->back()->with('success', 'تم استثناء قيود الخطة بنجاح.');
     }
-
-
-
-
-
-
 
 
     public function search(Request $request)
