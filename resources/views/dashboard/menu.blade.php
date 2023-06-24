@@ -217,6 +217,11 @@
 
                 <ul class="menu-sub">
                     <li class="menu-item">
+                        <a href="{{route('admin.override-plan-restrictions')}}" class="menu-link">
+                          <div>استثناءات الخطط</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
                         <a href="{{route('admin.search-all-schools')}}" class="menu-link">
                             <div> جميع المدارس</div>
                         </a>
@@ -275,3 +280,4 @@
 
 
 </aside>
+

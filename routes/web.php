@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Ticket\TicketController;
 use Illuminate\Support\Facades\Route;
 
@@ -137,6 +138,13 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
 //
 //    Route::get('/admin/searchresults',[App\Http\Controllers\Admin\AdminController::class,'search'])
 //        ->name('admin.search-results');
+
+    Route::get('/admin/override-plan-restrictions', [AdminController::class, 'showOverridePlanRestrictionsForm'])->name('admin.override-plan-restrictions');
+    Route::post('/admin/override-plan-restrictions', [AdminController::class, 'overridePlanRestrictions'])->name('admin.apply-override-plan-restrictions');
+    Route::get('/fetch-department-users', [AdminController::class,'fetchDepartmentUsers'])->name('fetch.department.users');
+
+
+
 
     Route::get('/admin/show-tickets', [TicketController::class, 'showTicketsAdmin'])
         ->name('admin.show-tickets');
