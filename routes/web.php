@@ -142,6 +142,8 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
     Route::get('/admin/override-plan-restrictions', [AdminController::class, 'showOverridePlanRestrictionsForm'])->name('admin.override-plan-restrictions');
     Route::post('/admin/override-plan-restrictions', [AdminController::class, 'overridePlanRestrictions'])->name('admin.apply-override-plan-restrictions');
     Route::get('/fetch-department-users', [AdminController::class,'fetchDepartmentUsers'])->name('fetch.department.users');
+    Route::delete('/admin/plan-restrictions/{id}', [AdminController::class,'deletePlanRestriction'])->name('admin.delete-plan-restriction');
+
 
 
 

@@ -25,28 +25,45 @@ class AdminController extends Controller
 
         return response()->json(['users' => $users]);
     }
+    public function getTableOverrideData(Request $request)
+    {
+        // Retrieve the data for the table (e.g., plan restrictions) with paginatiob
+        $planRestrictions = PlanRestriction::paginate(10);
+
+
+        // Pass the data to the view
+        return view('admin.table-override-data', compact('planRestrictions'));
+    }
+
+    public function deletePlanRestriction($planRestricion)
+    {
+        $planRestricion = PlanRestriction::find($planRestricion);
+        $planRestricion->delete();
+        return redirect()->back()->with('success', 'تم حذف الاسثناء بنجاح.');
+    }
+
 //    public function showOverridePlanRestrictionsForm(Request $request)
 //    {
 //        // Retrieve the list of users (you can customize this query as per your needs)
 //        $users = User::all();
 //        $departments = Department::all();
-//        $selectedUserOrDepartment = null;
-//       // dd($request->all());
+//        $selected_department_id= $request->input('selected_department_id');
+//        $selected_user_id= $request->input('selected_user_id');
+//        $selectedUser = null;
+//        $selectedDepartment = null;
+//        $selectedUserOrDepartment = '';
 //
 //        // Retrieve the selected user or department based on the form input
-//        if ($request->has('selected_user_id')) {
-//
-//            $selectedUserOrDepartment = User::find($request->input('selected_user_id'));
-//           // dd($selectedUserOrDepartment);
-//        } elseif ($request->has('selected_department_id')) {
-//            $selectedUserOrDepartment = Department::find($request->input('selected_department_id'));
-//            // Get the first user of the selected department
-//
-//            $users = $selectedUserOrDepartment->users;
+//        if ($selected_user_id) {
+//            $selectedUser = User::find($request->input('selected_user_id'));
+//            $selectedUserOrDepartment = 'user';
+//        } elseif ($selected_department_id) {
+//            $selectedDepartment = Department::find($request->input('selected_department_id'));
+//            $selectedUserOrDepartment = 'department';
 //        }
 //
 //
-//        return view('admin.override-plan-restrictions', compact('users', 'selectedUserOrDepartment', 'departments'));
+//        return view('admin.override-plan-restrictions', compact('users', 'selectedUser', 'selectedDepartment', 'departments', 'selectedUserOrDepartment'));
 //    }
 
     public function showOverridePlanRestrictionsForm(Request $request)
@@ -54,8 +71,8 @@ class AdminController extends Controller
         // Retrieve the list of users (you can customize this query as per your needs)
         $users = User::all();
         $departments = Department::all();
-        $selected_department_id= $request->input('selected_department_id');
-        $selected_user_id= $request->input('selected_user_id');
+        $selected_department_id = $request->input('selected_department_id');
+        $selected_user_id = $request->input('selected_user_id');
         $selectedUser = null;
         $selectedDepartment = null;
         $selectedUserOrDepartment = '';
@@ -69,10 +86,11 @@ class AdminController extends Controller
             $selectedUserOrDepartment = 'department';
         }
 
+        // Fetch the table data
+        $tableOverrideData = $this->getTableOverrideData($request);
 
-        return view('admin.override-plan-restrictions', compact('users', 'selectedUser', 'selectedDepartment', 'departments', 'selectedUserOrDepartment'));
+        return view('admin.override-plan-restrictions', compact('users', 'selectedUser', 'selectedDepartment', 'departments', 'selectedUserOrDepartment', 'tableOverrideData'));
     }
-
 
 
 
@@ -82,6 +100,14 @@ class AdminController extends Controller
         $selectedUserOrDepartment = $request->selected_user_or_department;
        // dd($selectedUserOrDepartment);
 
+//        $request->validate([
+//            'can_override_last_week' => 'nullable|boolean',
+//            'can_override_department' => 'nullable|boolean',
+//            'override_start_date' => 'nullable|date',
+//            'override_end_date' => 'nullable|date',
+//            'override_week_number' => 'nullable|integer',
+//            'override_department_id' => 'nullable|exists:departments,id',
+//        ]);
         $request->validate([
             'can_override_last_week' => 'nullable|boolean',
             'can_override_department' => 'nullable|boolean',
@@ -89,9 +115,22 @@ class AdminController extends Controller
             'override_end_date' => 'nullable|date',
             'override_week_number' => 'nullable|integer',
             'override_department_id' => 'nullable|exists:departments,id',
+        ], [
+            'override_start_date.date' => 'The override start date must be a valid date.',
+            'override_end_date.date' => 'The override end date must be a valid date.',
         ]);
 
         $validatedData = $request->all();
+
+        if (!isset($validatedData['override_start_date']) || $validatedData['override_start_date'] === null) {
+            $validatedData['override_start_date'] = now()->toDateString(); // Set default value as today's date if not provided
+        }
+
+        if (!isset($validatedData['override_end_date']) || $validatedData['override_end_date'] === null) {
+            $validatedData['override_end_date'] = now()->addDay()->toDateString(); // Set default value as tomorrow's date if not provided
+        }
+
+
         $validatedData['can_override_last_week'] = $validatedData['can_override_last_week'] ?? false;
         $validatedData['can_override_department'] = $validatedData['can_override_department'] ?? false;
 
