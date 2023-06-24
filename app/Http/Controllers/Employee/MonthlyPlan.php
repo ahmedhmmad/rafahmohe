@@ -23,12 +23,54 @@ class MonthlyPlan extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create($month, $year)
     {
-        $schools = School::all();
-        return view('employee.create-plan',compact('schools','month','year'));
 
+        // Check if the month is a valid value
+        if (!is_numeric($month) || $month < 1 || $month > 12) {
+            return redirect()->back()->with('error', 'اختر الشهر المطلوب.');
+        }
+
+        // Check if the year is a valid value
+        if (!is_numeric($year) || $year < 2020 || $year > 2099) {
+            return redirect()->back()->with('error', 'اختر السنة المطلوبة.');
+        }
+
+        try {
+            // Check if the specified month and year create a valid date
+            $currentMonth = Carbon::now()->month;
+            $currentYear = Carbon::now()->year;
+            $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
+            $lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
+
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'خطأ في اختيار الشهر أو المنطقة الزمنية غير صالحة.');
+        }
+
+        // Check if the current date is within the allowed range for entering the plan
+        $currentDate = now();
+
+        if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+
+            // Redirect the user or display an error message indicating that the plan can only be entered during the last week of the current month
+            return redirect()->back()->with('error', 'يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+        }
+
+        // Check if the current date is in the last week of the current month
+        if ($currentDate->addWeek()->month != $month) {
+
+            return redirect()->back()->with('error', 'يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+        }
+
+        $schools = School::all();
+
+        return view('employee.create-plan', compact('schools', 'month', 'year'));
     }
+
 
     /**
      * Store a newly created resource in storage.
