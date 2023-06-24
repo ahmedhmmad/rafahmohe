@@ -70,18 +70,18 @@
 @extends('layouts.master')
 
 @section('content')
-    {{-- Show errors --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul style="list-style: none;">
-                @foreach ($errors->all() as $error)
-                    <li style="color: red;">{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 
     <div class="p-4">
+        {{-- Show errors --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul style="list-style: none;">
+                    @foreach ($errors->all() as $error)
+                        <li style="color: red;">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <h2 class="p-4">إدخال الخطة الشهرية</h2>
         <div class="container">
             <div class="row">

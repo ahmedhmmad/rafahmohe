@@ -28,15 +28,17 @@ class MonthlyPlan extends Controller
      */
     public function create($month, $year)
     {
+        $errors = collect([]);
+
 
         // Check if the month is a valid value
         if (!is_numeric($month) || $month < 1 || $month > 12) {
-            return redirect()->back()->with('error', 'اختر الشهر المطلوب.');
+           $errors->push('اختر الشهر المطلوب.');
         }
 
         // Check if the year is a valid value
         if (!is_numeric($year) || $year < 2020 || $year > 2099) {
-            return redirect()->back()->with('error', 'اختر السنة المطلوبة.');
+            $errors->push('اختر السنة المطلوبة.');
         }
 
         try {
@@ -48,22 +50,24 @@ class MonthlyPlan extends Controller
 
 
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'خطأ في اختيار الشهر أو المنطقة الزمنية غير صالحة.');
+            $errors->push('اختر الشهر والسنة المطلوبة.');
         }
 
         // Check if the current date is within the allowed range for entering the plan
         $currentDate = now();
 
         if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
-
-            // Redirect the user or display an error message indicating that the plan can only be entered during the last week of the current month
-            return redirect()->back()->with('error', 'يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+                        // Redirect the user or display an error message indicating that the plan can only be entered during the last week of the current month
+            $errors->push('يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
         }
 
         // Check if the current date is in the last week of the current month
         if ($currentDate->addWeek()->month != $month) {
 
-            return redirect()->back()->with('error', 'يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+            $errors->push('يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+        }
+        if ($errors->isNotEmpty()) {
+            return redirect()->back()->withErrors($errors);
         }
 
         $schools = School::all();
