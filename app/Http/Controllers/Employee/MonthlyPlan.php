@@ -27,16 +27,76 @@ class MonthlyPlan extends Controller
     /**
      * Show the form for creating a new resource.
      */
+//    public function create($month, $year)
+//    {
+//        $errors = collect([]);
+//        $departmentId = Auth::user()->department->id;
+//        $planRestriction = Auth::user()->planRestrictions->first();
+//
+//
+//        $canOverrideDepartment = $planRestriction ? $planRestriction->can_override_department : false;
+//
+//
+//
+//        // Check if the month is a valid value
+//        if (!is_numeric($month) || $month < 1 || $month > 12) {
+//            $errors->push('اختر الشهر المطلوب.');
+//        }
+//
+//        // Check if the year is a valid value
+//        if (!is_numeric($year) || $year < 2020 || $year > 2099) {
+//            $errors->push('اختر السنة المطلوبة.');
+//        }
+//
+//        try {
+//            // Check if the specified month and year create a valid date
+//            $currentMonth = Carbon::create($year, $month)->month;
+//            $currentYear = Carbon::create($year, $month)->year;
+//            $lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
+//
+//            $existingPlans = Plan::whereMonth('start', $currentMonth)
+//                ->whereYear('start', $currentYear)
+//                ->where('department_id', $departmentId)
+//                ->get();
+//
+//            $existingPlanDates = $existingPlans->pluck('start')->toArray();
+//
+//            $planRestriction = Auth::user()->planRestrictions->first();
+//            $canOverrideLastWeek = $planRestriction ? $planRestriction->can_override_last_week : false;
+//
+//        } catch (\Exception $e) {
+//            $errors->push('اختر الشهر والسنة المطلوبة.');
+//        }
+//
+//        // Check if the current date is within the allowed range for entering the plan
+//        $currentDate = now();
+//        $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
+//
+//        if ($currentDate->addWeek()->month != $month) {
+//            if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+//                if (!$canOverrideLastWeek) {
+//                    $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+//                }
+//            }
+//        }
+//
+//        if ($errors->isNotEmpty()) {
+//            return redirect()->back()->withErrors($errors);
+//        }
+//
+//        $schools = School::all();
+//
+//        return view('employee.create-plan', compact('schools', 'month', 'year', 'existingPlanDates', 'existingPlans','canOverrideDepartment'));
+//
+//    }
+
     public function create($month, $year)
     {
         $errors = collect([]);
         $departmentId = Auth::user()->department->id;
         $planRestriction = Auth::user()->planRestrictions->first();
 
-
         $canOverrideDepartment = $planRestriction ? $planRestriction->can_override_department : false;
-
-
 
         // Check if the month is a valid value
         if (!is_numeric($month) || $month < 1 || $month > 12) {
@@ -63,7 +123,6 @@ class MonthlyPlan extends Controller
 
             $planRestriction = Auth::user()->planRestrictions->first();
             $canOverrideLastWeek = $planRestriction ? $planRestriction->can_override_last_week : false;
-
         } catch (\Exception $e) {
             $errors->push('اختر الشهر والسنة المطلوبة.');
         }
@@ -84,11 +143,19 @@ class MonthlyPlan extends Controller
             return redirect()->back()->withErrors($errors);
         }
 
-        $schools = School::all();
+        // Retrieve the disabled schools
+        $disabledSchools = Plan::whereMonth('start', $currentMonth)
+            ->whereYear('start', $currentYear)
+            ->where('department_id', '!=', $departmentId)
+            ->pluck('school_id')
+            ->toArray();
 
-        return view('employee.create-plan', compact('schools', 'month', 'year', 'existingPlanDates', 'existingPlans','canOverrideDepartment'));
+        $schools = School::whereNotIn('id', $disabledSchools)->get();
 
+        return view('employee.create-plan', compact('schools', 'month', 'year', 'existingPlanDates', 'existingPlans', 'canOverrideDepartment'));
     }
+
+
 
 
     /**
