@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\School;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\MessageBag;
 
 
 class MonthlyPlan extends Controller
@@ -29,11 +30,16 @@ class MonthlyPlan extends Controller
     public function create($month, $year)
     {
         $errors = collect([]);
+        $departmentId = Auth::user()->department->id;
+        $planRestriction = Auth::user()->planRestrictions->first();
+
+        $canOverrideDepartment = $planRestriction ? $planRestriction->can_override_department : false;
+
 
 
         // Check if the month is a valid value
         if (!is_numeric($month) || $month < 1 || $month > 12) {
-           $errors->push('اختر الشهر المطلوب.');
+            $errors->push('اختر الشهر المطلوب.');
         }
 
         // Check if the year is a valid value
@@ -43,11 +49,19 @@ class MonthlyPlan extends Controller
 
         try {
             // Check if the specified month and year create a valid date
-            $currentMonth = Carbon::now()->month;
-            $currentYear = Carbon::now()->year;
-            $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
+            $currentMonth = Carbon::create($year, $month)->month;
+            $currentYear = Carbon::create($year, $month)->year;
             $lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
 
+            $existingPlans = Plan::whereMonth('start', $currentMonth)
+                ->whereYear('start', $currentYear)
+                ->where('department_id', $departmentId)
+                ->get();
+
+            $existingPlanDates = $existingPlans->pluck('start')->toArray();
+
+            $planRestriction = Auth::user()->planRestrictions->first();
+            $canOverrideLastWeek = $planRestriction ? $planRestriction->can_override_last_week : false;
 
         } catch (\Exception $e) {
             $errors->push('اختر الشهر والسنة المطلوبة.');
@@ -55,59 +69,14 @@ class MonthlyPlan extends Controller
 
         // Check if the current date is within the allowed range for entering the plan
         $currentDate = now();
-        $planrestrictions = Auth::user()->planrestrictions;
-        //1. check if the time is within the allowed range for entering the plan (Last week of month)
-        //2. if failed, Check if the user has the permission to override the last week of the month restriction
 
-
-//        if ($currentDate->addWeek()->month != $month) {
-//            if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
-//
-//
-//                if (!$planrestrictions->isEmpty() && !$planrestrictions[0]->can_override_last_week) {
-//
-//                    $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
-//                }
-//            }
-//        }
         if ($currentDate->addWeek()->month != $month) {
-
             if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
-
-                if (!$planrestrictions->isEmpty() && $planrestrictions[0]->can_override_last_week) {
-
-                    $overrideStartDate = $planrestrictions[0]->override_start_date;
-                    $overrideEndDate = $planrestrictions[0]->override_end_date;
-                    $currentDate = now();
-                    //dd($currentDate >= $overrideStartDate && $currentDate <= $overrideEndDate);
-
-                    if (!($currentDate >= $overrideStartDate && $currentDate <= $overrideEndDate)) {
-                        $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
-                    }
-                }
-            }
-        }
-
-
-        // Check if the current date is in the last week of the current month
-        if ($currentDate->addWeek()->month != $month) {
-            if ($planrestrictions->isEmpty() || !$planrestrictions[0]->can_override_last_week) {
-                $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
-            }
-            else  if (!$planrestrictions->isEmpty() && $planrestrictions[0]->can_override_last_week) {
-
-                $overrideStartDate = $planrestrictions[0]->override_start_date;
-                $overrideEndDate = $planrestrictions[0]->override_end_date;
-                $currentDate = now();
-                //dd($currentDate >= $overrideStartDate && $currentDate <= $overrideEndDate);
-
-                if (!($currentDate >= $overrideStartDate && $currentDate <= $overrideEndDate)) {
+                if (!$canOverrideLastWeek) {
                     $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
                 }
             }
         }
-
-
 
         if ($errors->isNotEmpty()) {
             return redirect()->back()->withErrors($errors);
@@ -115,7 +84,8 @@ class MonthlyPlan extends Controller
 
         $schools = School::all();
 
-        return view('employee.create-plan', compact('schools', 'month', 'year'));
+        return view('employee.create-plan', compact('schools', 'month', 'year', 'existingPlanDates', 'existingPlans','canOverrideDepartment'));
+
     }
 
 
