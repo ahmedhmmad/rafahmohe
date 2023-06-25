@@ -55,22 +55,59 @@ class MonthlyPlan extends Controller
 
         // Check if the current date is within the allowed range for entering the plan
         $currentDate = now();
+        $planrestrictions = Auth::user()->planrestrictions;
+        //1. check if the time is within the allowed range for entering the plan (Last week of month)
+        //2. if failed, Check if the user has the permission to override the last week of the month restriction
 
-        $planrestrictions=Auth::user()->planrestrictions;
-        if (!$planrestrictions[0]->can_override_last_week) {
+
+//        if ($currentDate->addWeek()->month != $month) {
+//            if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+//
+//
+//                if (!$planrestrictions->isEmpty() && !$planrestrictions[0]->can_override_last_week) {
+//
+//                    $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+//                }
+//            }
+//        }
+        if ($currentDate->addWeek()->month != $month) {
 
             if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
 
-                // Redirect the user or display an error message indicating that the plan can only be entered during the last week of the current month
-                $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
-            }
+                if (!$planrestrictions->isEmpty() && $planrestrictions[0]->can_override_last_week) {
 
-            // Check if the current date is in the last week of the current month
-            if ($currentDate->addWeek()->month != $month) {
+                    $overrideStartDate = $planrestrictions[0]->override_start_date;
+                    $overrideEndDate = $planrestrictions[0]->override_end_date;
+                    $currentDate = now();
+                    //dd($currentDate >= $overrideStartDate && $currentDate <= $overrideEndDate);
 
-                $errors->push(' لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+                    if (!($currentDate >= $overrideStartDate && $currentDate <= $overrideEndDate)) {
+                        $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+                    }
+                }
             }
         }
+
+
+        // Check if the current date is in the last week of the current month
+        if ($currentDate->addWeek()->month != $month) {
+            if ($planrestrictions->isEmpty() || !$planrestrictions[0]->can_override_last_week) {
+                $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+            }
+            else  if (!$planrestrictions->isEmpty() && $planrestrictions[0]->can_override_last_week) {
+
+                $overrideStartDate = $planrestrictions[0]->override_start_date;
+                $overrideEndDate = $planrestrictions[0]->override_end_date;
+                $currentDate = now();
+                //dd($currentDate >= $overrideStartDate && $currentDate <= $overrideEndDate);
+
+                if (!($currentDate >= $overrideStartDate && $currentDate <= $overrideEndDate)) {
+                    $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+                }
+            }
+        }
+
+
 
         if ($errors->isNotEmpty()) {
             return redirect()->back()->withErrors($errors);
