@@ -69,6 +69,7 @@ class MonthlyPlan extends Controller
 
         // Check if the current date is within the allowed range for entering the plan
         $currentDate = now();
+        $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
 
         if ($currentDate->addWeek()->month != $month) {
             if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
