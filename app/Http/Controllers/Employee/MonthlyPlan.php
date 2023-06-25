@@ -33,6 +33,7 @@ class MonthlyPlan extends Controller
         $departmentId = Auth::user()->department->id;
         $planRestriction = Auth::user()->planRestrictions->first();
 
+
         $canOverrideDepartment = $planRestriction ? $planRestriction->can_override_department : false;
 
 
@@ -69,6 +70,7 @@ class MonthlyPlan extends Controller
 
         // Check if the current date is within the allowed range for entering the plan
         $currentDate = now();
+        $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
 
         if ($currentDate->addWeek()->month != $month) {
             if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
@@ -94,6 +96,7 @@ class MonthlyPlan extends Controller
      */
     public function store(Request $request)
     {
+
         $days = $request->input('days');
         $user = Auth::user();
         $departmentId = $user->department->id;
