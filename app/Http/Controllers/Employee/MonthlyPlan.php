@@ -33,6 +33,7 @@ class MonthlyPlan extends Controller
         $departmentId = Auth::user()->department->id;
         $planRestriction = Auth::user()->planRestrictions->first();
 
+
         $canOverrideDepartment = $planRestriction ? $planRestriction->can_override_department : false;
 
 
@@ -95,6 +96,7 @@ class MonthlyPlan extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $days = $request->input('days');
         $user = Auth::user();
         $departmentId = $user->department->id;
