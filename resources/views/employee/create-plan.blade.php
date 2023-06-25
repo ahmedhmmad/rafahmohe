@@ -44,11 +44,20 @@
                                                         $disabled = $isRestricted && ($existingPlan && $existingPlan->school_id !== 34);
                                                     @endphp
 
+{{--                                                Don't show Disabled--}}
 
-                                                    <option value="{{ $schoolId }}" {{ $disabled ? 'disabled' : '' }} style="font-weight: {{ $disabled ? 'normal' : 'bold' }}; color: {{ $disabled ? 'grey' : 'black' }};">
-                                                        {{ $school->name }}
-                                                        {{ $disabled ? ' (غير متاح)' : '' }}
-                                                    </option>
+                                                    @if(!$disabled)
+                                                        <option value="{{ $schoolId }}">
+                                                            {{ $school->name }}
+                                                        </option>
+                                                    @endif
+
+
+
+{{--                                                    <option value="{{ $schoolId }}" {{ $disabled ? 'disabled' : '' }} style="font-weight: {{ $disabled ? 'normal' : 'bold' }}; color: {{ $disabled ? 'grey' : 'black' }};">--}}
+{{--                                                        {{ $school->name }}--}}
+{{--                                                        {{ $disabled ? ' (غير متاح)' : '' }}--}}
+{{--                                                    </option>--}}
                                                 @endforeach
                                             </select>
                                         </div>
