@@ -96,7 +96,7 @@ class MonthlyPlan extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+
         $days = $request->input('days');
         $user = Auth::user();
         $departmentId = $user->department->id;
