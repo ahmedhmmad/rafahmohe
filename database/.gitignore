@@ -1,1 +1,4 @@
 *.sqlite*
+/migrations/2023_06_12_101642_create_tickets_table.php
+/migrations/2023_06_12_205244_create_ticket_assignments_table.php
+/migrations/2023_06_12_205842_add_assigned_to_tickets_table.php
