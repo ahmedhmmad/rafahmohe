@@ -114,7 +114,7 @@ class AdminController extends Controller
             'override_start_date' => 'nullable|date',
             'override_end_date' => 'nullable|date',
             'override_week_number' => 'nullable|integer',
-            'override_department_id' => 'nullable|exists:departments,id',
+            'can_override_multi_department' => 'nullable|boolean',
         ], [
             'override_start_date.date' => 'The override start date must be a valid date.',
             'override_end_date.date' => 'The override end date must be a valid date.',

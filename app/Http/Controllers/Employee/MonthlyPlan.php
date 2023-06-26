@@ -34,8 +34,13 @@ class MonthlyPlan extends Controller
         $planRestriction = Auth::user()->planRestrictions->first();
 
 
-        $canOverrideDepartment = $planRestriction ? $planRestriction->can_override_department : false;
+//        $canOverrideDepartment = $planRestriction ? $planRestriction->can_override_department : false;
+//        $canOverrideMultiDepartment = $planRestriction ? $planRestriction->can_override_multi_department : false;
 
+//        $canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
+        $canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
+
+        $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
 
 
         // Check if the month is a valid value
@@ -56,7 +61,6 @@ class MonthlyPlan extends Controller
 
             $existingPlans = Plan::whereMonth('start', $currentMonth)
                 ->whereYear('start', $currentYear)
-                ->where('department_id', $departmentId)
                 ->get();
 
             $existingPlanDates = $existingPlans->pluck('start')->toArray();
@@ -85,10 +89,21 @@ class MonthlyPlan extends Controller
         }
 
         $schools = School::all();
+        //dd($existingPlans, $existingPlanDates, $canOverrideDepartment, $canOverrideMultiDepartment, $departmentId);
 
-        return view('employee.create-plan', compact('schools', 'month', 'year', 'existingPlanDates', 'existingPlans','canOverrideDepartment'));
+        return view('employee.create-plan', compact('schools', 'month', 'year', 'existingPlanDates', 'existingPlans','canOverrideDepartment','canOverrideMultiDepartment','departmentId'));
 
     }
+
+
+
+
+
+
+
+
+
+
 
 
     /**
