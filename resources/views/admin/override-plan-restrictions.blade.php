@@ -82,8 +82,9 @@
                                     <div class="mb-3">
                                         <label for="can_override_department" class="form-label fw-bold">السماح باستثناء أكثر من موظف للقسم</label>
                                         <select name="can_override_department" id="can_override_department" class="form-control" required>
-                                            <option value="0" {{ old('can_override_department') == '0' ? 'selected' : '' }}>لا</option>
+
                                             <option value="1" {{ old('can_override_department') == '1' ? 'selected' : '' }}>نعم</option>
+                                            <option value="0" {{ old('can_override_department') == '0' ? 'selected' : '' }}>لا</option>
                                         </select>
                                         @error('can_override_department')
                                         <div class="text-danger">{{ $message }}</div>
