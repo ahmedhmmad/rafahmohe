@@ -40,24 +40,38 @@
                                                         $schoolId = $school->id;
                                                         $dateKey = $startOfMonth->format('Y-m-d');
                                                         $existingPlan = $existingPlans->where('start', $dateKey)->where('school_id', $schoolId)->first();
-                                                        $isRestricted = in_array($dateKey, $existingPlanDates) && !$canOverrideDepartment;
+                                                        $isRestricted = false;
+
+                                                        if ($existingPlan) {
+                                                            $existingPlanDepartmentId = $existingPlan->department_id ?? null;
+
+
+                                                            if ($existingPlanDepartmentId == $departmentId)
+                                                            {
+                                                                $isRestricted = in_array($dateKey, $existingPlanDates) && !$canOverrideDepartment;
+                                                            }
+                                                        else{
+                                                            $isRestricted = in_array($dateKey, $existingPlanDates) && !$canOverrideMultiDepartment;
+                                                        }
+                                                        }
+
+                                                       // $isRestricted = in_array($dateKey, $existingPlanDates) && !$canOverrideDepartment;
                                                         $disabled = $isRestricted && ($existingPlan && $existingPlan->school_id !== 34);
                                                     @endphp
 
-{{--                                                Don't show Disabled--}}
+                                                    <option value="{{ $schoolId }}" {{ $disabled ? 'disabled' : '' }} style="font-weight: {{ $disabled ? 'normal' : 'bold' }}; color: {{ $disabled ? 'grey' : 'black' }};">
+                                                        {{ $school->name }}
+                                                        {{ $disabled ? ' (غير متاح)' : '' }}
+                                                    </option>
 
-                                                    @if(!$disabled)
-                                                        <option value="{{ $schoolId }}">
-                                                            {{ $school->name }}
-                                                        </option>
-                                                    @endif
+                                                    {{--                                                Don't show Disabled--}}
 
+                                                    {{--                                                    @if(!$disabled)--}}
+                                                    {{--                                                        <option value="{{ $schoolId }}">--}}
+                                                    {{--                                                            {{ $school->name }}--}}
+                                                    {{--                                                        </option>--}}
+                                                    {{--                                                    @endif--}}
 
-
-{{--                                                    <option value="{{ $schoolId }}" {{ $disabled ? 'disabled' : '' }} style="font-weight: {{ $disabled ? 'normal' : 'bold' }}; color: {{ $disabled ? 'grey' : 'black' }};">--}}
-{{--                                                        {{ $school->name }}--}}
-{{--                                                        {{ $disabled ? ' (غير متاح)' : '' }}--}}
-{{--                                                    </option>--}}
                                                 @endforeach
                                             </select>
                                         </div>
@@ -80,5 +94,4 @@
         </div>
     </div>
 
-   @endsection
-
+@endsection

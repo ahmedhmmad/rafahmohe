@@ -15,7 +15,7 @@ class PlanRestriction extends Model
         'override_start_date',
         'override_end_date',
         'override_week_number',
-        'override_department_id',
+        'can_override_multi_department',
     ];
 
     public function user()
