@@ -25,6 +25,7 @@ class SchoolController extends Controller
     {
        $schoolvisits=Plan::where('school_id',auth()->user()->id)->get();
          $schoolvisitscount=Plan::where('school_id',auth()->user()->id)->count();
+             dd($schoolvisits);
        return view('school.show-school-visitors',compact('schoolvisits','schoolvisitscount'));
     }
 
@@ -33,8 +34,12 @@ class SchoolController extends Controller
      */
     public function create()
     {
+        //Get the school visits for today (from plans table) if any in this day.
+        $plans = Plan::where('school_id', auth()->user()->id)
+            ->whereDate('start', now())
+            ->get();
 
-        $plans = Plan::where('school_id',auth()->user()->id)->where('start',now())->get();
+
         return view('school.create-school-visits',compact('plans'));
     }
 
@@ -43,6 +48,7 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $this->validate($request, [
             'purpose.*' => 'required',
             'activities.*' => 'required',

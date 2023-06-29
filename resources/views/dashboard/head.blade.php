@@ -36,6 +36,8 @@
 <link rel="stylesheet" href="{{url('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
 
 <link rel="stylesheet" href="{{url('/assets/vendor/libs/apex-charts/apex-charts.css')}}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
 
 <!-- Page CSS -->
 
