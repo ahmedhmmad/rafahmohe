@@ -4,6 +4,7 @@ namespace App\Http\Controllers\School;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
+use App\Models\SchoolVisit;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,8 @@ class SchoolController extends Controller
     {
         $name = $request->input('name');
 
-        $users = User::where('name', 'LIKE', "%$name%")->get(['id', 'name', 'job_title']);
+
+        $users = User::where('name', 'LIKE',  '%' . $name . '%')->get(['id', 'name', 'job_title']);
 
         return response()->json($users);
     }
@@ -34,13 +36,18 @@ class SchoolController extends Controller
      */
     public function create()
     {
-        //Get the school visits for today (from plans table) if any in this day.
-        $plans = Plan::where('school_id', auth()->user()->id)
-            ->whereDate('start', now())
-            ->get();
+        //Get all school visits from schoolvisits table and paginate them if there is any.
+        $schoolVisits = SchoolVisit::where('school_id', auth()->user()->id)
+            ->paginate(10);
 
 
-        return view('school.create-school-visits',compact('plans'));
+
+        return view('school.create-school-visits',compact('schoolVisits'));
+    }
+
+    public function addvisits()
+    {
+        return view('school.add-school-visits');
     }
 
     /**

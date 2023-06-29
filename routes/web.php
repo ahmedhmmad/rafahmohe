@@ -177,6 +177,7 @@ Route::middleware(['auth', 'role:School'])->group(function () {
     Route::get('users/search', [App\Http\Controllers\School\SchoolController::class, 'usersSearch'])->name('users.search');
 
     Route::get('/school/createvisits', [App\Http\Controllers\School\SchoolController::class, 'create'])->name('school.create-visits');
+    Route::get('/school/addvisits', [App\Http\Controllers\School\SchoolController::class, 'addvisits'])->name('school.add-visits');
     Route::post('/school/storevisits', [App\Http\Controllers\School\SchoolController::class, 'store'])->name('school.store-visits');
 
     Route::get('/school/show-tickets', [App\Http\Controllers\Ticket\TicketController::class, 'index'])->name('school.show-tickets');

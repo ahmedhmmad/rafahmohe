@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SchoolVisit extends Model
+
 {
 
     use HasFactory;
+    protected $table = 'schoolvisits';
     protected $fillable = [
         'school_id',
         'user_id',
@@ -22,4 +24,10 @@ class SchoolVisit extends Model
     {
         return $this->belongsTo(School::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
 }
