@@ -27,8 +27,7 @@ class SchoolController extends Controller
     {
        $schoolvisits=Plan::where('school_id',auth()->user()->id)->get();
          $schoolvisitscount=Plan::where('school_id',auth()->user()->id)->count();
-             dd($schoolvisits);
-       return view('school.show-school-visitors',compact('schoolvisits','schoolvisitscount'));
+                  return view('school.show-school-visitors',compact('schoolvisits','schoolvisitscount'));
     }
 
     /**
