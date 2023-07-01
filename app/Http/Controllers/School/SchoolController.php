@@ -23,12 +23,24 @@ class SchoolController extends Controller
 
         return response()->json($users);
     }
-    public function index()
+    public function index(Request $request)
     {
-       $schoolvisits=Plan::where('school_id',auth()->user()->id)->get();
-         $schoolvisitscount=Plan::where('school_id',auth()->user()->id)->count();
-                  return view('school.show-school-visitors',compact('schoolvisits','schoolvisitscount'));
+
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+
+        $month = $request->input('month', $currentMonth);
+        $year = $request->input('year', $currentYear);
+
+        $schoolPlannedVisits = Plan::where('school_id', auth()->user()->id)
+            ->whereMonth('start', $month)
+            ->whereYear('start', $year)
+            ->get();
+       // dd($schoolPlannedVisits);
+
+        return view('school.show-school-visitors', compact('schoolPlannedVisits'));
     }
+
 
     /**
      * Show the form for creating a new resource.
