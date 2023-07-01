@@ -80,6 +80,25 @@
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <div data-i18n="Layouts">زائري المدرسة</div>
+                </a>
+
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{route('school.index')}}" class="menu-link">
+                            <div> عرض الزوار</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{route('school.create-visits')}}" class="menu-link">
+                            <div> إدخال سجل الزوار</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-layout"></i>
                     <div data-i18n="Layouts">طلبات الصيانة</div>
                 </a>
 

@@ -23,6 +23,11 @@ class School extends Model
        return $this->hasMany(Department::class, 'department_id');
    }
 
+    public function schoolVisits()
+    {
+        return $this->hasMany(SchoolVisit::class);
+    }
+
 
 
 }
