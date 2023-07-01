@@ -55,35 +55,40 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
-        $this->validate($request, [
-            'purpose.*' => 'required',
-            'activities.*' => 'required',
+        // Validate the form data
+        $validatedData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'visitorName' => 'required|string',
+            'visitDate' => 'required|date',
+            'comingTime' => 'required',
+            'leavingTime' => 'required',
+            'purpose' => 'required|string',
+            'activities' => 'nullable|string',
         ]);
 
-        $visitsData = [];
+        //Get job title for user_id from users table
+        $user=User::where('id',$validatedData['user_id'])->first();
 
-        // Prepare the data for storing school visits
-        foreach ($request->input('purpose') as $index => $purpose) {
-            $visitsData[] = [
-                'visit_date' => $request->input('visit_date')[$index],
-                'coming_time' => $request->input('coming_time')[$index],
-                'leaving_time' => $request->input('leaving_time')[$index],
-                'user_id' => $request->input('user_id')[$index],
-                'school_id' => $request->input('school_id')[$index],
-                'job_title' => $request->input('job_title')[$index],
-                'purpose' => $purpose,
-                'activities' => $request->input('activities')[$index],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-        }
+        // Store the validated data in the database or perform other actions
 
-        // Insert the school visits into the database
-        SchoolVisit::insert($visitsData);
 
-        return redirect()->back()->with('success', 'School visits stored successfully.');
+
+        $storeVisit= new SchoolVisit();
+        $storeVisit->school_id=auth()->user()->id;
+        $storeVisit->user_id=$validatedData['user_id'];
+        $storeVisit->job_title=$user->job_title;
+        $storeVisit->visit_date=$validatedData['visitDate'];
+        $storeVisit->coming_time=$validatedData['comingTime'];
+        $storeVisit->leaving_time=$validatedData['leavingTime'];
+        $storeVisit->purpose=$validatedData['purpose'];
+        $storeVisit->activities=$validatedData['activities'];
+        $storeVisit->save();
+
+        //Return a JSON response indicating success
+        return response()->json(['message' => 'تم الحفظ بنجاح']);
+
     }
+
 
 
     /**

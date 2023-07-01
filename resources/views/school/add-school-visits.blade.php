@@ -1,15 +1,42 @@
 @extends('layouts.master')
 
+<style>
+    .suggestions-list {
+        list-style-type: none;
+        padding: 0;
+        margin-top: 5px;
+    }
+
+    .suggestion-item {
+        cursor: pointer;
+        padding: 5px;
+    }
+
+</style>
+
 @section('content')
     <div class="container py-2">
         <div class="card py2">
             <div class="card-body">
-                <h3 class="text-center mb-4">إضافة زيارة مدرسية</h3>
-                <form id="schoolVisitForm" action="{{route('school.store-visits')}}" method="POST">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h3 class="mb-4">إضافة زيارة مدرسية</h3>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="{{ route('school.create-visits') }}">
+                            <button type="button" class="btn btn-secondary" id="returnButton">
+                                <span class="tf-icons bx bx-arrow-back"></span>&nbsp;العودة
+                            </button>
+                        </a>
+                    </div>
+                </div>
+
+                <form id="schoolVisitForm" action="{{ route('school.store-visits') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label for="visitorName" class="form-label">اسم الزائر</label>
                         <input type="text" class="form-control user-name-input" id="visitorName" required>
+                        <input type="hidden" name="user_id" class="user-id-input">
                     </div>
 
                     <div class="row mb-3">
@@ -35,7 +62,6 @@
                         <textarea class="form-control" id="activities" rows="3" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">إضافة الزيارة</button>
-                    <button type="button" class="btn btn-secondary" id="returnButton">العودة</button>
                 </form>
             </div>
         </div>
@@ -60,35 +86,68 @@
 
             // Get form field values
             var visitorName = document.getElementById('visitorName').value;
+            var userId=document.querySelector('.user-id-input').value;
             var visitDate = document.getElementById('visitDate').value;
             var comingTime = document.getElementById('comingTime').value;
             var leavingTime = document.getElementById('leavingTime').value;
             var purpose = document.getElementById('purpose').value;
             var activities = document.getElementById('activities').value;
+            console.log(userId);
 
             // Perform any necessary validation or data processing here
 
-            // Clear the form fields
-            clearForm();
+            // Make an AJAX request to submit the form
+            fetch('{{ route('school.store-visits') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    visitorName: visitorName,
+                    visitDate: visitDate,
+                    comingTime: comingTime,
+                    leavingTime: leavingTime,
+                    purpose: purpose,
+                    activities: activities
+                })
+            })
+                .then(function(response) {
+                    if (response.ok) {
+                        // Clear the form fields
+                        clearForm();
 
-            // Show success toast
-            // You can use a library like Bootstrap Toasts or any other notification library
-            // to show a success message. Here's an example using Bootstrap Toasts:
-            var toast = document.createElement('div');
-            toast.classList.add('toast', 'show');
-            toast.setAttribute('role', 'alert');
-            toast.setAttribute('aria-live', 'assertive');
-            toast.setAttribute('aria-atomic', 'true');
-            toast.innerHTML = '<div class="toast-header"><strong class="me-auto">Success</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button></div><div class="toast-body">تمت إضافة الزيارة بنجاح.</div>';
-            document.body.appendChild(toast);
+                        // Show success toast
+                        // You can use a library like Bootstrap Toasts or any other notification library
+                        // to show a success message. Here's an example using Bootstrap Toasts:
+                        var toast = document.createElement('div');
+                        toast.classList.add('toast', 'show');
+                        toast.setAttribute('role', 'alert');
+                        toast.setAttribute('aria-live', 'assertive');
+                        toast.setAttribute('aria-atomic', 'true');
+                        toast.innerHTML = '<div class="toast-header"><strong class="me-auto">Success</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button></div><div class="toast-body">تمت إضافة الزيارة بنجاح.</div>';
+                        document.body.appendChild(toast);
 
-            // Return to the previous page or perform any other action
-            // You can add your own logic to redirect or handle the return button click event
+                        // Return to the previous page or perform any other action
+                        // You can add your own logic to redirect or handle the return button click event
 
-            // Optional: Clear the success toast after a few seconds
-            setTimeout(function() {
-                toast.remove();
-            }, 5000);
+                        // Optional: Clear the success toast after a few seconds
+                        setTimeout(function() {
+                            toast.remove();
+                        }, 5000);
+                    } else {
+                       //print Body to console
+                        response.json().then(function(data) {
+                            console.log(data);
+                        });
+                       // throw new Error('Something went wrong');
+                    }
+                })
+                .catch(function(error) {
+                    console.log(error);
+                    // Handle the error here
+                });
         });
 
         // Event listener for return button click
@@ -101,7 +160,6 @@
         userNameInputs.forEach(function(userNameInput) {
             userNameInput.addEventListener('input', function() {
                 var userName = this.value;
-                var jobTitleInput = this.parentNode.parentNode.querySelector('.job-title-input');
 
                 // Make an AJAX request to fetch matching users
                 fetch('{{ route("users.search") }}?name=' + userName)
@@ -109,6 +167,12 @@
                         return response.json();
                     })
                     .then(function(data) {
+                        // Remove any existing suggestions list
+                        var existingSuggestionsList = userNameInput.parentNode.querySelector('.suggestions-list');
+                        if (existingSuggestionsList) {
+                            existingSuggestionsList.remove();
+                        }
+
                         // Display the suggestions in a list
                         var suggestionsList = document.createElement('ul');
                         suggestionsList.classList.add('suggestions-list');
@@ -120,19 +184,20 @@
 
                             // Event listener for selecting a user from the list
                             listItem.addEventListener('click', function() {
+                                console.log(user.name);
                                 userNameInput.value = user.name;
-                                jobTitleInput.value = user.job_title;
+                                //make the userName bold
+                                userNameInput.style.fontWeight = 'bold';
+                                // var jobTitleInput = userNameInput.parentNode.parentNode.querySelector('.job-title-input');
+                                // jobTitleInput.value = user.job_title;
                                 var userIdInput = userNameInput.parentNode.querySelector('.user-id-input');
                                 userIdInput.value = user.id;
+                                console.log(userIdInput.value);
+                                //Remove List once a user is selected
                                 suggestionsList.remove();
+                                console.log('list is removed')
                             });
                         });
-
-                        // Remove any existing suggestions list
-                        var existingSuggestionsList = userNameInput.parentNode.querySelector('.suggestions-list');
-                        if (existingSuggestionsList) {
-                            existingSuggestionsList.remove();
-                        }
 
                         // Append the suggestions list to the parent container
                         userNameInput.parentNode.appendChild(suggestionsList);
@@ -142,6 +207,6 @@
                     });
             });
         });
-    </script>
 
+    </script>
 @endsection

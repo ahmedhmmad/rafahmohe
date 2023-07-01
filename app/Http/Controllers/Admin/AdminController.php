@@ -157,6 +157,7 @@ class AdminController extends Controller
 
     public function search(Request $request)
     {
+
         $departments = Department::all();
         $employeeName = $request->input('employee_name');
         $departmentId = $request->input('department_name');

@@ -14,7 +14,7 @@ class SchoolVisit extends Model
     protected $fillable = [
         'school_id',
         'user_id',
-        'date',
+        'visit_date',
         'coming_time',
         'leaving_time',
         'purpose',
