@@ -224,6 +224,20 @@
 
                 </ul>
             </li>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <div data-i18n="Layouts">زائري المدرسة</div>
+                </a>
+
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{route('head.view-visits')}}" class="menu-link">
+                            <div> عرض الزوار حسب الخطة</div>
+                        </a>
+                    </li>
+
+            </li>
 
         @endif
 
@@ -287,6 +301,22 @@
                     <li class="menu-item">
                         <a href="{{route('admin.show-tickets')}}" class="menu-link">
                             <div> عرض الطلبات</div>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <div data-i18n="Layouts">زوار المدراس</div>
+                </a>
+
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{route('admin.show-schools-visits')}}" class="menu-link">
+                            <div> عرض الزوار حسب الخطة</div>
                         </a>
                     </li>
 

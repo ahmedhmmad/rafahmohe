@@ -96,6 +96,9 @@ Route::middleware(['auth', 'role:Department_Head'])->group(function ()
     Route::post('/head/assignticket/{ticketId}', [TicketController::class, 'assignTicket'])
         ->name('head.tickets.assign');
 
+    Route::get('/head/viewVisits',[\App\Http\Controllers\School\SchoolController::class,'viewDepVisits'])
+        ->name('head.view-visits');
+
 //
 //    Route::get('/employee/enterplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'index'])
 //        ->name('employee.select-month-year-plan');
@@ -144,6 +147,8 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
     Route::get('/fetch-department-users', [AdminController::class,'fetchDepartmentUsers'])->name('fetch.department.users');
     Route::delete('/admin/plan-restrictions/{id}', [AdminController::class,'deletePlanRestriction'])->name('admin.delete-plan-restriction');
 
+    Route::get('/admin/showschoolsvisits', [App\Http\Controllers\School\SchoolController::class, 'showSchoolsVisits'])
+        ->name('admin.show-schools-visits');
 
 
 

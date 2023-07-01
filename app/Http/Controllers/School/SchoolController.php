@@ -41,6 +41,29 @@ class SchoolController extends Controller
         return view('school.show-school-visitors', compact('schoolPlannedVisits'));
     }
 
+    public function viewDepVisits()
+
+    {
+        //Get Department id for Logged user
+        $departmentId = auth()->user()->department_id;
+        //get all users for this department
+        $users = User::where('department_id', $departmentId)->get();
+        //get all school visits for this department using their ids
+        $schoolVisits = SchoolVisit::whereIn('user_id', $users->pluck('id'))->paginate(10);
+
+        return view('head.show-schools-visits',compact('schoolVisits'));
+    }
+
+    public function showSchoolsVisits()
+    {
+
+        $schoolVisits = SchoolVisit::paginate(10);
+
+
+
+        return view('admin.show-schools-visits',compact('schoolVisits'));
+    }
+
 
     /**
      * Show the form for creating a new resource.
