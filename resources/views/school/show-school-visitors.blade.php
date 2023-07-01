@@ -57,7 +57,7 @@
                                 <th scope="col">اليوم</th>
                                 <th scope="col">تاريخ الزيارة</th>
                                 <th scope="col">الزائرون</th>
-                                <th scope="col">العدد</th>
+{{--                                <th scope="col">العدد</th>--}}
                             </tr>
                             </thead>
                             <tbody>
@@ -83,9 +83,9 @@
                                                 @endif
                                             @endforeach
                                         </td>
-                                        <td>
-                                            <a href="" class="btn btn-primary">عرض</a>
-                                        </td>
+{{--                                        <td>--}}
+{{--                                            <a href="" class="btn btn-primary">عرض</a>--}}
+{{--                                        </td>--}}
                                     </tr>
                                     @php
                                         $visitedDays[] = $currentDay;
