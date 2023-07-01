@@ -33,7 +33,6 @@ class MonthlyPlan extends Controller
         $departmentId = Auth::user()->department->id;
         $planRestriction = Auth::user()->planRestrictions->first();
 
-
 //        $canOverrideDepartment = $planRestriction ? $planRestriction->can_override_department : false;
 //        $canOverrideMultiDepartment = $planRestriction ? $planRestriction->can_override_multi_department : false;
 
@@ -76,12 +75,18 @@ class MonthlyPlan extends Controller
         $currentDate = now();
         $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
 
-        if ($currentDate->addWeek()->month != $month) {
-            if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
-                if (!$canOverrideLastWeek) {
-                    $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+
+        if ($currentDate->month != $month || $currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+
+
+            if (!$canOverrideLastWeek) {
+
+//                    $errors->push('لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي.');
+                $validDates = $lastWeekOfMonth->format('d/m/Y') . ' - ' . $lastDayOfMonth->format('d/m/Y');
+                $errorMessage = 'لا يمكن إدخال الخطة فقط خلال الأسبوع الأخير من الشهر الحالي. الفترة المسموحة: ' . $validDates;
+                $errors->push($errorMessage);
                 }
-            }
+
         }
 
         if ($errors->isNotEmpty()) {
@@ -94,14 +99,6 @@ class MonthlyPlan extends Controller
         return view('employee.create-plan', compact('schools', 'month', 'year', 'existingPlanDates', 'existingPlans','canOverrideDepartment','canOverrideMultiDepartment','departmentId'));
 
     }
-
-
-
-
-
-
-
-
 
 
 
