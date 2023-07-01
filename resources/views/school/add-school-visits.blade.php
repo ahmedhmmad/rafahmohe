@@ -12,6 +12,7 @@
         padding: 5px;
     }
 
+
 </style>
 
 @section('content')
@@ -62,6 +63,11 @@
                         <textarea class="form-control" id="activities" rows="3" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">إضافة الزيارة</button>
+
+
+                    <h6 class="text-secondary mt-2">
+                        <span class="tf-icons bx bx-help-circle"></span>&nbsp;ملاحظة: بعد الانتهاء من إضافة الزيارات يمكنك الضغط على زر العودة
+                    </h6>
                 </form>
             </div>
         </div>
