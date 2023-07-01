@@ -86,7 +86,7 @@
                 <ul class="menu-sub">
                     <li class="menu-item">
                         <a href="{{route('school.index')}}" class="menu-link">
-                            <div> عرض الزوار</div>
+                            <div> عرض الزوار حسب الخطة</div>
                         </a>
                     </li>
                     <li class="menu-item">
