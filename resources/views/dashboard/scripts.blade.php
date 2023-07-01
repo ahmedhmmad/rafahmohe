@@ -14,6 +14,10 @@
 <!-- Main JS -->
 <script src="{{url('/assets/js/main.js')}}"></script>
 
+{{--Toast JS--}}
+<script src="{{url('/assets/js/ui-toasts.js')}}"></script>
+
+{{--Sweet Alert--}}
 <!-- Page JS -->
 <script src="{{url('/assets/js/dashboards-analytics.js')}}"></script>
 

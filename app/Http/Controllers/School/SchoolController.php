@@ -117,8 +117,15 @@ class SchoolController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        // Find the record in the database
+        $schoolvisit = SchoolVisit::findOrFail($id);
+
+        $schoolvisit->delete();
+
+        // Optionally, you can redirect the user after deleting the record
+        return redirect()->back()->with('success', 'تم حذف الزيارة بنجاح.');
     }
+
 }
