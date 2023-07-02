@@ -65,7 +65,7 @@ class MonthlyPlan extends Controller
             $existingPlanDates = $existingPlans->pluck('start')->toArray();
 
             $planRestriction = Auth::user()->planRestrictions->first();
-            $canOverrideLastWeek = $planRestriction ? $planRestriction->can_override_last_week : false;
+            $canOverrideLastWeek = $planRestriction ? $planRestriction->can_override_last_week  && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now() : false;
 
         } catch (\Exception $e) {
             $errors->push('اختر الشهر والسنة المطلوبة.');
