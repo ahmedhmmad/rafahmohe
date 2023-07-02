@@ -147,23 +147,17 @@
             </li>
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bx-layout"></i>
-                    <div data-i18n="Layouts">طلبات المدارس</div>
+                    <i class="menu-icon tf-icons bx bxs-school"></i>
+                    <div data-i18n="Layouts">متابعة طلبات المدارس</div>
                 </a>
 
                 <ul class="menu-sub">
                     <li class="menu-item">
                         <a href="{{route('employee.show-assigned-tickets')}}" class="menu-link">
-                            <div> متابعة الطلبات</div>
+                            <div> متابعة تنفيذ الطلبات</div>
                         </a>
                     </li>
-                    {{--                    <li class="menu-item">--}}
-                    {{--                        <a href="{{route('school.show-tickets')}}" class="menu-link">--}}
-                    {{--                            <div> متابعة الطلبات</div>--}}
-                    {{--                        </a>--}}
-                    {{--                    </li>--}}
-
-                </ul>
+               </ul>
             </li>
         @endif
 
@@ -171,7 +165,7 @@
 
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <i class="menu-icon tf-icons bx bx-paper-plane"></i>
                     <div data-i18n="Layouts">خطط موظفي القسم</div>
                 </a>
 
@@ -206,19 +200,19 @@
             </li>
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <i class="menu-icon tf-icons bx bx-building"></i>
                     <div data-i18n="Layouts">طلبات المدارس</div>
                 </a>
 
                 <ul class="menu-sub">
                     <li class="menu-item">
                         <a href="{{url('/head/show-tickets')}}" class="menu-link">
-                            <div> عرض الطلبات</div>
+                            <div> عرض وتنسيب الطلبات</div>
                         </a>
                     </li>
                     <li class="menu-item">
                         <a href="{{route('head.show-assigend-tickets')}}" class="menu-link">
-                            <div> متابعة الطلبات</div>
+                            <div> سجل الطلبات</div>
                         </a>
                     </li>
 
@@ -226,14 +220,14 @@
             </li>
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <i class="menu-icon tf-icons bx bx-command"></i>
                     <div data-i18n="Layouts">زائري المدرسة</div>
                 </a>
 
                 <ul class="menu-sub">
                     <li class="menu-item">
                         <a href="{{route('head.view-visits')}}" class="menu-link">
-                            <div> عرض الزوار حسب الخطة</div>
+                            <div> سجل الزوار لموظفي القسم</div>
                         </a>
                     </li>
 

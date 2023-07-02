@@ -49,28 +49,48 @@
                 </table>
             </div>
         </div>
-{{--                <div class="container py-2">--}}
-{{--                    <div class="card px-2">--}}
+        @if ($ticket->status === 'on-progress' || $ticket->status === 'closed')
+            <div class="container py-2">
+                <div class="card">
+                    <h4 class="p-2">التعليقات</h4>
+                    @if ($ticket->ticketAssignments->count() > 0)
+                        <ul class="list-group">
+                            @foreach ($ticket->ticketAssignments as $assignment)
+                                @if ($assignment->comments)
+                                    <li class="list-group-item">
+                                        {!! nl2br(e($assignment->comments)) !!}
 
-{{--                <h4 class="p-2">تغيير حالة التذكرة</h4>--}}
-{{--                <form action="{{ route('employee.tickets.changeStatus', $ticket->id) }}" method="POST">--}}
-{{--                    @csrf--}}
-{{--                    <div class="form-group">--}}
-{{--                        <label for="status">تغيير الحالة:</label>--}}
-{{--                        <select class="form-control" name="status" id="status">--}}
-{{--                            <option value="on-progress">بدء التنفيذ</option>--}}
-{{--                            <option value="closed">إغلاق</option>--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
-{{--                    <button type="submit" class="btn btn-primary">حفظ</button>--}}
-{{--                </form>--}}
-{{--            </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
+                                        {{-- Add attachment logic here if needed --}}
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    @else
+                        <p>لا يوجد تعليقات.</p>
+                    @endif
+                </div>
+            </div>
+
+            @if ($ticket->status === 'on-progress')
+                <div class="container py-2">
+                    <div class="card px-2">
+                        <h4 class="p-2">إضافة تعليق</h4>
+                        <form action="{{ route('employee.tickets.addComment', $ticket->id) }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <textarea class="form-control" name="comment" rows="3" placeholder="أضف تعليقًا"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">إرسال</button>
+                        </form>
+                    </div>
+                </div>
+            @endif
+        @endif
+
 
 
         <div class="container py-2">
-            <div class="card px-2 ">
+            <div class="card bg-light">
                 <h4 class="p-2">تغيير حالة التذكرة</h4>
                 <form action="{{ route('employee.tickets.changeStatus', $ticket->id) }}" method="POST">
                     @csrf
@@ -88,6 +108,8 @@
                 </form>
             </div>
         </div>
+
+
 
         @endsection
 
