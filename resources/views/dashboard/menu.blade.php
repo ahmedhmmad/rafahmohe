@@ -207,7 +207,7 @@
                 <ul class="menu-sub">
                     <li class="menu-item">
                         <a href="{{url('/head/show-tickets')}}" class="menu-link">
-                            <div> عرض الطلبات</div>
+                            <div> عرض وتنسيب الطلبات</div>
                         </a>
                     </li>
                     <li class="menu-item">

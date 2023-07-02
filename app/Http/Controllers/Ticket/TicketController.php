@@ -235,6 +235,22 @@ class TicketController extends Controller
         return redirect()->back()->with('success', 'تم تغيير حالة التذكرة بنجاح.');
     }
 
+    public function addComment(Request $request, Ticket $ticket)
+    {
+        $request->validate([
+            'comment' => 'required|string',
+        ]);
+
+        $assignedTicket = TicketAssignment::where('ticket_id', $ticket->id)->first();
+
+        // Append the new comment to the existing comments using the .= concatenation operator
+        $assignedTicket->comments .= "\n" . $request->input('comment');
+
+        $assignedTicket->save();
+        return redirect()->back()->with('success', 'Comment added successfully.');
+    }
+
+
 
 
 
