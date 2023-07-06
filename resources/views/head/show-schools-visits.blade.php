@@ -62,16 +62,17 @@
                 <table class="table">
                             <thead>
                             <tr>
-                                <th>اليوم</th>
-                                <th>التاريخ</th>
-                                <th>اسم المستخدم</th>
-                                <th>المسمى الوظيفي</th>
-                                <th>اسم المدرسة</th>
-                                <th>وقت الحضور</th>
-                                <th>وقت الانصراف</th>
-                                <th>الهدف من الزيارة</th>
-                                <th>الأنشطة المنفذة</th>
+                                <th><strong>اليوم</strong></th>
+                                <th><strong>التاريخ</strong></th>
+                                <th><strong>اسم المستخدم</strong></th>
+                                <th><strong>المسمى الوظيفي</strong></th>
+                                <th><strong>اسم المدرسة</strong></th>
+                                <th><strong>وقت الحضور</strong></th>
+                                <th><strong>وقت الانصراف</strong></th>
+                                <th><strong>الهدف من الزيارة</strong></th>
+                                <th><strong>الأنشطة المنفذة</strong></th>
                             </tr>
+
                             </thead>
                             <tbody>
 

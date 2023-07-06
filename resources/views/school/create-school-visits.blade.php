@@ -14,17 +14,19 @@
                 <div class="table-responsive text-wrap">
                     <table class="table table-hover">
                         <thead>
+
                         <tr>
-                            <th>اليوم</th>
-                            <th>التاريخ</th>
-                            <th>الموظف</th>
-                            <th>المسمى الوظيفي</th>
-                            <th>توقيت الحضور</th>
-                            <th>توقيت الانصراف</th>
-                            <th>الهدف من الزيارة</th>
-                            <th>الأنشطة المنفذة</th>
-                            <th>الإجراءات</th>
+                            <th><strong>اليوم</strong></th>
+                            <th><strong>التاريخ</strong></th>
+                            <th><strong>الموظف</strong></th>
+                            <th><strong>المسمى الوظيفي</strong></th>
+                            <th><strong>توقيت الحضور</strong></th>
+                            <th><strong>توقيت الانصراف</strong></th>
+                            <th><strong>الهدف من الزيارة</strong></th>
+                            <th><strong>الأنشطة المنفذة</strong></th>
+                            <th><strong>الإجراءات</strong></th>
                         </tr>
+
                         </thead>
                         <tbody>
                         @foreach($schoolVisits as $schoolVisit)
