@@ -221,7 +221,7 @@
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-command"></i>
-                    <div data-i18n="Layouts">زائري المدرسة</div>
+                    <div data-i18n="Layouts">زيارات المدارس</div>
                 </a>
 
                 <ul class="menu-sub">
@@ -310,7 +310,7 @@
                 <ul class="menu-sub">
                     <li class="menu-item">
                         <a href="{{route('admin.show-schools-visits')}}" class="menu-link">
-                            <div> عرض الزوار حسب الخطة</div>
+                            <div> عرض سجل الزوار </div>
                         </a>
                     </li>
 
