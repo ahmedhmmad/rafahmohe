@@ -57,7 +57,7 @@ class SchoolController extends Controller
 //    }
     public function viewDepVisits(Request $request)
     {
-//        dd($request->all());
+
         // Get Department id for Logged user
         $departmentId = auth()->user()->department_id;
         // Get all users for this department
@@ -98,10 +98,35 @@ class SchoolController extends Controller
     }
 
 
-    public function showSchoolsVisits()
+    public function showSchoolsVisits(Request $request)
     {
+        $selectedSchool = $request->input('school');
+        $selectedMonth = $request->input('month');
+        $selectedYear = $request->input('year');
 
-        $schoolVisits = SchoolVisit::paginate(10);
+        $query = SchoolVisit::query();
+
+        if ($selectedSchool) {
+
+            $query->where('school_id', $selectedSchool);
+        }
+        if($selectedMonth && !$selectedYear){
+            $query->whereMonth('visit_date', $selectedMonth);
+
+        }
+        if($selectedYear && !$selectedMonth){
+            $query->whereYear('visit_date', $selectedYear);
+        }
+
+        if ($selectedMonth && $selectedYear) {
+
+            $query->whereMonth('visit_date', $selectedMonth)->whereYear('visit_date', $selectedYear);
+
+        }
+
+        $schoolVisits = $query->orderBy('visit_date', 'desc')->paginate(10); // Order by visit_date in descending order
+
+
         $schools=School::all();
 
 
