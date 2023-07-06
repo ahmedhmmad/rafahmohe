@@ -4,6 +4,7 @@ namespace App\Http\Controllers\School;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
+use App\Models\School;
 use App\Models\SchoolVisit;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -41,27 +42,69 @@ class SchoolController extends Controller
         return view('school.show-school-visitors', compact('schoolPlannedVisits'));
     }
 
-    public function viewDepVisits()
-
+//    public function viewDepVisits()
+//
+//    {
+//        //Get Department id for Logged user
+//        $departmentId = auth()->user()->department_id;
+//        //get all users for this department
+//        $users = User::where('department_id', $departmentId)->get();
+//        //get all school visits for this department using their ids
+//        $schoolVisits = SchoolVisit::whereIn('user_id', $users->pluck('id'))->paginate(10);
+//        $schools=School::all();
+//
+//        return view('head.show-schools-visits',compact('schoolVisits','schools'));
+//    }
+    public function viewDepVisits(Request $request)
     {
-        //Get Department id for Logged user
+//        dd($request->all());
+        // Get Department id for Logged user
         $departmentId = auth()->user()->department_id;
-        //get all users for this department
+        // Get all users for this department
         $users = User::where('department_id', $departmentId)->get();
-        //get all school visits for this department using their ids
-        $schoolVisits = SchoolVisit::whereIn('user_id', $users->pluck('id'))->paginate(10);
 
-        return view('head.show-schools-visits',compact('schoolVisits'));
+        // Apply filters based on selected school and month/year
+        $selectedSchool = $request->input('school');
+        $selectedMonth = $request->input('month');
+        $selectedYear = $request->input('year');
+
+        $query = SchoolVisit::whereIn('user_id', $users->pluck('id'));
+
+        if ($selectedSchool) {
+            $query->where('school_id', $selectedSchool);
+        }
+        if($selectedMonth && !$selectedYear){
+            $query->whereMonth('visit_date', $selectedMonth);
+
+        }
+        if($selectedYear && !$selectedMonth){
+            $query->whereYear('visit_date', $selectedYear);
+        }
+
+        if ($selectedMonth && $selectedYear) {
+            $query->whereMonth('visit_date', $selectedMonth)->whereYear('visit_date', $selectedYear);
+
+        }
+
+
+
+        // Get the filtered school visits and paginate the results
+        $schoolVisits = $query->paginate(10);
+        $schools = School::all();
+
+        return view('head.show-schools-visits', compact('schoolVisits', 'schools'));
     }
+
 
     public function showSchoolsVisits()
     {
 
         $schoolVisits = SchoolVisit::paginate(10);
+        $schools=School::all();
 
 
 
-        return view('admin.show-schools-visits',compact('schoolVisits'));
+        return view('admin.show-schools-visits',compact('schoolVisits','schools'));
     }
 
 

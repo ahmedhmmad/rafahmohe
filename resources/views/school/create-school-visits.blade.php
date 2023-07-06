@@ -28,8 +28,11 @@
                         </thead>
                         <tbody>
                         @foreach($schoolVisits as $schoolVisit)
+                            @php
+                                $start = \Carbon\Carbon::parse($schoolVisit->visit_date)->locale('ar');
+                            @endphp
                             <tr>
-                                <td>{{ $schoolVisit->visit_date }}</td>
+                                <td><h6>{{ $start->translatedFormat('l') }}</h6></td>
                                 <td>{{ $schoolVisit->visit_date }}</td>
                                 <td>{{ $schoolVisit->user->name }}</td>
                                 <td>{{ $schoolVisit->user->job_title }}</td>

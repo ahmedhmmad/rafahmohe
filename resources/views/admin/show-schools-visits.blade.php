@@ -34,17 +34,15 @@
                             {{--                                <input type="date" name="visit_date[]" class="form-control date-input" required>--}}
                             {{--                                <input type="hidden" name="day[]" class="day-input">--}}
                             <h6>{{ $start->translatedFormat('Y-m-d') }}</h6>
-                            <input type="hidden" name="visit_date[]" value="{{ $start->translatedFormat('Y-m-d') }}">
-                            <input type="hidden" name="day[]" value="{{ $start->translatedFormat('l') }}">
+
                         </td>
                         <td>
                             <h6>{{$schoolVisit->user->name}}</h6>
-                            <input type="hidden" name="user_name[]" class="form-control user-name-input" required>
-                            <input type="hidden" name="user_id[]" class="user-id-input">
+
                         </td>
                         <td>
                             <h6>{{$schoolVisit->user->job_title}}</h6>
-                            <input type="hidden" name="job_title[]" class="form-control job-title-input" readonly>
+
                         </td>
                         <td>
                             <h6>{{$schoolVisit->school->name}}</h6>
