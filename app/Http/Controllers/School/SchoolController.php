@@ -71,6 +71,7 @@ class SchoolController extends Controller
         $query = SchoolVisit::whereIn('user_id', $users->pluck('id'));
 
         if ($selectedSchool) {
+
             $query->where('school_id', $selectedSchool);
         }
         if($selectedMonth && !$selectedYear){
@@ -82,6 +83,7 @@ class SchoolController extends Controller
         }
 
         if ($selectedMonth && $selectedYear) {
+
             $query->whereMonth('visit_date', $selectedMonth)->whereYear('visit_date', $selectedYear);
 
         }

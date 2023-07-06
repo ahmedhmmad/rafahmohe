@@ -11,8 +11,8 @@
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label for="school">المدرسة</label>
-                        <select name="school" id="school" class="form-control">
-                            <option value="school">اختر المدرسة</option>
+                        <select name="school" id="school" class="form-control form-select">
+                            <option value="">اختر المدرسة</option>
                             @foreach($schools as $school)
                                 <option value="{{ $school->id }}">{{ $school->name }}</option>
                             @endforeach
@@ -20,7 +20,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label for="month">الشهر</label>
-                        <select name="month" id="month" class="form-control">
+                        <select name="month" id="month" class="form-control form-select">
                             <option value="">اختر الشهر</option>
                             <option value="1">يناير</option>
                             <option value="2">فبراير</option>
@@ -38,7 +38,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label for="year">السنة</label>
-                        <select name="year" id="year" class="form-control">
+                        <select name="year" id="year" class="form-control form-select">
                             <option value="">اختر السنة</option>
                             <option value="2023">2023</option>
                             <option value="2024">2024</option>
@@ -46,7 +46,7 @@
 
                         </select>
                     </div>
-                    <div class="form-group col-md-2"><button type="submit" class="btn btn-primary">بحث</button></div>
+                    <div class="form-group col-md-2"><button type="submit" class="btn btn-primary mt-4 px-lg-4">بحث</button></div>
 
                 </div>
 
