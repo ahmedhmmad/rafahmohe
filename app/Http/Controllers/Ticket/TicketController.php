@@ -34,6 +34,38 @@ class TicketController extends Controller
 
 
     }
+    public function getTicketDetails(Request $request)
+    {
+        $ticketId = $request->input('ticketId');
+        // Retrieve the ticket details based on the ticket ID
+        $ticket = Ticket::find($ticketId);
+
+        // Process and prepare the ticket details as needed
+
+        // Render the ticket details HTML
+        $ticketDetailsHtml = view('admin.ticket-details', compact('ticket'))->render();
+
+        // Return the ticket details HTML as a JSON response
+        return response()->json([
+            'ticketDetails' => $ticketDetailsHtml
+        ]);
+    }
+
+    // app/Http/Controllers/TicketController.php
+
+    public function getComments(Request $request)
+    {
+        $ticketId = $request->input('ticketId');
+        $ticket = Ticket::find($ticketId);
+
+        // Retrieve the comments for the ticket
+        $comments = $ticket->ticketAssignments->pluck('comments')->filter()->toArray();
+
+        return response()->json(['comments' => $comments]);
+    }
+
+
+
     public function showTicketsAdmin()
     {
         // Retrieve the tickets belonging to the user
