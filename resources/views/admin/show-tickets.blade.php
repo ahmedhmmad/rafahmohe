@@ -197,7 +197,22 @@
                                                     <p><strong>موضوع الطلب:</strong> {{ $ticket->subject }}</p>
                                                     <p><strong>القسم:</strong> {{ $ticket->department->name }}</p>
                                                     <p><strong>حالة الطلب:</strong> <span class="badge {{ getStatusStyle($ticket->status) }}">{{ getStatusName($ticket->status) }}</span></p>
-                                                    <p><strong>التعليقات</strong></p> {{ $ticket->assigned_to}}
+                                                    <p><strong>منفذ الطلب:</strong> {{$ticket->assignedUser->name ?? 'لم يتم التعيين بعد' }}</p>
+                                                    <p><strong>التعليقات</strong></p> @if ($ticket->ticketAssignments->count() > 0)
+                                                        <ul class="list-group">
+                                                            @foreach ($ticket->ticketAssignments as $assignment)
+                                                                @if ($assignment->comments)
+                                                                    <li class="list-group-item">
+                                                                        {!! nl2br(e($assignment->comments)) !!}
+
+                                                                        {{-- Add attachment logic here if needed --}}
+                                                                    </li>
+                                                                @endif
+                                                            @endforeach
+                                                        </ul>
+                                                    @else
+                                                        <p>لا يوجد تعليقات.</p>
+                                                    @endif
 
                                                 </div>
                                                 <div class="modal-footer">
