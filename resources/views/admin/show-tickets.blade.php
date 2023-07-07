@@ -117,8 +117,14 @@
                         </thead>
                         <tbody>
                         @foreach($tickets as $ticket)
+
                             <tr>
-                                <td>{{ $ticket->id }}</td>
+                                <td>
+                                    <a href="#" class="ticket-link" data-ticket-id="{{ $ticket->id }}" data-bs-toggle="modal" data-bs-target="#ticketModal-{{ $ticket->id }}">
+
+                                    {{ $ticket->id }}
+                                    </a>
+                                </td>
                                 <td>{{ $ticket->created_at->format('Y-m-d') }}</td>
                                 <td>{{ $ticket->user->name }}</td>
                                 <td>{{ $ticket->subject }}</td>
@@ -173,9 +179,38 @@
                                         </div>
                                     </div>
 
+{{--                                    Modal for showing the ticket details--}}
+                                    <div class="modal fade" id="ticketModal-{{ $ticket->id }}" tabindex="-1" aria-labelledby="ticketModalLabel-{{ $ticket->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="ticketModalLabel-{{ $ticket->id }}">تفاصيل التذكرة رقم {{ $ticket->id }}</h5>
+{{--                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>--}}
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!-- Loading spinner -->
+                                                    <div class="spinner-border text-primary" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    <p><strong>تاريخ الطلب:</strong> {{ $ticket->created_at->format('Y-m-d') }}</p>
+                                                    <p><strong>المدرسة:</strong> {{ $ticket->user->name }}</p>
+                                                    <p><strong>موضوع الطلب:</strong> {{ $ticket->subject }}</p>
+                                                    <p><strong>القسم:</strong> {{ $ticket->department->name }}</p>
+                                                    <p><strong>حالة الطلب:</strong> <span class="badge {{ getStatusStyle($ticket->status) }}">{{ getStatusName($ticket->status) }}</span></p>
+                                                    <p><strong>التعليقات</strong></p> {{ $ticket->assigned_to}}
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
 
                                 </td>
                             </tr>
+
                         @endforeach
                         </tbody>
                     </table>
@@ -237,6 +272,41 @@
                 // Perform assignment logic here using the ticketId and selectedEmployee
 
                 $(this).closest('.assign-modal').addClass('d-none');
+            });
+        });
+
+        $(document).ready(function() {
+            $('.ticket-link').click(function(e) {
+                e.preventDefault();
+
+                var ticketId = $(this).data('ticket-id');
+                var spinner = $('#ticketModal-' + ticketId).find('.spinner-border');
+                var modalBody = $('#ticketModal-' + ticketId).find('.modal-body');
+
+                // Show the loading spinner
+                spinner.show();
+
+                // Make an AJAX request to fetch the ticket details
+                $.ajax({
+                    url: '{{ route('admin.tickets.details') }}',
+                    type: 'GET',
+                    data: {
+                        ticketId: ticketId
+                    },
+                    success: function(response) {
+                        // Hide the loading spinner
+                        spinner.hide();
+
+                        // Update the modal body with the ticket details
+                        modalBody.html(response.ticketDetails);
+                    },
+                    error: function(xhr) {
+                        // Hide the loading spinner
+                        spinner.hide();
+
+                        // Handle the error scenario if needed
+                    }
+                });
             });
         });
     </script>

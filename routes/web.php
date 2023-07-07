@@ -163,6 +163,10 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
     Route::post('/tickets/{ticketId}/assign', [TicketController::class, 'assignTicketDepAdmin'])
         ->name('admin.tickets.assign');
 
+    Route::get('/admin/tickets/details', [TicketController::class, 'getTicketDetails'])
+        ->name('admin.tickets.details');
+
+
     Route::get('/admin/search', [App\Http\Controllers\Admin\AdminController::class, 'search'])
         ->name('admin.search-plan');
 
