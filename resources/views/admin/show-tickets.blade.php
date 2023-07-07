@@ -200,20 +200,7 @@
                                                     <p><strong>حالة الطلب:</strong> <span class="badge {{ getStatusStyle($ticket->status) }}">{{ getStatusName($ticket->status) }}</span></p>
                                                     <p><strong>منفذ الطلب:</strong> {{ $ticket->assignedUser->name ?? 'لم يتم التعيين بعد' }}</p>
                                                     <p><strong>التعليقات</strong></p>
-                                                    @if ($ticket->ticketAssignments->count() > 0)
-                                                        <ul class="list-group">
-                                                            @foreach ($ticket->ticketAssignments as $assignment)
-                                                                @if ($assignment->comments)
-                                                                    <li class="list-group-item">
-                                                                        {!! nl2br(e($assignment->comments)) !!}
-                                                                        {{-- Add attachment logic here if needed --}}
-                                                                    </li>
-                                                                @endif
-                                                            @endforeach
-                                                        </ul>
-                                                    @else
-                                                        <p>لا يوجد تعليقات.</p>
-                                                    @endif
+                                                    <div id="comments-{{ $ticket->id }}"></div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
@@ -297,14 +284,14 @@
 
                 var ticketId = $(this).data('ticket-id');
                 var spinner = $('#ticketModal-' + ticketId).find('.spinner-border');
-                var modalBody = $('#ticketModal-' + ticketId).find('.modal-body');
+                var commentsContainer = $('#comments-' + ticketId);
 
                 // Show the loading spinner
                 spinner.show();
 
-                // Make an AJAX request to fetch the ticket details
+                // Make an AJAX request to fetch the comments
                 $.ajax({
-                    url: '{{ route('admin.tickets.details') }}',
+                    url: '{{ route('admin.tickets.comments') }}',
                     type: 'GET',
                     data: {
                         ticketId: ticketId
@@ -313,8 +300,24 @@
                         // Hide the loading spinner
                         spinner.hide();
 
-                        // Update the modal body with the ticket details
-                        modalBody.html(response.ticketDetails);
+                        commentsContainer.empty();
+
+                        // Generate the list of comments
+                        if (response.comments.length > 0) {
+                            response.comments.forEach(function(comment) {
+                                // Split the comment by new lines
+                                var lines = comment.split('\n');
+
+                                // Generate a list item for each line
+                                lines.forEach(function(line) {
+                                    if (line.trim() !== '') {
+                                        commentsContainer.append('<li class="list-group-item">' + line + '</li>');
+                                    }
+                                });
+                            });
+                        }  else {
+                            commentsContainer.html('<p>لا يوجد تعليقات.</p>');
+                        }
                     },
                     error: function(xhr) {
                         // Hide the loading spinner
@@ -325,6 +328,7 @@
                 });
             });
         });
+
     </script>
 @endpush
 

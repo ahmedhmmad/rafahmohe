@@ -51,6 +51,20 @@ class TicketController extends Controller
         ]);
     }
 
+    // app/Http/Controllers/TicketController.php
+
+    public function getComments(Request $request)
+    {
+        $ticketId = $request->input('ticketId');
+        $ticket = Ticket::find($ticketId);
+
+        // Retrieve the comments for the ticket
+        $comments = $ticket->ticketAssignments->pluck('comments')->filter()->toArray();
+
+        return response()->json(['comments' => $comments]);
+    }
+
+
 
     public function showTicketsAdmin()
     {
