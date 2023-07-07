@@ -202,4 +202,10 @@ Route::middleware(['auth', 'role:School'])->group(function () {
     Route::get('/school/create-ticket', [App\Http\Controllers\Ticket\TicketController::class, 'create'])->name('school.create-ticket');
     Route::post('/school/store-ticket', [App\Http\Controllers\Ticket\TicketController::class, 'store'])->name('school.store-ticket');
 
+    Route::get('/school/tickets/details', [TicketController::class, 'getTicketDetails'])
+        ->name('school.tickets.details');
+
+    Route::get('/tickets/comments', [TicketController::class, 'getComments'])
+        ->name('school.tickets.comments');
+
 });
