@@ -185,26 +185,27 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="ticketModalLabel-{{ $ticket->id }}">تفاصيل التذكرة رقم {{ $ticket->id }}</h5>
-{{--                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>--}}
                                                 </div>
                                                 <div class="modal-body">
-                                                    <!-- Loading spinner -->
-                                                    <div class="spinner-border text-primary" role="status">
-                                                        <span class="visually-hidden">Loading...</span>
+                                                    <div class="text-center">
+                                                        <!-- Loading spinner -->
+                                                        <div class="spinner-border text-primary" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
                                                     </div>
                                                     <p><strong>تاريخ الطلب:</strong> {{ $ticket->created_at->format('Y-m-d') }}</p>
                                                     <p><strong>المدرسة:</strong> {{ $ticket->user->name }}</p>
                                                     <p><strong>موضوع الطلب:</strong> {{ $ticket->subject }}</p>
                                                     <p><strong>القسم:</strong> {{ $ticket->department->name }}</p>
                                                     <p><strong>حالة الطلب:</strong> <span class="badge {{ getStatusStyle($ticket->status) }}">{{ getStatusName($ticket->status) }}</span></p>
-                                                    <p><strong>منفذ الطلب:</strong> {{$ticket->assignedUser->name ?? 'لم يتم التعيين بعد' }}</p>
-                                                    <p><strong>التعليقات</strong></p> @if ($ticket->ticketAssignments->count() > 0)
+                                                    <p><strong>منفذ الطلب:</strong> {{ $ticket->assignedUser->name ?? 'لم يتم التعيين بعد' }}</p>
+                                                    <p><strong>التعليقات</strong></p>
+                                                    @if ($ticket->ticketAssignments->count() > 0)
                                                         <ul class="list-group">
                                                             @foreach ($ticket->ticketAssignments as $assignment)
                                                                 @if ($assignment->comments)
                                                                     <li class="list-group-item">
                                                                         {!! nl2br(e($assignment->comments)) !!}
-
                                                                         {{-- Add attachment logic here if needed --}}
                                                                     </li>
                                                                 @endif
@@ -213,7 +214,6 @@
                                                     @else
                                                         <p>لا يوجد تعليقات.</p>
                                                     @endif
-
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
@@ -221,6 +221,7 @@
                                             </div>
                                         </div>
                                     </div>
+
 
 
                                 </td>
