@@ -154,6 +154,9 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
     Route::get('/admin/showschoolsvisits', [App\Http\Controllers\School\SchoolController::class, 'showSchoolsVisits'])
         ->name('admin.show-schools-visits');
 
+    Route::get('/admin/print',[\App\Http\Controllers\Report\ReportController::class,'print'])
+        ->name('admin.print');
+
 
 
 
@@ -166,7 +169,7 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
     Route::get('/admin/tickets/details', [TicketController::class, 'getTicketDetails'])
         ->name('admin.tickets.details');
 
-    Route::get('/tickets/comments', [TicketController::class, 'getComments'])
+    Route::get('/admin/tickets/comments', [TicketController::class, 'getComments'])
         ->name('admin.tickets.comments');
 
 

@@ -250,6 +250,8 @@
             </div>
         @endif
     </div>
+
+
 @endsection
 
 @push('scripts')
@@ -291,7 +293,7 @@
 
                 // Make an AJAX request to fetch the comments
                 $.ajax({
-                    url: '{{ route('admin.tickets.comments') }}',
+                    url: '{{route('admin.tickets.comments')}}',
                     type: 'GET',
                     data: {
                         ticketId: ticketId
@@ -332,34 +334,3 @@
     </script>
 @endpush
 
-@php
-    function getStatusStyle($status) {
-        switch ($status) {
-            case 'open':
-                return 'bg-label-primary';
-            case 'assigned':
-                return 'bg-label-success';
-            case 'on-progress':
-                return 'bg-label-warning';
-            case 'closed':
-                return 'bg-label-danger';
-            default:
-                return '';
-        }
-    }
-
-    function getStatusName($status) {
-        switch ($status) {
-            case 'open':
-                return 'جديدة';
-            case 'assigned':
-                return 'تم التعيين';
-            case 'on-progress':
-                return 'قيد التنفيذ';
-            case 'closed':
-                return 'مغلقة';
-            default:
-                return '';
-        }
-    }
-@endphp
