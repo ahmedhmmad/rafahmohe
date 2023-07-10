@@ -182,60 +182,60 @@
 {{--@endphp--}}
 
 
-{{--@push('scripts')--}}
-{{--    <script>--}}
+@push('scripts')
+    <script>
 
-{{--        $(document).ready(function() {--}}
-{{--            $('.ticket-link').click(function(e) {--}}
-{{--                e.preventDefault();--}}
+        $(document).ready(function() {
+            $('.ticket-link').click(function(e) {
+                e.preventDefault();
 
-{{--                var ticketId = $(this).data('ticket-id');--}}
-{{--                var spinner = $('#ticketModal-' + ticketId).find('.spinner-border');--}}
-{{--                var commentsContainer = $('#comments-' + ticketId);--}}
+                var ticketId = $(this).data('ticket-id');
+                var spinner = $('#ticketModal-' + ticketId).find('.spinner-border');
+                var commentsContainer = $('#comments-' + ticketId);
 
-{{--                // Show the loading spinner--}}
-{{--                spinner.show();--}}
+                // Show the loading spinner
+                spinner.show();
 
-{{--                // Make an AJAX request to fetch the comments--}}
-{{--                $.ajax({--}}
-{{--                    url: '{{ route('school.tickets.comments') }}',--}}
-{{--                    type: 'GET',--}}
-{{--                    data: {--}}
-{{--                        ticketId: ticketId--}}
-{{--                    },--}}
-{{--                    success: function(response) {--}}
-{{--                        // Hide the loading spinner--}}
-{{--                        spinner.hide();--}}
+                // Make an AJAX request to fetch the comments
+                $.ajax({
+                    url: '{{ route('school.tickets.comments') }}',
+                    type: 'GET',
+                    data: {
+                        ticketId: ticketId
+                    },
+                    success: function(response) {
+                        // Hide the loading spinner
+                        spinner.hide();
 
-{{--                        commentsContainer.empty();--}}
+                        commentsContainer.empty();
 
-{{--                        // Generate the list of comments--}}
-{{--                        if (response.comments.length > 0) {--}}
-{{--                            response.comments.forEach(function(comment) {--}}
-{{--                                // Split the comment by new lines--}}
-{{--                                var lines = comment.split('\n');--}}
+                        // Generate the list of comments
+                        if (response.comments.length > 0) {
+                            response.comments.forEach(function(comment) {
+                                // Split the comment by new lines
+                                var lines = comment.split('\n');
 
-{{--                                // Generate a list item for each line--}}
-{{--                                lines.forEach(function(line) {--}}
-{{--                                    if (line.trim() !== '') {--}}
-{{--                                        commentsContainer.append('<li class="list-group-item">' + line + '</li>');--}}
-{{--                                    }--}}
-{{--                                });--}}
-{{--                            });--}}
-{{--                        }  else {--}}
-{{--                            commentsContainer.html('<p>لا يوجد تعليقات.</p>');--}}
-{{--                        }--}}
-{{--                    },--}}
-{{--                    error: function(xhr) {--}}
-{{--                        // Hide the loading spinner--}}
-{{--                        spinner.hide();--}}
+                                // Generate a list item for each line
+                                lines.forEach(function(line) {
+                                    if (line.trim() !== '') {
+                                        commentsContainer.append('<li class="list-group-item">' + line + '</li>');
+                                    }
+                                });
+                            });
+                        }  else {
+                            commentsContainer.html('<p>لا يوجد تعليقات.</p>');
+                        }
+                    },
+                    error: function(xhr) {
+                        // Hide the loading spinner
+                        spinner.hide();
 
-{{--                        // Handle the error scenario if needed--}}
-{{--                    }--}}
-{{--                });--}}
-{{--            });--}}
-{{--        });--}}
+                        // Handle the error scenario if needed
+                    }
+                });
+            });
+        });
 
-{{--    </script>--}}
-{{--@endpush--}}
+    </script>
+@endpush
 
