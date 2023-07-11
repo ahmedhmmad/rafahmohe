@@ -27,6 +27,6 @@ class TicketCreated extends Mailable
         $schoolName =Auth::user()->name;
         return $this->view('emails.ticket-created')
             ->subject('تم تقديم طلب صيانة جديد')
-            ->from('ahammad@moegaza.edu.ps', $schoolName);
+            ->from('no-replay@rafahmohe.com', $schoolName);
     }
 }

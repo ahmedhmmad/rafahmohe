@@ -229,13 +229,17 @@ class TicketController extends Controller
 
         // Send email to the selected department
         $department = Department::find($request->input('department'));
+        $departmentemail= $department->email;
         if ($department) {
             $emailData = [
                 'ticket' => $ticket,
                 // Add any additional data you want to pass to the email view
             ];
 
-            Mail::to($department->email)->send(new TicketCreated($emailData));
+            if($departmentemail){
+                Mail::to($departmentemail)->send(new TicketCreated($emailData));
+            }
+
 
             //Send SMS notification to the department head
             // Get the department head user
