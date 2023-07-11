@@ -3,12 +3,17 @@
 namespace App\Http\Controllers\Ticket;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TicketCreated;
 use App\Models\Department;
 use App\Models\Ticket;
 use App\Models\TicketAssignment;
 use App\Models\User;
+use App\Notifications\SMSNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Twilio\Rest\Client;
+use Illuminate\Support\Facades\Config;
 
 class TicketController extends Controller
 {
@@ -221,6 +226,52 @@ class TicketController extends Controller
         //dd($ticket);
 
         $ticket->save();
+
+        // Send email to the selected department
+        $department = Department::find($request->input('department'));
+        if ($department) {
+            $emailData = [
+                'ticket' => $ticket,
+                // Add any additional data you want to pass to the email view
+            ];
+
+            Mail::to($department->email)->send(new TicketCreated($emailData));
+
+            //Send SMS notification to the department head
+            // Get the department head user
+//            $departmentHead = User::where('department_id', $request->input('department'))
+//                ->where('role_id', 2)
+//                ->first();
+//            if ($departmentHead) {
+//                $mobileNumber = $departmentHead->phone;
+//
+//                // Send the SMS notification using Twilio
+//                if ($mobileNumber) {
+//                    $accountSid = Config::get('services.twilio.sid');
+//                    $authToken = Config::get('services.twilio.token');
+//                    $twilioPhoneNumber = Config::get('services.twilio.phone_number');
+//                   // dd($accountSid, $authToken, $twilioPhoneNumber);
+//
+//                    $client = new Client($accountSid, $authToken);
+//
+//                    $countryCode = '+970'; // Replace with the appropriate country code
+//
+//                    // Add the country code to the mobile number
+//                    $formattedMobileNumber = $countryCode . $mobileNumber;
+//
+//
+//                    $message = $client->messages->create(
+//                        $formattedMobileNumber,
+//                        [
+//                            'from' => $twilioPhoneNumber,
+//                            'body' => 'A new ticket has been created. Please login to your account to view the ticket details.'
+//                        ]
+//                    );
+//
+//                }
+//            }
+        }
+
 
 
         // Redirect to a success page or ticket details page
