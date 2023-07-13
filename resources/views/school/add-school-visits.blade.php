@@ -98,7 +98,7 @@
             var leavingTime = document.getElementById('leavingTime').value;
             var purpose = document.getElementById('purpose').value;
             var activities = document.getElementById('activities').value;
-            console.log(userId,visitDate,comingTime,leavingTime,purpose,activities);
+            console.log(userId);
 
             // Perform any necessary validation or data processing here
 
@@ -143,7 +143,6 @@
                             toast.remove();
                         }, 5000);
                     } else {
-
                        //print Body to console
                         response.json().then(function(data) {
                             console.log(data);
