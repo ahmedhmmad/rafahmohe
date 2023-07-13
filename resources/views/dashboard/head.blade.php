@@ -47,4 +47,13 @@
 <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
 <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
 <script src="{{url('/assets/js/config.js')}}"></script>
+
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script>
+        const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+            // Add any additional configuration options you need
+        });
+    </script>
+
 </head>

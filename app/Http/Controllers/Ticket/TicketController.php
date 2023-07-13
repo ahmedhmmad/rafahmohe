@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Ticket;
 
 use App\Http\Controllers\Controller;
 use App\Mail\TicketCreated;
+use App\Events\TicketCreatedEvent;
+
 use App\Models\Department;
 use App\Models\Ticket;
 use App\Models\TicketAssignment;
@@ -14,6 +16,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Config;
+use Pusher\Pusher;
+
+
 
 class TicketController extends Controller
 {
@@ -236,9 +241,12 @@ class TicketController extends Controller
                 // Add any additional data you want to pass to the email view
             ];
 
-            if($departmentemail){
-                Mail::to($departmentemail)->send(new TicketCreated($emailData));
+            if ($departmentemail) {
+               // Mail::to($departmentemail)->send(new TicketCreated($emailData));
             }
+            event(new TicketCreatedEvent($ticket));
+
+        }
 
 
             //Send SMS notification to the department head
@@ -274,11 +282,35 @@ class TicketController extends Controller
 //
 //                }
 //            }
-        }
+
+
+//            // Retrieve the department head user
+//            $departmentHead = User::where('department_id', $request->input('department'))
+//                ->where('role_id', 2)
+//                ->first();
+//
+//            if ($departmentHead) {
+//                $departmentHeadChannel = 'department-head-' . $departmentHead->id;
+//
+//                // Trigger a Pusher event to notify the department head
+//                $pusher = new Pusher(
+//                    env('PUSHER_APP_KEY'),
+//                    env('PUSHER_APP_SECRET'),
+//                    env('PUSHER_APP_ID'),
+//                    [
+//                        'cluster' => env('PUSHER_APP_CLUSTER'),
+//                        'useTLS' => true,
+//                    ]
+//                );
+//
+//                $pusher->trigger($departmentHeadChannel, 'ticket-created', $ticket);
+//            }
+//
+//        }
 
 
 
-        // Redirect to a success page or ticket details page
+            // Redirect to a success page or ticket details page
         return redirect()->route('school.show-tickets')->with('success', 'Ticket created successfully.');
 
     }

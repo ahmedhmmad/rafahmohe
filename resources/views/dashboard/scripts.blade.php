@@ -21,7 +21,9 @@
 <!-- Page JS -->
 <script src="{{url('/assets/js/dashboards-analytics.js')}}"></script>
 
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 
+<script src="{{ asset('/js/notifications.js') }}"></script>
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>

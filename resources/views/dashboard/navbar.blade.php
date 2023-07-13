@@ -22,6 +22,25 @@
 
         <ul class="navbar-nav flex-row align-items-center mr-auto">
              <!-- User -->
+            <!-- User -->
+            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown">
+                    <!-- Add notification icon here if desired -->
+                    <i class="bx bx-bell"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" id="notification-dropdown" data-user-id="{{ Auth::user()->id }}">
+
+                <!-- Add the list of notifications here -->
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            New Ticket Created
+                        </a>
+                    </li>
+                    <!-- Add more notification items as needed -->
+                </ul>
+            </li>
+            <!--/ User -->
+
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
