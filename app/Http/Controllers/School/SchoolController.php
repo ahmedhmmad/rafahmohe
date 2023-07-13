@@ -159,6 +159,7 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
+
         // Validate the form data
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -174,7 +175,6 @@ class SchoolController extends Controller
         $user=User::where('id',$validatedData['user_id'])->first();
 
         // Store the validated data in the database or perform other actions
-
 
 
         $storeVisit= new SchoolVisit();
