@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ticket;
 
+use App\Events\TicketCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Mail\TicketCreated;
 use App\Models\Department;
