@@ -29,7 +29,7 @@ channel.bind('ticket-created', function (data) {
     notificationItem.innerHTML = `
         <a class="dropdown-item" href="#">
             // ${data.ticket.subject}
-            A new ticket has been created
+           <h5>هناك طلب جديد</h5>
         </a>
     `;
 
