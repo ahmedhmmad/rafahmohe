@@ -3,6 +3,11 @@ const notificationsDropdown = document.getElementById('notification-dropdown');
 const userId = notificationsDropdown.getAttribute('data-user-id');
 
 // Listen for the Pusher event
+const pusher = new Pusher('{{ env("PUSHER_APP_KEY") }}', {
+    cluster: '{{ env("PUSHER_APP_CLUSTER") }}',
+    encrypted: true
+});
+
 const channel = pusher.subscribe('department-head-' + userId);
 channel.bind('ticket-created', function (data) {
     // Create a new notification item
