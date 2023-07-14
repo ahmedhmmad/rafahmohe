@@ -237,8 +237,9 @@ class TicketController extends Controller
             ];
 
             if($departmentemail){
-                Mail::to($departmentemail)->send(new TicketCreated($emailData));
+                //Mail::to($departmentemail)->send(new TicketCreated($emailData));
             }
+            event(new TicketCreatedEvent($ticket));
 
 
             //Send SMS notification to the department head
