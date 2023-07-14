@@ -2,9 +2,17 @@
 const notificationsDropdown = document.getElementById('notification-dropdown');
 const userId = notificationsDropdown.getAttribute('data-user-id');
 
+// Get the pusher key and cluster from the Blade template
+const PUSHER_APP_KEY = pusherAppKey;
+const PUSHER_APP_CLUSTER = pusherAppCluster;
+
+// Enable pusher logging - don't include this in production
+Pusher.logToConsole = true;
+
+
 // Listen for the Pusher event
-const pusher = new Pusher('{{ env("PUSHER_APP_KEY") }}', {
-    cluster: '{{ env("PUSHER_APP_CLUSTER") }}',
+const pusher = new Pusher(PUSHER_APP_KEY, {
+    cluster: PUSHER_APP_CLUSTER,
     encrypted: true
 });
 

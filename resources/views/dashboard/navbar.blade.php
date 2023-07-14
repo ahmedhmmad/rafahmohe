@@ -15,6 +15,10 @@
             </div>
         </div>
         <!-- /Search -->
+        <script>
+            const pusherAppKey = '{{ env("PUSHER_APP_KEY") }}';
+            const pusherAppCluster = '{{ env("PUSHER_APP_CLUSTER") }}';
+        </script>
 
         <ul class="navbar-nav flex-row align-items-center mr-auto">
             <!-- Notifications -->
