@@ -69,13 +69,13 @@
         </div>
         <div class="container py-2">
             <div class="card px-2">
-                <form method="GET" action="{{ route('admin.tickets.filter') }}">
+                <form method="GET" action="">
                     <div class="row py-4">
                         <div class="col-md-3">
                             <label for="status" class="form-label"><strong>تصنيف حسب الحالة</strong></label>
                             <select class="form-select" name="status" id="status" aria-label="Default select example">
                                 <option value="">الكل</option>
-                                <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>جديدة</option>
+                                <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>قيد الانتظار</option>
                                 <option value="assigned" {{ request('status') == 'assigned' ? 'selected' : '' }}>معينة</option>
                                 <option value="on-progress" {{ request('status') == 'on-progress' ? 'selected' : '' }}>قيد التنفيذ</option>
                                 <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>مغلقة</option>

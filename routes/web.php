@@ -100,9 +100,6 @@ Route::middleware(['auth', 'role:Department_Head'])->group(function ()
     Route::post('/head/assignticket/{ticketId}', [TicketController::class, 'assignTicket'])
         ->name('head.tickets.assign');
 
-    Route::get('/head/tickets/filter', [TicketController::class, 'headfilterTickets'])
-        ->name('head.tickets.filter');
-
     Route::get('/head/viewVisits',[\App\Http\Controllers\School\SchoolController::class,'viewDepVisits'])
         ->name('head.view-visits');
 
@@ -174,10 +171,6 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
 
     Route::get('/admin/tickets/comments', [TicketController::class, 'getComments'])
         ->name('admin.tickets.comments');
-
-    Route::get('/admin/tickets/filter', [TicketController::class, 'showTicketsAdmin'])
-        ->name('admin.tickets.filter');
-
 
 
 
