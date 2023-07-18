@@ -157,10 +157,9 @@ class AdminController extends Controller
 
     public function search(Request $request)
     {
-        //Get all adepartments except department_id==24
+        // Get all departments except department_id == 24
         $departments = Department::where('id', '!=', 24)->get();
 
-        //$departments = Department::all();
         $employeeName = $request->input('employee_name');
         $departmentId = $request->input('department_name');
 
@@ -172,11 +171,14 @@ class AdminController extends Controller
             $query->where('name', 'LIKE', '%' . $searchTerm . '%');
         })->when($departmentId, function ($query) use ($departmentId) {
             return $query->where('department_id', $departmentId);
-        })->get();
+        })
+            ->where('department_id', '!=', 24) // Exclude users with department_id == 24
+            ->get();
 
         // Pass the search results to the same blade view
         return view('admin.search-plan', compact('employees', 'departments'));
     }
+
 
     public function searchSchoolDate(Request $request)
     {
