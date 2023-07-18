@@ -54,8 +54,8 @@
                         @if($plans->isEmpty())
                             <div class="p-4">لا توجد نتائج للبحث في هذا الشهر.</div>
                         @else
-                            <table class="table">
-                                <thead>
+                            <table class="table table-bordered table-hover">
+                        <thead class="table-primary">
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">تاريخ الزيارة</th>

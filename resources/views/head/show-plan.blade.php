@@ -7,8 +7,8 @@
             <div class="card mt-4 mx-2">
                 <div class="col-md-12">
                     <h3 class="pt-2 ">عرض الخطة الشهرية</h3>
-                    <table class="table table-hover">
-                        <thead>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-primary">
                         <tr>
                             <th style="font-weight: bold;color:#020e4f">اليوم</th>
                             <th style="font-weight: bold;color:#020e4f">التاريخ</th>

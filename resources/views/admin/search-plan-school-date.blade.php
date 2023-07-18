@@ -113,8 +113,8 @@
                     @if($visits->isEmpty())
                         <div class="p-4">لا توجد نتائج للبحث.</div>
                     @else
-                        <table class="table">
-                            <thead>
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-primary">
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">اسم المدرسة</th>

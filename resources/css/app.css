@@ -1,0 +1,14 @@
+.table-bordered th {
+    font-weight: bold;
+    text-align: center;
+}
+
+.table-bordered td {
+    text-align: center;
+}
+
+/* Custom style for the table header */
+.table-primary th {
+    background-color: #007bff; /* Change the color to your preferred header color */
+    color: #fff; /* Change the text color for the header */
+}

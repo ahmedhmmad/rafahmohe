@@ -41,8 +41,9 @@
         @else
             <div class="container py-2">
                 <div class="card px-2">
-                    <table class="table table-bordered">
-                        <thead>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-primary">
+
                         <tr>
                             <th scope="col">رقم الطلب</th>
                             <th scope="col">تاريخ الطلب</th>
