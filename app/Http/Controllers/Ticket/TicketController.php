@@ -9,7 +9,7 @@ use App\Models\Department;
 use App\Models\Ticket;
 use App\Models\TicketAssignment;
 use App\Models\User;
-use App\Notifications\SMSNotification;
+use App\Notifications\TicketCreatedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -72,13 +72,30 @@ class TicketController extends Controller
 
 
 
-    public function showTicketsAdmin()
+    public function showTicketsAdmin(Request $request)
     {
-        // Retrieve the tickets belonging to the user
-        $tickets = Ticket::orderBy('created_at', 'desc')->paginate(10);
+        $status = $request->input('status');
+        $date = $request->input('date');
+
+        // Start building the query to retrieve the tickets
+        $query = Ticket::query();
+
+        // Apply the filters based on the selected values
+        if ($status) {
+            $query->where('status', $status);
+        }
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        }
+
+        // Continue building the query
+        $query->orderBy('created_at', 'desc');
+
+        // Retrieve the filtered tickets using pagination
+        $tickets = $query->paginate(10);
         $departments = Department::all();
 
-        // Calculate ticket counts
+        // Calculate ticket counts for all tickets
         $openTicketsCount = Ticket::where('status', 'open')->count();
         $assignedTicketsCount = Ticket::where('status', 'assigned')->count();
         $onProgressTicketsCount = Ticket::where('status', 'on-progress')->count();
@@ -93,6 +110,7 @@ class TicketController extends Controller
             'closedTicketsCount' => $closedTicketsCount,
         ]);
     }
+
     public function showTicketsDep()
     {
         // Retrieve the tickets belonging to the user department
@@ -192,6 +210,58 @@ class TicketController extends Controller
         ]);
     }
 
+    // app/Http/Controllers/TicketController.php
+
+    public function headfilterTickets(Request $request)
+    {
+        $user = Auth::user();
+        $department_id = $user->department_id;
+
+        $status = $request->input('status');
+        $date = $request->input('date');
+
+        // Start building the query to retrieve the tickets belonging to the user
+        $query = Ticket::where('department_id', $department_id);
+
+        // Apply the filters based on the selected values
+        if ($status) {
+            $query->where('status', $status);
+        }
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        }
+
+        // Continue building the query
+        $query->orderBy('created_at', 'desc');
+
+        // Retrieve the filtered tickets using pagination
+        $tickets = $query->paginate(10);
+
+        $users = User::where('department_id', $department_id)
+            ->where('id', '!=', $user->id)
+            ->get();
+
+        $assignedUserNames = [];
+        foreach ($tickets as $ticket) {
+            $assignedUserId = $ticket->assigned_to;
+            $assignedUser = User::find($assignedUserId);
+
+            $assignedUserName = $assignedUser ? $assignedUser->name : '';
+            $parts = explode(' ', $assignedUserName);
+            $firstName = $parts[0] ?? '';
+            $lastName = end($parts) ?? '';
+            $fullName = $firstName . ' ' . $lastName;
+            $assignedUserNames[$ticket->id] = $fullName;
+        }
+
+        return view('head.show-tickets', [
+            'tickets' => $tickets,
+            'users' => $users,
+            'assignedUserNames' => $assignedUserNames,
+        ]);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      */
@@ -239,8 +309,21 @@ class TicketController extends Controller
 
             if($departmentemail){
                 //Mail::to($departmentemail)->send(new TicketCreated($emailData));
+
             }
-            event(new TicketCreatedEvent($ticket));
+            //event(new TicketCreatedEvent($ticket));
+           //Call TicketCreatedNotification
+            $departmentHead = User::where('department_id', $request->input('department'))
+                ->where('role_id', 2)
+                ->first();
+            if ($departmentHead) {
+               // $departmentHead->notify(new TicketCreatedNotification($ticket));
+
+
+=======
+
+            }
+           // event(new TicketCreatedEvent($ticket));
 
 
             //Send SMS notification to the department head
@@ -277,6 +360,7 @@ class TicketController extends Controller
 //                }
 //            }
         }
+
 
 
 
