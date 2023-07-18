@@ -309,8 +309,9 @@ class TicketController extends Controller
 
             if($departmentemail){
                 //Mail::to($departmentemail)->send(new TicketCreated($emailData));
+
             }
-            event(new TicketCreatedEvent($ticket));
+            //event(new TicketCreatedEvent($ticket));
            //Call TicketCreatedNotification
             $departmentHead = User::where('department_id', $request->input('department'))
                 ->where('role_id', 2)
@@ -319,7 +320,10 @@ class TicketController extends Controller
                // $departmentHead->notify(new TicketCreatedNotification($ticket));
 
 
+=======
+
             }
+           // event(new TicketCreatedEvent($ticket));
 
 
             //Send SMS notification to the department head
