@@ -4,16 +4,6 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Ticket\TicketController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 //Common Routes
 Route::get('/logout', [\App\Http\Controllers\Auth\LogoutController::class,'index'])->name('auth.logout');
@@ -40,12 +30,7 @@ Route::middleware(['auth'])->group(function()
         ->name('employee.tickets.addComment');
 
 
-
-
     Route::get('/employee/monthly-plan', [\App\Http\Controllers\Employee\MonthlyPlan::class,'monthlyPlan'])->name('employee.monthly-plan');
-
-
-
 
     Route::get('/employee/enterplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'index'])
         ->name('employee.select-month-year-plan');
@@ -100,51 +85,17 @@ Route::middleware(['auth', 'role:Department_Head'])->group(function ()
     Route::post('/head/assignticket/{ticketId}', [TicketController::class, 'assignTicket'])
         ->name('head.tickets.assign');
 
+    Route::get('/head/tickets/filter', [TicketController::class, 'headfilterTickets'])
+        ->name('head.tickets.filter');
+
     Route::get('/head/viewVisits',[\App\Http\Controllers\School\SchoolController::class,'viewDepVisits'])
         ->name('head.view-visits');
 
-//
-//    Route::get('/employee/enterplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'index'])
-//        ->name('employee.select-month-year-plan');
-//    Route::get('/employee/createplan/{month}/{year}',[App\Http\Controllers\Employee\MonthlyPlan::class,'create'])
-//        ->name('employee.create-plan');
-//
-//    Route::post('/employee/storeplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'store'])
-//        ->name('employee.store-plan');
-//
-//    Route::get('/employee/showplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'show'])
-//        ->name('employee.show-plan');
-//    Route::get('/employee/showonlyplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'showonly'])
-//        ->name('employee.showonly-plan');
-//
-//    Route::get('/employee/editplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'edit'])
-//        ->name('employee.edit-plan');
-//
-//    Route::get('/employee/deleteplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'destroy'])
-//        ->name('employee.delete-plan');
-//
-//    Route::post('/employee/updateplan/{plan}',[App\Http\Controllers\Employee\MonthlyPlan::class,'update'])
-//        ->name('employee.update-plan');
-//
-//    Route::get('/employee/addDay/{date}',[App\Http\Controllers\Employee\MonthlyPlan::class,'addDay'])
-//        ->name('employee.add-day');
-//    Route::post('/employee/storeDay',[App\Http\Controllers\Employee\MonthlyPlan::class,'storeDay'])
-//        ->name('employee.store-day');
 });
 
 //Admin Routes
 Route::middleware(['auth', 'role:Administrator'])->group(function ()
 {
-//    Route::get('/', function () {
-//        return view('welcome');
-//    })->name('home');
-
-//    Route::get('/admin/search',function(){
-//        return view('admin.search-plan')->with('departments',\App\Models\Department::all());
-//    })->name('admin.search-plan');
-//
-//    Route::get('/admin/searchresults',[App\Http\Controllers\Admin\AdminController::class,'search'])
-//        ->name('admin.search-results');
 
     Route::get('/admin/override-plan-restrictions', [AdminController::class, 'showOverridePlanRestrictionsForm'])->name('admin.override-plan-restrictions');
     Route::post('/admin/override-plan-restrictions', [AdminController::class, 'overridePlanRestrictions'])->name('admin.apply-override-plan-restrictions');
@@ -156,8 +107,6 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
 
     Route::get('/admin/print',[\App\Http\Controllers\Report\ReportController::class,'print'])
         ->name('admin.print');
-
-
 
 
     Route::get('/admin/show-tickets', [TicketController::class, 'showTicketsAdmin'])
@@ -172,6 +121,8 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
     Route::get('/admin/tickets/comments', [TicketController::class, 'getComments'])
         ->name('admin.tickets.comments');
 
+    Route::get('/admin/tickets/filter', [TicketController::class, 'showTicketsAdmin'])
+        ->name('admin.tickets.filter');
 
 
     Route::get('/admin/search', [App\Http\Controllers\Admin\AdminController::class, 'search'])
