@@ -157,8 +157,10 @@ class AdminController extends Controller
 
     public function search(Request $request)
     {
+        //Get all adepartments except department_id==24
+        $departments = Department::where('id', '!=', 24)->get();
 
-        $departments = Department::all();
+        //$departments = Department::all();
         $employeeName = $request->input('employee_name');
         $departmentId = $request->input('department_name');
 
