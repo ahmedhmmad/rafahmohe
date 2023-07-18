@@ -7,8 +7,8 @@
 
                 <h3>بيانات الاستثناءات للموظفين</h3>
 
-                <table class="table">
-                    <thead>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-primary">
                     <tr>
                         <th scope="col">المستخدم</th>
                         <th scope="col">القسم</th>

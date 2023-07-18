@@ -8,8 +8,8 @@
                 @if($tickets->isEmpty())
                     <div class="p-4">لا توجد تذاكر متاحة.</div>
                 @else
-                    <table class="table">
-                        <thead>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-primary">
                         <tr>
                             <th scope="col">رقم التذكرة</th>
                             <th scope="col">تاريخ الإنشاء</th>

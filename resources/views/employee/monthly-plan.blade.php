@@ -43,8 +43,8 @@
                     </div>
                 </form>
 
-                <table class="table">
-                    <thead>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-primary">
                     <tr>
                         <th>اليوم</th>
                         <th>التاريخ</th>

@@ -59,8 +59,8 @@
     <div class="container py-1">
         <div class="card py-2">
             <div class="card-body">
-                <table class="table">
-                    <thead>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-primary">
                     <tr>
                         <th><strong>اليوم</strong></th>
                         <th><strong>التاريخ</strong></th>
