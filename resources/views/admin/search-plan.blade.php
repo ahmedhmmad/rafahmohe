@@ -17,7 +17,7 @@
                                 <option value="" selected>اختر القسم</option>
                                 @foreach($departments as $department)
                                     @if($department->name != 'مدارس')
-                                        <option value="{{ $department->name }}">{{ $department->name }}</option>
+                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
                                     @endif
                                 @endforeach
                             </select>
@@ -54,9 +54,7 @@
                                     <td>{{ $employee->name }}</td>
                                     <td>{{ $employee->department->name }}</td>
                                     <td>
-
-                                            <a href="{{ route('admin.show-plan', $employee->id)}}"><i class="bx bx-show me-2"></i></a>
-
+                                        <a href="{{ route('admin.show-plan', $employee->id) }}"><i class="bx bx-show me-2"></i></a>
                                     </td>
                                     {{-- Add more columns as needed --}}
                                 </tr>
