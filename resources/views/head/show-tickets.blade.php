@@ -41,7 +41,7 @@
         @else
             <div class="container py-2">
                 <div class="card px-2">
-                    <table class="table">
+                    <table class="table table-bordered">
                         <thead>
                         <tr>
                             <th scope="col">رقم الطلب</th>

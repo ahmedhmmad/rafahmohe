@@ -145,6 +145,10 @@
 
                 </ul>
             </li>
+
+        @endif
+
+        @if (\Illuminate\Support\Facades\Auth::user()->hasRole('Employee'))
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bxs-school"></i>
@@ -157,7 +161,7 @@
                             <div> متابعة تنفيذ الطلبات</div>
                         </a>
                     </li>
-               </ul>
+                </ul>
             </li>
         @endif
 
@@ -198,6 +202,21 @@
 
                 </ul>
             </li>
+
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-command"></i>
+                    <div data-i18n="Layouts">زيارات المدارس</div>
+                </a>
+
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{route('head.view-visits')}}" class="menu-link">
+                            <div> سجل الزوار لموظفي القسم</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-building"></i>
@@ -216,22 +235,17 @@
                         </a>
                     </li>
 
+                        <li class="menu-item">
+                            <a href="{{route('employee.show-assigned-tickets')}}" class="menu-link">
+                                <div> متابعة تنفيذ الطلبات</div>
+                            </a>
+                        </li>
+
+
                 </ul>
             </li>
-            <li class="menu-item">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bx-command"></i>
-                    <div data-i18n="Layouts">زيارات المدارس</div>
-                </a>
 
-                <ul class="menu-sub">
-                    <li class="menu-item">
-                        <a href="{{route('head.view-visits')}}" class="menu-link">
-                            <div> سجل الزوار لموظفي القسم</div>
-                        </a>
-                    </li>
 
-            </li>
 
         @endif
 
