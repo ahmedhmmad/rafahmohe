@@ -35,10 +35,10 @@
                                         <td><strong>{{ $dayNames[date('N', strtotime($workingDay)) - 1] }}</strong></td>
                                         <td>{{ date('Y/m/d', strtotime($workingDay)) }}</td>
                                         <td>لا توجد مدارس</td>
-                                        <td>
-                                            {{-- Add the appropriate action for adding schools --}}
+{{--                                        <td>--}}
+{{--                                            --}}{{-- Add the appropriate action for adding schools --}}
 {{--                                            <a href="" class="btn btn-success">إضافة مدرسة</a>--}}
-                                        </td>
+{{--                                        </td>--}}
                                     </tr>
                                 @endif
                             @endforeach
@@ -52,12 +52,12 @@
                                     </td>
                                     <td>{{ date('Y/m/d', strtotime($plan->start)) }}</td>
                                     <td>{{ $plan->schools->name }}</td>
-                                    <td>
-                                        {{-- Add the appropriate action for adding schools --}}
-                                        {{--                                    <a href="" class="btn btn-primary">تعديل</a>--}}
-                                        {{--                                    <a href="" class="btn btn-danger">حذف</a>--}}
-                                        {{--                                    <a href="" class="btn btn-success">إضافة مدرسة</a>--}}
-                                    </td>
+{{--                                    <td>--}}
+{{--                                         Add the appropriate action for adding schools --}}
+{{--                                                                            <a href="" class="btn btn-primary">تعديل</a>--}}
+{{--                                                                            <a href="" class="btn btn-danger">حذف</a>--}}
+{{--                                                                            <a href="" class="btn btn-success">إضافة مدرسة</a>--}}
+{{--                                    </td>--}}
                                 </tr>
                             @endif
 
@@ -73,10 +73,10 @@
                                     <td><strong>{{ $dayNames[date('N', strtotime($workingDay)) - 1] }}</strong></td>
                                     <td>{{ date('Y/m/d', strtotime($workingDay)) }}</td>
                                     <td>لا توجد مدارس</td>
-                                    <td>
-                                        {{-- Add the appropriate action for adding schools --}}
-                                        {{--                                    <a href="" class="btn btn-success">إضافة مدرسة</a>--}}
-                                    </td>
+{{--                                    <td>--}}
+{{--                                         Add the appropriate action for adding schools --}}
+{{--                                                                            <a href="" class="btn btn-success">إضافة مدرسة</a>--}}
+{{--                                    </td>--}}
                                 </tr>
                             @endif
                         @endforeach

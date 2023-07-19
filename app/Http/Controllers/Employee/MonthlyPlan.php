@@ -32,6 +32,72 @@ class MonthlyPlan extends Controller
         $errors = collect([]);
         $departmentId = Auth::user()->department->id;
         $planRestriction = Auth::user()->planRestrictions->first();
+        $canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
+        $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
+
+        // Check if the month is a valid value
+        if (!is_numeric($month) || $month < 1 || $month > 12) {
+            $errors->push('اختر الشهر المطلوب.');
+        }
+
+        // Check if the year is a valid value
+        if (!is_numeric($year) || $year < 2020 || $year > 2099) {
+            $errors->push('اختر السنة المطلوبة.');
+        }
+
+        $currentMonth = null; // Initialize the variable outside the try-catch block
+        $currentYear = null;
+        $canOverrideLastWeek = false; // Initialize the variable outside the try-catch block
+        $lastDayOfMonth = null; // Initialize the variable outside the try-catch block
+
+        try {
+            // Check if the specified month and year create a valid date
+            $currentMonth = Carbon::create($year, $month)->month;
+            $currentYear = Carbon::create($year, $month)->year;
+
+            $existingPlans = Plan::whereMonth('start', $currentMonth)
+                ->whereYear('start', $currentYear)
+                ->get();
+
+            $existingPlanDates = $existingPlans->pluck('start')->toArray();
+
+            $planRestriction = Auth::user()->planRestrictions->first();
+            $canOverrideLastWeek = $planRestriction ? ($planRestriction->can_override_last_week && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
+
+        } catch (\Exception $e) {
+            $errors->push('اختر الشهر والسنة المطلوبة.');
+        }
+
+        // Calculate the last day of the month outside the try-catch block
+        $lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
+
+        // Check if the current date is within the allowed range for entering the plan
+        $currentDate = now();
+        $lastWeekOfMonth = $lastDayOfMonth->copy()->subWeek();
+
+        if ($currentDate->month != $month || $currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+            if (!$canOverrideLastWeek) {
+                $validDates = $lastWeekOfMonth->format('d/m/Y') . ' - ' . $lastDayOfMonth->format('d/m/Y');
+                $errorMessage = 'لا يمكن إدخال الخطة إلا خلال الأسبوع الأخير من الشهر الحالي:: الفترة المسموحة: ' . $validDates;
+                $errors->push($errorMessage);
+            }
+        }
+
+        if ($errors->isNotEmpty()) {
+            return redirect()->back()->withErrors($errors);
+        }
+
+        $schools = School::all();
+        //dd($existingPlans, $existingPlanDates, $canOverrideDepartment, $canOverrideMultiDepartment, $departmentId);
+
+        return view('employee.create-plan', compact('schools', 'month', 'year', 'existingPlanDates', 'existingPlans', 'canOverrideDepartment', 'canOverrideMultiDepartment', 'departmentId'));
+    }
+
+    public function create2($month, $year)
+    {
+        $errors = collect([]);
+        $departmentId = Auth::user()->department->id;
+        $planRestriction = Auth::user()->planRestrictions->first();
 
 //        $canOverrideDepartment = $planRestriction ? $planRestriction->can_override_department : false;
 //        $canOverrideMultiDepartment = $planRestriction ? $planRestriction->can_override_multi_department : false;
@@ -51,6 +117,11 @@ class MonthlyPlan extends Controller
         if (!is_numeric($year) || $year < 2020 || $year > 2099) {
             $errors->push('اختر السنة المطلوبة.');
         }
+        $currentMonth = null; // Initialize the variable outside the try-catch block
+        $currentYear = null;
+        $canOverrideLastWeek = false;
+        $lastDayOfMonth = null;
+
 
         try {
             // Check if the specified month and year create a valid date
@@ -72,6 +143,7 @@ class MonthlyPlan extends Controller
         }
 
         // Check if the current date is within the allowed range for entering the plan
+
         $currentDate = now();
         $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
 
