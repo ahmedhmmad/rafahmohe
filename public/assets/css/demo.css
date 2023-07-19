@@ -6,7 +6,10 @@
   height: 64px;
   margin-top: 12px;
 }
-
+div[data-i18n="Layouts"] {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
 .app-brand-logo.demo svg {
   width: 22px;
   height: 38px;

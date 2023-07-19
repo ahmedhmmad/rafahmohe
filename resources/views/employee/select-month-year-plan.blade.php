@@ -52,58 +52,62 @@
         </div>
     </div>
 
-    <!-- Error Modal -->
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="modalTopTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTopTitle">خطأ</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>الرجاء اختيار الشهر والسنة.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Error Modal -->
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="modalTopTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTopTitle">خطأ</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>الرجاء اختيار الشهر والسنة.</p>
-                </div>
-            </div>
-        </div>
-    </div>
+{{--    <!-- Error Modal -->--}}
+{{--    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="modalTopTitle" aria-hidden="true">--}}
+{{--        <div class="modal-dialog modal-dialog-centered" role="document">--}}
+{{--            <div class="modal-content">--}}
+{{--                <div class="modal-header">--}}
+{{--                    <h5 class="modal-title" id="modalTopTitle">خطأ</h5>--}}
+{{--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+{{--                        <span aria-hidden="true">&times;</span>--}}
+{{--                    </button>--}}
+{{--                </div>--}}
+{{--                <div class="modal-body">--}}
+{{--                    <p>الرجاء اختيار الشهر والسنة.</p>--}}
+{{--                </div>--}}
+{{--                <div class="modal-footer">--}}
+{{--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--    <!-- Error Modal -->--}}
+{{--    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="modalTopTitle" aria-hidden="true">--}}
+{{--        <div class="modal-dialog modal-dialog-centered" role="document">--}}
+{{--            <div class="modal-content">--}}
+{{--                <div class="modal-header">--}}
+{{--                    <h5 class="modal-title" id="modalTopTitle">خطأ</h5>--}}
+{{--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+{{--                        <span aria-hidden="true">&times;</span>--}}
+{{--                    </button>--}}
+{{--                </div>--}}
+{{--                <div class="modal-body">--}}
+{{--                    <p>الرجاء اختيار الشهر والسنة.</p>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
+    <!-- Error Message -->
     <script>
         function setSelectedValues() {
-
             var selectedMonth = document.getElementById('monthSelect').value;
             var selectedYear = document.getElementById('yearSelect').value;
 
-            if (selectedMonth == "اختر الشهر المطلوب" || selectedYear == "اختر السنة") {
-                $('#errorModal').modal('show');
-
-
+            if (selectedMonth === "اختر الشهر المطلوب" || selectedYear === "اختر السنة") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'حدث خطأ',
+                    text: 'يرجى اختيار الشهر و السنة!',
+                    footer: '<a href="">مديرية التربية و التعليم رفح :: الخدمات الالكترونية</a>'
+                });
             } else {
                 var form = document.getElementById('createPlanForm');
                 form.action = form.action.replace(':selectedMonth', selectedMonth);
                 form.action = form.action.replace(':selectedYear', selectedYear);
+                form.submit();
             }
-
-           }
+        }
     </script>
+
 @endsection
