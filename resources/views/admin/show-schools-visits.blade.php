@@ -9,6 +9,34 @@
                 <form method="GET" action="{{route('admin.show-schools-visits')}}">
                     @csrf
                     <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="selected_department_id" class="form-label fw-bold">اختر القسم</label>
+                            <select name="selected_department_id" id="selected_department_id" class="form-select" dir="rtl">
+                                <option value="">اختر القسم</option>
+                                @foreach ($departments as $department)
+                                    <option value="{{ $department->id }}" {{ old('selected_department_id') == $department->id ? 'selected' : '' }}>{{ $department->name }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="selected_user_id" class="form-label fw-bold">اختر المستخدم</label>
+                            <select name="selected_user_id" id="selected_user_id" class="form-select" dir="rtl">
+                                <option value="">اختر المستخدم</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}" {{ old('selected_user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="row">
+
                         <div class="form-group col-md-4">
                             <label for="school">المدرسة</label>
                             <select name="school" id="school" class="form-control form-select">
@@ -170,6 +198,35 @@
     </div>
 
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#selected_department_id').change(function() {
+                var departmentId = $(this).val();
+
+                // Send an AJAX request to fetch the department users
+                $.ajax({
+                    url: '/fetch-department-users',
+                    method: 'GET',
+                    data: { department_id: departmentId },
+                    success: function(response) {
+                        // Clear the previous options in the users select box
+                        $('#selected_user_id').empty();
+
+                        // Add the "اختر المستخدم" option
+                        var selectOption = $('<option>', { value: '', text: 'اختر الموظف' });
+                        $('#selected_user_id').append(selectOption);
+
+                        // Add the new options based on the department users
+                        response.users.forEach(function(user) {
+                            var option = $('<option>', { value: user.id, text: user.name });
+                            $('#selected_user_id').append(option);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 
 
 @endsection

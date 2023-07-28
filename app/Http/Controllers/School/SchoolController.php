@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\School;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
 use App\Models\Plan;
 use App\Models\School;
 use App\Models\SchoolVisit;
@@ -103,6 +104,8 @@ class SchoolController extends Controller
         $selectedSchool = $request->input('school');
         $selectedMonth = $request->input('month');
         $selectedYear = $request->input('year');
+        $selecteddepartment=$request->input('selected_department_id');
+        $selectedUser=$request->input('selected_user_id');
 
         $query = SchoolVisit::query();
 
@@ -123,15 +126,25 @@ class SchoolController extends Controller
             $query->whereMonth('visit_date', $selectedMonth)->whereYear('visit_date', $selectedYear);
 
         }
+        if ($selecteddepartment) {
+
+            $query->where('department_id', $selecteddepartment);
+        }
+        if ($selectedUser) {
+
+            $query->where('user_id', $selectedUser);
+        }
 
         $schoolVisits = $query->orderBy('visit_date', 'desc')->paginate(10); // Order by visit_date in descending order
 
 
         $schools=School::all();
+        $departments=Department::all();
+        $users=User::all();
 
 
 
-        return view('admin.show-schools-visits',compact('schoolVisits','schools'));
+        return view('admin.show-schools-visits',compact('schoolVisits','schools','departments','users'));
     }
 
 
@@ -172,6 +185,9 @@ class SchoolController extends Controller
 
         //Get job title for user_id from users table
         $user=User::where('id',$validatedData['user_id'])->first();
+        $departmentId=$user->department_id;
+
+
 
         // Store the validated data in the database or perform other actions
 
@@ -186,6 +202,7 @@ class SchoolController extends Controller
         $storeVisit->leaving_time=$validatedData['leavingTime'];
         $storeVisit->purpose=$validatedData['purpose'];
         $storeVisit->activities=$validatedData['activities'];
+        $storeVisit->department_id=$departmentId;
         $storeVisit->save();
 
         //Return a JSON response indicating success
