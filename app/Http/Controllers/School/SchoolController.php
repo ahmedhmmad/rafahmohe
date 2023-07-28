@@ -9,6 +9,7 @@ use App\Models\School;
 use App\Models\SchoolVisit;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SchoolController extends Controller
 {
@@ -24,6 +25,23 @@ class SchoolController extends Controller
         $users = User::where('name', 'LIKE',  '%' . $name . '%')->get(['id', 'name', 'job_title']);
 
         return response()->json($users);
+    }
+    public function fetchDepartmentUsers(Request $request)
+    {
+        $userId = $request->input('user_id');
+
+        $user = optional(User::find($userId));
+
+        // Get the department ID or set it to null if the user is not found
+        $departmentId = $user->department_id ?? null;
+
+
+        $departmentMembers = User::where('department_id', $departmentId)
+            ->where('id', '!=', $userId) // Exclude the selected user from the list
+            ->get(['id', 'name']);
+
+        // Return the department members as JSON
+        return response()->json($departmentMembers);
     }
     public function index(Request $request)
     {
@@ -155,6 +173,8 @@ class SchoolController extends Controller
     {
         //Get all school visits from schoolvisits table and paginate them if there is any.
         $schoolVisits = SchoolVisit::where('school_id', auth()->user()->id)
+            ->orderBy(DB::raw('DATE(visit_date)'), 'desc') // Order by the date (newest to oldest)
+            ->orderBy('coming_time', 'desc') // Order by the time (latest to earliest)
             ->paginate(10);
 
 
@@ -181,34 +201,53 @@ class SchoolController extends Controller
             'leavingTime' => 'required',
             'purpose' => 'required|string',
             'activities' => 'nullable|string',
+            'companions' => 'nullable|array', // Add validation for companions field as an array
         ]);
 
-        //Get job title for user_id from users table
-        $user=User::where('id',$validatedData['user_id'])->first();
-        $departmentId=$user->department_id;
-
-
+        // Get job title for user_id from users table
+        $user = User::where('id', $validatedData['user_id'])->first();
+        $departmentId = $user->department_id;
 
         // Store the validated data in the database or perform other actions
 
-
-
-        $storeVisit= new SchoolVisit();
-        $storeVisit->school_id=auth()->user()->id;
-        $storeVisit->user_id=$validatedData['user_id'];
-        $storeVisit->job_title=$user->job_title;
-        $storeVisit->visit_date=$validatedData['visitDate'];
-        $storeVisit->coming_time=$validatedData['comingTime'];
-        $storeVisit->leaving_time=$validatedData['leavingTime'];
-        $storeVisit->purpose=$validatedData['purpose'];
-        $storeVisit->activities=$validatedData['activities'];
-        $storeVisit->department_id=$departmentId;
+        $storeVisit = new SchoolVisit();
+        $storeVisit->school_id = auth()->user()->id;
+        $storeVisit->user_id = $validatedData['user_id'];
+        $storeVisit->job_title = $user->job_title;
+        $storeVisit->visit_date = $validatedData['visitDate'];
+        $storeVisit->coming_time = $validatedData['comingTime'];
+        $storeVisit->leaving_time = $validatedData['leavingTime'];
+        $storeVisit->purpose = $validatedData['purpose'];
+        $storeVisit->activities = $validatedData['activities'];
+        $storeVisit->department_id = $departmentId;
         $storeVisit->save();
 
-        //Return a JSON response indicating success
-        return response()->json(['message' => 'تم الحفظ بنجاح']);
+        // Store the companions' data
+        if (isset($validatedData['companions']) && is_array($validatedData['companions'])) {
+            foreach ($validatedData['companions'] as $companionId) {
+                // Check if the companion ID exists in the users table
+                $companionUser = User::find($companionId);
+                if ($companionUser) {
+                    // Store the companion's data as a new row in the school_visits table
+                    $companionVisit = new SchoolVisit();
+                    $companionVisit->school_id = auth()->user()->id;
+                    $companionVisit->user_id = $companionId;
+                    $companionVisit->job_title = $companionUser->job_title;
+                    $companionVisit->visit_date = $validatedData['visitDate'];
+                    $companionVisit->coming_time = $validatedData['comingTime'];
+                    $companionVisit->leaving_time = $validatedData['leavingTime'];
+                    $companionVisit->purpose = $validatedData['purpose'];
+                    $companionVisit->activities = $validatedData['activities'];
+                    $companionVisit->department_id = $departmentId;
+                    $companionVisit->save();
+                }
+            }
+        }
 
+        // Return a JSON response indicating success
+        return response()->json(['message' => 'تم الحفظ بنجاح']);
     }
+
 
 
 
