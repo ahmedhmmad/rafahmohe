@@ -55,6 +55,7 @@ class MonthlyPlan extends Controller
             $currentMonth = Carbon::create($year, $month)->month;
             $currentYear = Carbon::create($year, $month)->year;
 
+
             $existingPlans = Plan::whereMonth('start', $currentMonth)
                 ->whereYear('start', $currentYear)
                 ->get();
@@ -69,14 +70,20 @@ class MonthlyPlan extends Controller
         }
 
         // Calculate the last day of the month outside the try-catch block
-        $lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
+        //$lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
+        $lastDayOfMonth= Carbon::create($currentYear, $currentMonth)->subMonth()->endOfMonth();
 
         // Check if the current date is within the allowed range for entering the plan
         $currentDate = now();
         $lastWeekOfMonth = $lastDayOfMonth->copy()->subWeek();
+        //dd($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth);
 
-        if ($currentDate->month != $month || $currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
-            if (!$canOverrideLastWeek) {
+
+        if ($currentDate->month == $month || $currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+
+
+
+                if (!$canOverrideLastWeek) {
                 $validDates = $lastWeekOfMonth->format('d/m/Y') . ' - ' . $lastDayOfMonth->format('d/m/Y');
                 $errorMessage = 'لا يمكن إدخال الخطة إلا خلال الأسبوع الأخير من الشهر الحالي:: الفترة المسموحة: ' . $validDates;
                 $errors->push($errorMessage);
