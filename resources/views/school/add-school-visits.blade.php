@@ -39,6 +39,16 @@
                         <input type="text" class="form-control user-name-input" id="visitorName" required>
                         <input type="hidden" name="user_id" class="user-id-input">
                     </div>
+                    <div class="mb-3">
+                        <label for="addCompanion" class="form-label">إضافة مرافق</label>
+                        <input type="checkbox" class="form-check-input" id="addCompanion">
+                    </div>
+
+                    <!-- Add the 'companionsContainer' element to the HTML -->
+                    <div id="companionsContainer" style="display: none;"></div>
+
+
+
 
                     <div class="row mb-3">
                         <div class="col">
@@ -74,8 +84,14 @@
     </div>
 
     <!-- Include Bootstrap JS -->
-
+@endsection
+@push('scripts')
     <script>
+
+
+
+        //global variable to store the user id
+        var userId = null;
         // Function to clear the form fields
         function clearForm() {
             document.getElementById('visitorName').value = '';
@@ -84,6 +100,10 @@
             document.getElementById('leavingTime').value = '';
             document.getElementById('purpose').value = '';
             document.getElementById('activities').value = '';
+            document.getElementById('addCompanion').checked = false;
+            document.getElementById('companionsContainer').style.display = 'none';
+            document.getElementById('companionsContainer').innerHTML = '';
+
         }
 
         // Event listener for form submission
@@ -99,6 +119,11 @@
             var purpose = document.getElementById('purpose').value;
             var activities = document.getElementById('activities').value;
             console.log(userId);
+            var selectedCompanions = [];
+            var companionCheckboxes = document.querySelectorAll('input[name="companions[]"]:checked');
+            companionCheckboxes.forEach(function(checkbox) {
+                selectedCompanions.push(checkbox.value);
+            });
 
             // Perform any necessary validation or data processing here
 
@@ -116,7 +141,8 @@
                     comingTime: comingTime,
                     leavingTime: leavingTime,
                     purpose: purpose,
-                    activities: activities
+                    activities: activities,
+                    companions: selectedCompanions
                 })
             })
                 .then(function(response) {
@@ -173,6 +199,9 @@
                         return response.json();
                     })
                     .then(function(data) {
+                        var user = data[0];
+                        userId = user.id;
+
                         // Remove any existing suggestions list
                         var existingSuggestionsList = userNameInput.parentNode.querySelector('.suggestions-list');
                         if (existingSuggestionsList) {
@@ -211,8 +240,115 @@
                     .catch(function(error) {
                         console.log(error);
                     });
+
+
             });
+        }
+        );
+
+        function fetchDepartmentUsers(userId) {
+            return new Promise(function(resolve, reject) {
+                fetch('{{ route("school.fetch.department.users") }}?user_id=' + userId)
+                    .then(function(response) {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(function(data) {
+                        resolve(data);
+                    })
+                    .catch(function(error) {
+                        reject(error);
+                    });
+            });
+        }
+
+
+            function displayDepartmentUsers(usersData, containerElement) {
+                // Check if the container element exists
+                if (!containerElement) {
+                    console.error("Element with ID 'companionsContainer' not found.");
+                    return;
+                }
+
+                // Clear the container first
+                containerElement.innerHTML = '';
+                var row;
+                var col;
+                var colCount = 0;
+
+                // Create and append checkboxes for each department user
+                usersData.forEach(function(user) {
+                    if (colCount === 0) {
+                        // Create a new row for every three users
+                        row = document.createElement('div');
+                        row.classList.add('row');
+                        companionsContainer.appendChild(row);
+                    }
+
+                    // Create a Bootstrap column for each user
+                    col = document.createElement('div');
+                    col.classList.add('col-md-4'); // Adjust the column size as needed
+                    row.appendChild(col);
+
+                    // Create checkbox and label for the user
+                    var checkBoxLabel = document.createElement('label');
+                    checkBoxLabel.classList.add('checkbox-label');
+
+                    var checkBoxInput = document.createElement('input');
+                    checkBoxInput.type = 'checkbox';
+                    checkBoxInput.name = 'companions[]';
+                    checkBoxInput.value = user.id;
+                    checkBoxLabel.appendChild(checkBoxInput);
+
+                    var userNameSpan = document.createElement('span');
+                    userNameSpan.textContent = user.name;
+                    userNameSpan.addsStyle = 'padding-right: 10px;';
+                    checkBoxLabel.appendChild(userNameSpan);
+
+                    col.appendChild(checkBoxLabel);
+
+                    colCount++;
+                    if (colCount === 3) {
+                        colCount = 0;
+                    }
+                });
+
+                // Show the container once data is received and appended
+                containerElement.style.display = 'block';
+            }
+
+
+
+        // Event listener for the "Add Companion" checkbox
+        document.getElementById('addCompanion').addEventListener('change', function() {
+            var companionsContainer = document.getElementById('companionsContainer');
+            if (this.checked) {
+                // Check if a user is selected
+                if (userId !== null) {
+                    // Fetch and display department users with checkboxes
+                    fetchDepartmentUsers(userId)
+                        .then(function(data) {
+                            console.log(data);
+                            displayDepartmentUsers(data, companionsContainer);
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        });
+                } else {
+                    // If no user is selected, show a message or perform any other action
+                    console.log("Please select a user first.");
+                }
+            } else {
+                // Clear and hide the department users list
+                companionsContainer.innerHTML = '';
+            }
         });
 
+
+
+
     </script>
-@endsection
+
+@endpush

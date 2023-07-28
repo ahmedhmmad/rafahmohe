@@ -149,6 +149,7 @@ Route::middleware(['auth', 'role:School'])->group(function () {
 
     Route::get('/school/createvisits', [App\Http\Controllers\School\SchoolController::class, 'create'])->name('school.create-visits');
     Route::get('/school/addvisits', [App\Http\Controllers\School\SchoolController::class, 'addvisits'])->name('school.add-visits');
+    Route::get('/school/fetchdepartmentusers', [App\Http\Controllers\School\SchoolController::class, 'fetchDepartmentUsers'])->name('school.fetch.department.users');
     Route::post('/school/storevisits', [App\Http\Controllers\School\SchoolController::class,  'store'])->name('school.store-visits');
     Route::delete('/school/deletevisits/{id}', [App\Http\Controllers\School\SchoolController::class, 'destroy'])->name('school.delete-visit');
 
