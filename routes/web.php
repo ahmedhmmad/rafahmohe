@@ -105,8 +105,11 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
     Route::get('/admin/showschoolsvisits', [App\Http\Controllers\School\SchoolController::class, 'showSchoolsVisits'])
         ->name('admin.show-schools-visits');
 
-    Route::get('/admin/print',[\App\Http\Controllers\Report\ReportController::class,'print'])
-        ->name('admin.print');
+    Route::get('/admin/get-user-timeline',[\App\Http\Controllers\Admin\AdminController::class,'getUserTimeline'])
+        ->name('admin.getUserTimeline');
+
+    Route::get('/admin/timeline', [App\Http\Controllers\Admin\AdminController::class, 'timeline'])
+        ->name('admin.timeline');
 
 
     Route::get('/admin/show-tickets', [TicketController::class, 'showTicketsAdmin'])

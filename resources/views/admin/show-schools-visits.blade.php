@@ -84,10 +84,33 @@
     </div>
     </div>
 
+    <!-- TimeLine Modal -->
+    <div class="modal" id="timelineModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">المخطط الزمني</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Timeline details will be displayed here -->
+                    <div id="timelineDetails">
+                        <!-- Timeline data will be added dynamically here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">اغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <div class="container py-1">
         <div class="card py-2">
             <div class="card-body">
-                <table class="table table-bordered table-hover">
+                <table class="table table-bordered table-hover table-responsive">
                     <thead class="table-primary">
                     <tr>
                         <th><strong>اليوم</strong></th>
@@ -119,7 +142,8 @@
                                 <input type="hidden" name="day[]" value="{{ $start->translatedFormat('l') }}">
                             </td>
                             <td>
-                                <h6>{{$schoolVisit->user->name}}</h6>
+                                <h6>{{ $schoolVisit->user->name }}</h6>
+                                <div class="view-timeline-link" data-user-id="{{ $schoolVisit->user_id }}" data-visit-date="{{ $schoolVisit->visit_date }}">المخطط الزمني</div>
                                 <input type="hidden" name="user_name[]" class="form-control user-name-input" required>
                                 <input type="hidden" name="user_id[]" class="user-id-input">
                             </td>
@@ -141,11 +165,20 @@
                                 {{$schoolVisit->leaving_time}}
                             </td>
                             <td>
-                                {{$schoolVisit->purpose}}
+                                <!-- Display limited characters for "Purpose" -->
+                                <div class="limited-content" data-content="{{ $schoolVisit->purpose }}">{{ Str::limit($schoolVisit->purpose, 15) }}</div>
+                                @if (strlen($schoolVisit->purpose) > 15)
+                                    <a href="#" class="view-more-link">المزيد..</a>
+                                @endif
                             </td>
                             <td>
-                                {{$schoolVisit->activities}}
+                                <!-- Display limited characters for "Activities" -->
+                                <div class="limited-content" data-content="{{ $schoolVisit->activities }}">{{ Str::limit($schoolVisit->activities, 15) }}</div>
+                                @if (strlen($schoolVisit->activities) > 15)
+                                    <a href="#" class="view-more-link">المزيد..</a>
+                                @endif
                             </td>
+
 
 
 
@@ -157,10 +190,10 @@
                             {{--                                <textarea name="activities[]" class="form-control" required></textarea>--}}
                             {{--                            </td>--}}
                         </tr>
-                        <!-- Modal -->
+
+
 
                     @endforeach
-
                     </tbody>
                 </table>
             </div>
@@ -196,35 +229,73 @@
             </div>
         </div>
     </div>
+<style>
 
+    .view-timeline-link {
+        display: none;
+        cursor: pointer;
+        color: #007bff;
+        text-decoration: underline;
+    }
+
+    .view-timeline-link:hover {
+        color: #0056b3;
+    }
+
+
+    /* Style to display link on row hover */
+    tr:hover .view-timeline-link {
+        display: inline-block;
+        text-decoration: none;
+      border-top: #cae0d2 2px dashed;
+    }
+</style>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
     <script>
+
+
+
         $(document).ready(function() {
-            $('#selected_department_id').change(function() {
-                var departmentId = $(this).val();
 
-                // Send an AJAX request to fetch the department users
-                $.ajax({
-                    url: '/fetch-department-users',
-                    method: 'GET',
-                    data: { department_id: departmentId },
-                    success: function(response) {
-                        // Clear the previous options in the users select box
-                        $('#selected_user_id').empty();
-
-                        // Add the "اختر المستخدم" option
-                        var selectOption = $('<option>', { value: '', text: 'اختر الموظف' });
-                        $('#selected_user_id').append(selectOption);
-
-                        // Add the new options based on the department users
-                        response.users.forEach(function(user) {
-                            var option = $('<option>', { value: user.id, text: user.name });
-                            $('#selected_user_id').append(option);
-                        });
-                    }
+                 // Handle the click event of the "Read More" link
+                $('.view-more-link').click(function() {
+                    var contentDiv = $(this).prev('.limited-content');
+                    var fullContent = contentDiv.data('content');
+                    contentDiv.text(fullContent);
+                    $(this).remove(); // Remove the "Read More" link after expanding the content
                 });
-            });
+
+                // Handle the click event of the "View Timeline" link
+                $('.view-timeline-link').click(function() {
+                    var date = $(this).data('visit-date');
+                    var userId = $(this).data('user-id');
+
+                    // Send an AJAX request to fetch the user timeline
+                    $.ajax({
+                        url: '/admin/get-user-timeline', // Update the URL if needed
+                        method: 'GET',
+                        data: { date: date, user_id: userId },
+                        success: function(response) {
+                            // Clear the previous timeline details
+                            $('#timelineDetails').html('');
+
+                            // Append the timeline content to the modal body
+                            $('#timelineDetails').html(response.timeline_content);
+
+                            // Show the modal
+                            $('#timelineModal').modal('show');
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                });
+
+
         });
     </script>
 
