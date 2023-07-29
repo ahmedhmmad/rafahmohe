@@ -12,5 +12,20 @@
     background-color: #007bff; /* Change the color to your preferred header color */
     color: #fff; /* Change the text color for the header */
 }
+.view-timeline-link {
+    display: none;
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.view-timeline-link:hover {
+    color: #0056b3;
+}
+
+/* Style to display link on row hover */
+tr:hover .view-timeline-link {
+    display: inline-block;
+}
 
 

@@ -7,13 +7,49 @@ use App\Models\Department;
 use App\Models\Plan;
 use App\Models\PlanRestriction;
 use App\Models\School;
+use App\Models\SchoolVisit;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 class AdminController extends Controller
 {
+public function timeline()
+{
 
+    return view('admin.timeline');
+}
+    public function getUserTimeline(Request $request)
+    {
+        $date = $request->input('date');
+        $user_id = $request->input('user_id');
+
+        $timeline = $this->fetchUserTimeline($date, $user_id); // Assuming you have another method named 'fetchUserTimeline' to get the timeline data
+        $timelineContent = View::make('admin.timeline')->with('timeline', $timeline)->render();
+
+
+        return response()->json([
+            'timeline' => $timeline,
+            'timeline_content' => $timelineContent,
+        ]);
+    }
+    public function fetchUserTimeline($date, $user_id)
+    {
+        // Assuming you have a 'schoolvisits' table and a 'SchoolVisit' model defined
+        // You can use the 'where' method to filter the data based on the date and user ID
+        $timeline = SchoolVisit::where('visit_date', $date)
+            ->where('user_id', $user_id)
+            ->get();
+
+        return $timeline;
+    }
+//    public function showUserTimeline($date, $user_id)
+//    {
+//        $timeline = $this->getUserTimeline($date, $user_id);
+//
+//        return view('your-blade-template', compact('timeline'));
+//    }
     public function fetchDepartmentUsers(Request $request)
     {
         $departmentId = $request->input('department_id');
