@@ -259,12 +259,19 @@
         $(document).ready(function() {
 
                  // Handle the click event of the "Read More" link
-                $('.view-more-link').click(function() {
-                    var contentDiv = $(this).prev('.limited-content');
-                    var fullContent = contentDiv.data('content');
+            $('.view-more-link').click(function() {
+                var contentDiv = $(this).prev('.limited-content');
+                var fullContent = contentDiv.data('content');
+                var linkText = $(this).text().toLowerCase();
+
+                if (linkText === 'المزيد..') {
                     contentDiv.text(fullContent);
-                    $(this).remove(); // Remove the "Read More" link after expanding the content
-                });
+                    $(this).text('أقل..');
+                } else {
+                    contentDiv.text(fullContent.substring(0, 15) + '...');
+                    $(this).text('المزيد..');
+                }
+            });
 
                 // Handle the click event of the "View Timeline" link
                 $('.view-timeline-link').click(function() {
