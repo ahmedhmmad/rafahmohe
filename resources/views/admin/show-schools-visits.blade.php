@@ -31,9 +31,6 @@
 
                         </div>
 
-                    </div>
-
-
 
                     <div class="row">
 
@@ -294,6 +291,31 @@
                         }
                     });
                 });
+
+            $('#selected_department_id').change(function() {
+                var departmentId = $(this).val();
+
+                // Send an AJAX request to fetch the department users
+                $.ajax({
+                    url: '/fetch-department-users',
+                    method: 'GET',
+                    data: { department_id: departmentId },
+                    success: function(response) {
+                        // Clear the previous options in the users select box
+                        $('#selected_user_id').empty();
+
+                        // Add the "اختر المستخدم" option
+                        var selectOption = $('<option>', { value: '', text: 'اختر الموظف' });
+                        $('#selected_user_id').append(selectOption);
+
+                        // Add the new options based on the department users
+                        response.users.forEach(function(user) {
+                            var option = $('<option>', { value: user.id, text: user.name });
+                            $('#selected_user_id').append(option);
+                        });
+                    }
+                });
+            });
 
 
         });
