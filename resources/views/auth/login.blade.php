@@ -89,9 +89,7 @@
                                     <div class="mb-3 form-password-toggle">
                                         <div class="d-flex justify-content-between">
                                             <label class="form-label" for="password">كلمة المرور</label>
-                                            <a href="{{ route('password.request') }}">
-                                                <small>نسيت كلمة المرور</small>
-                                            </a>
+
                                         </div>
                                         <div class="input-group input-group-merge">
                                             <input
@@ -105,6 +103,9 @@
                                             <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                         </div>
                                     </div>
+                                    <a href="{{ route('password.request') }}">
+                                        <small>نسيت كلمة المرور</small>
+                                    </a>
                                     {{-- <div class="mb-3">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="remember-me" />
