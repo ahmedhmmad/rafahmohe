@@ -30,6 +30,7 @@
                             </select>
 
                         </div>
+                    </div>
 
 
                     <div class="row">
@@ -90,6 +91,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="loading-spinner">
+                        <img src="{{url('/img/loading.gif')}}" alt="Loading..." width="50" height="50">
+                    </div>
                     <!-- Timeline details will be displayed here -->
                     <div id="timelineDetails">
                         <!-- Timeline data will be added dynamically here -->
@@ -246,6 +250,14 @@
         text-decoration: none;
       border-top: #cae0d2 2px dashed;
     }
+    .loading-spinner {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+    }
 </style>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -257,6 +269,16 @@
 
 
         $(document).ready(function() {
+            function showLoadingSpinner() {
+                console.log('show');
+                $('.loading-spinner').show();
+            }
+
+            // Function to hide the loading spinner
+            function hideLoadingSpinner() {
+                console.log('hide');
+                $('.loading-spinner').hide();
+            }
 
                  // Handle the click event of the "Read More" link
             $('.view-more-link').click(function() {
@@ -277,6 +299,7 @@
                 $('.view-timeline-link').click(function() {
                     var date = $(this).data('visit-date');
                     var userId = $(this).data('user-id');
+                    showLoadingSpinner();
 
                     // Send an AJAX request to fetch the user timeline
                     $.ajax({
@@ -284,6 +307,7 @@
                         method: 'GET',
                         data: { date: date, user_id: userId },
                         success: function(response) {
+                            hideLoadingSpinner();
                             // Clear the previous timeline details
                             $('#timelineDetails').html('');
 
@@ -294,6 +318,7 @@
                             $('#timelineModal').modal('show');
                         },
                         error: function(error) {
+                            hideLoadingSpinner();
                             console.log(error);
                         }
                     });

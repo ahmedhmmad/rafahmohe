@@ -82,6 +82,7 @@
     .history-tl-container ul.tl li .item-content {
         margin-left: 35px;
     }
+
 </style>
 
 <!-- HTML Content -->
