@@ -30,9 +30,7 @@
                             </select>
 
                         </div>
-
                     </div>
-
 
 
                     <div class="row">
@@ -93,6 +91,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="loading-spinner">
+                        <img src="{{url('/img/loading.gif')}}" alt="Loading..." width="50" height="50">
+                    </div>
                     <!-- Timeline details will be displayed here -->
                     <div id="timelineDetails">
                         <!-- Timeline data will be added dynamically here -->
@@ -249,6 +250,14 @@
         text-decoration: none;
       border-top: #cae0d2 2px dashed;
     }
+    .loading-spinner {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+    }
 </style>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -260,19 +269,37 @@
 
 
         $(document).ready(function() {
+            function showLoadingSpinner() {
+                console.log('show');
+                $('.loading-spinner').show();
+            }
+
+            // Function to hide the loading spinner
+            function hideLoadingSpinner() {
+                console.log('hide');
+                $('.loading-spinner').hide();
+            }
 
                  // Handle the click event of the "Read More" link
-                $('.view-more-link').click(function() {
-                    var contentDiv = $(this).prev('.limited-content');
-                    var fullContent = contentDiv.data('content');
+            $('.view-more-link').click(function() {
+                var contentDiv = $(this).prev('.limited-content');
+                var fullContent = contentDiv.data('content');
+                var linkText = $(this).text().toLowerCase();
+
+                if (linkText === 'المزيد..') {
                     contentDiv.text(fullContent);
-                    $(this).remove(); // Remove the "Read More" link after expanding the content
-                });
+                    $(this).text('أقل..');
+                } else {
+                    contentDiv.text(fullContent.substring(0, 15) + '...');
+                    $(this).text('المزيد..');
+                }
+            });
 
                 // Handle the click event of the "View Timeline" link
                 $('.view-timeline-link').click(function() {
                     var date = $(this).data('visit-date');
                     var userId = $(this).data('user-id');
+                    showLoadingSpinner();
 
                     // Send an AJAX request to fetch the user timeline
                     $.ajax({
@@ -280,6 +307,7 @@
                         method: 'GET',
                         data: { date: date, user_id: userId },
                         success: function(response) {
+                            hideLoadingSpinner();
                             // Clear the previous timeline details
                             $('#timelineDetails').html('');
 
@@ -290,10 +318,36 @@
                             $('#timelineModal').modal('show');
                         },
                         error: function(error) {
+                            hideLoadingSpinner();
                             console.log(error);
                         }
                     });
                 });
+
+            $('#selected_department_id').change(function() {
+                var departmentId = $(this).val();
+
+                // Send an AJAX request to fetch the department users
+                $.ajax({
+                    url: '/fetch-department-users',
+                    method: 'GET',
+                    data: { department_id: departmentId },
+                    success: function(response) {
+                        // Clear the previous options in the users select box
+                        $('#selected_user_id').empty();
+
+                        // Add the "اختر المستخدم" option
+                        var selectOption = $('<option>', { value: '', text: 'اختر الموظف' });
+                        $('#selected_user_id').append(selectOption);
+
+                        // Add the new options based on the department users
+                        response.users.forEach(function(user) {
+                            var option = $('<option>', { value: user.id, text: user.name });
+                            $('#selected_user_id').append(option);
+                        });
+                    }
+                });
+            });
 
 
         });
