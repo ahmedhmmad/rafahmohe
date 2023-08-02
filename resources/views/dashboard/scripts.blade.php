@@ -1,8 +1,13 @@
 <!-- Core JS -->
 <!-- build:js assets/vendor/js/core.js -->
-<script src="{{url('/assets/vendor/libs/jquery/jquery.js')}}"></script>
-<script src="{{url('/assets/vendor/libs/popper/popper.js')}}"></script>
-<script src="{{url('/assets/vendor/js/bootstrap.js')}}"></script>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
 <script src="{{url('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
 
 <script src="{{url('/assets/vendor/js/menu.js')}}"></script>
@@ -15,7 +20,18 @@
 <script src="{{url('/assets/js/main.js')}}"></script>
 
 {{--Toast JS--}}
-<script src="{{url('/assets/js/ui-toasts.js')}}"></script>
+{{--<script src="{{url('/assets/js/ui-toasts.js')}}"></script>--}}
+<script>
+    $(document).ready(function () {
+        // Check if the success message exists in the session
+        const successMessage = '{{ session('success') }}';
+        if (successMessage) {
+            // Show the toast when the page loads with the success message
+            $('.toast-body').text(successMessage);
+            $('.toast').toast('show');
+        }
+    });
+</script>
 
 {{--Sweet Alert--}}
 <!-- Page JS -->
