@@ -153,21 +153,21 @@
                         // Show success toast
                         // You can use a library like Bootstrap Toasts or any other notification library
                         // to show a success message. Here's an example using Bootstrap Toasts:
-                        // var toast = document.createElement('div');
-                        // toast.classList.add('toast', 'show');
-                        // toast.setAttribute('role', 'alert');
-                        // toast.setAttribute('aria-live', 'assertive');
-                        // toast.setAttribute('aria-atomic', 'true');
-                        // toast.innerHTML = '<div class="toast-header"><strong class="me-auto">Success</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button></div><div class="toast-body">تمت إضافة الزيارة بنجاح.</div>';
-                        // document.body.appendChild(toast);
-                        //
-                        // // Return to the previous page or perform any other action
-                        // // You can add your own logic to redirect or handle the return button click event
-                        //
-                        // // Optional: Clear the success toast after a few seconds
-                        // setTimeout(function() {
-                        //     toast.remove();
-                        // }, 5000);
+                        var toast = document.createElement('div');
+                        toast.classList.add('toast', 'show');
+                        toast.setAttribute('role', 'alert');
+                        toast.setAttribute('aria-live', 'assertive');
+                        toast.setAttribute('aria-atomic', 'true');
+                        toast.innerHTML = '<div class="toast-header"><strong class="me-auto">Success</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button></div><div class="toast-body">تمت إضافة الزيارة بنجاح.</div>';
+                        document.body.appendChild(toast);
+
+                        // Return to the previous page or perform any other action
+                        // You can add your own logic to redirect or handle the return button click event
+
+                        // Optional: Clear the success toast after a few seconds
+                        setTimeout(function() {
+                            toast.remove();
+                        }, 5000);
                     } else {
                        //print Body to console
                         response.json().then(function(data) {
