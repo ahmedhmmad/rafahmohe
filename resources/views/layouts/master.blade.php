@@ -26,8 +26,7 @@
             <!-- Navbar -->
 
             @include('dashboard.navbar')
-            <div class="toast-container position-fixed top-0 end-0 p-3">
-            </div>
+
             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="direction: rtl; background-color: lightgreen;"  data-bs-delay="1500" data-bs-animation="true" data-bs-autohide="true">
 
                 <div class="toast-body">

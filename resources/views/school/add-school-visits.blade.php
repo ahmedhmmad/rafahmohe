@@ -32,10 +32,12 @@
                     </div>
                 </div>
 
-              
+
 
                 <form id="schoolVisitForm" action="{{ route('school.store-visits') }}" method="POST">
                     @csrf
+                    <div class="toast-container position-fixed top-0 end-0 p-3">
+                    </div>
                     <div class="mb-3">
                         <label for="visitorName" class="form-label">اسم الزائر</label>
                         <input type="text" class="form-control user-name-input" id="visitorName" required>
