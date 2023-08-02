@@ -32,8 +32,7 @@
                     </div>
                 </div>
 
-                <div class="toast-container position-fixed top-0 end-0 p-3">
-                </div>
+              
 
                 <form id="schoolVisitForm" action="{{ route('school.store-visits') }}" method="POST">
                     @csrf
