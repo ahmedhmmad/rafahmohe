@@ -19,6 +19,8 @@
     <div class="container py-2">
         <div class="card py2">
             <div class="card-body">
+                <div class="toast-container p-3">
+                </div>
                 <div class="row">
                     <div class="col-md-10">
                         <h3 class="mb-4">إضافة زيارة مدرسية</h3>
@@ -36,8 +38,7 @@
 
                 <form id="schoolVisitForm" action="{{ route('school.store-visits') }}" method="POST">
                     @csrf
-                    <div class="toast-container position-fixed top-0 end-0 p-3">
-                    </div>
+
                     <div class="mb-3">
                         <label for="visitorName" class="form-label">اسم الزائر</label>
                         <input type="text" class="form-control user-name-input" id="visitorName" required>
@@ -163,7 +164,7 @@
                         toast.setAttribute('aria-live', 'assertive');
                         toast.setAttribute('aria-atomic', 'true');
                         toast.setAttribute('style', 'direction: rtl; background-color: lightgreen;');
-                        toast.setAttribute('data-bs-delay', '1500');
+                        toast.setAttribute('data-bs-delay', '2500');
                         toast.setAttribute('data-bs-animation', 'true');
                         toast.setAttribute('data-bs-autohide', 'true');
                         toast.innerHTML = '<div class="toast-body">{{ session('success')}}</div>';
@@ -177,9 +178,7 @@
                         bootstrapToast.show();
 
                         // Optional: Clear the toast after a few seconds
-                        setTimeout(function() {
-                            bootstrapToast.hide();
-                        }, 1500);
+
                     } else {
                        //print Body to console
                         response.json().then(function(data) {
