@@ -9,7 +9,7 @@
     data-template="vertical-menu-template-free"
 >
 
-   @include('dashboard.head')
+@include('dashboard.head')
 
 
 <body>
@@ -27,6 +27,16 @@
 
             @include('dashboard.navbar')
 
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="direction: rtl; background-color: lightgreen;"  data-bs-delay="1500" data-bs-animation="true" data-bs-autohide="true">
+
+                <div class="toast-body">
+                    {{ session('success')}}
+                </div>
+            </div>
+
+
+
+
             <!-- / Navbar -->
 
             <!-- Content wrapper -->
@@ -37,7 +47,7 @@
                 <!-- / Content -->
 
                 <!-- Footer -->
-               @include('dashboard.footer')
+                @include('dashboard.footer')
                 <!-- / Footer -->
 
                 <div class="content-backdrop fade"></div>
