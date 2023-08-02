@@ -167,7 +167,7 @@
                         toast.setAttribute('data-bs-delay', '2500');
                         toast.setAttribute('data-bs-animation', 'true');
                         toast.setAttribute('data-bs-autohide', 'true');
-                        toast.innerHTML = '<div class="toast-body">{{ session('success')}}</div>';
+                        toast.innerHTML = '<div class="toast-body">تم تسجيل الزيارة بنجاح</div>';
 
                         // Append the toast element to the toast container
                         var toastContainer = document.querySelector('.toast-container');
