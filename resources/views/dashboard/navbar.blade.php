@@ -1,3 +1,4 @@
+
 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
         <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
@@ -15,21 +16,56 @@
             </div>
         </div>
         <!-- /Search -->
-        <script>
-            const pusherAppKey = '{{ env("PUSHER_APP_KEY") }}';
-            const pusherAppCluster = '{{ env("PUSHER_APP_CLUSTER") }}';
-        </script>
+{{--        <script>--}}
+{{--            const pusherAppKey = '{{ env("PUSHER_APP_KEY") }}';--}}
+{{--            const pusherAppCluster = '{{ env("PUSHER_APP_CLUSTER") }}';--}}
+{{--        </script>--}}
 
         <ul class="navbar-nav flex-row align-items-center mr-auto">
             <!-- Notifications -->
-            <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                <a class="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown">
-                    <i class="bx bx-bell"></i>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bx bxs-bell-ring">
+                        @if(count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications) > 0)
+                            <span class="badge bg-label-danger">{{ count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications) }}</span>
+                        @endif
+                    </i>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" id="notification-dropdown" data-user-id="{{ auth()->user()->id }}">
-                    <!-- Notification items will be added dynamically here -->
-                </ul>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                    <!-- Fetch and display notifications from the database -->
+                    @foreach(\Illuminate\Support\Facades\Auth::user()->notifications as $notification)
+                        @php
+                            $data = $notification->data['data'];
+                        @endphp
+                        <a class="dropdown-item" href="{{ $data['ticketId'] }}">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar avatar-online">
+                                        <img src="{{ $data['ticketAttachment'] }}" alt class="w-px-40 h-auto rounded-circle" />
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <span class="fw-semibold d-block">{{ $data['ticketSchoolName'] }}</span>
+                                    <small class="text-muted">{{ $data['ticketSubject'] }}</small>
+                                </div>
+                                <form action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">تعليم كمقروء</button>
+                                </form>
+                            </div>
+                        </a>
+                        <!-- Add mark as read button -->
+
+                    @endforeach
+                    <!-- End of notifications -->
+                    <!-- Add mark all as read button -->
+                    <form action="{{ route('notifications.markAllAsRead') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="dropdown-item">Mark All as Read</button>
+                    </form>
+                </div>
             </li>
+
             <!--/ Notifications -->
             <!-- User -->
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
