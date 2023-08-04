@@ -209,6 +209,7 @@ class SchoolController extends Controller
 
         // Get job title for user_id from users table
         $user = User::where('id', $validatedData['user_id'])->first();
+        $mainVisitor = $user->name;
         $departmentId = $user->department_id;
 
         // Store the validated data in the database or perform other actions
@@ -248,8 +249,8 @@ class SchoolController extends Controller
         }
         $manager=User::where('role_id',1)->get();
         $data=[
-            'ticketSchoolName'=>auth()->user()->name,
-            'ticketSubject'=>$validatedData['visitDate'],
+            'ticketSubject'=>auth()->user()->name,
+            'ticketSchoolName'=>$mainVisitor,
             'ticketId'=>$storeVisit->id,
         ];
         Notification::send($manager,new CreateNewSchoolVisit($data));
