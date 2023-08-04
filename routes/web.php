@@ -72,10 +72,10 @@ Route::middleware(['auth', 'role:Employee'])->group(function ()
 //Department Head Routes
 Route::middleware(['auth', 'role:Department_Head'])->group(function ()
 {
-    Route::post('/head/notifications/{notification}/mark-as-read', [\App\Http\Controllers\NotificationController::class,'markAsRead'])
+    Route::post('/notifications/{notification}/mark-as-read', [\App\Http\Controllers\NotificationController::class,'markAsRead'])
         ->name('notifications.markAsRead');
 
-    Route::post('/head/notifications/mark-all-as-read', [\App\Http\Controllers\NotificationController::class,'markAllAsRead'])
+    Route::post('/notifications/mark-all-as-read', [\App\Http\Controllers\NotificationController::class,'markAllAsRead'])
         ->name('notifications.markAllAsRead');
 
 
@@ -103,10 +103,10 @@ Route::middleware(['auth', 'role:Department_Head'])->group(function ()
 Route::middleware(['auth', 'role:Administrator'])->group(function ()
 {
 
-    Route::post('/admin/notifications/{notification}/mark-as-read', [\App\Http\Controllers\NotificationController::class,'markAsRead'])
+    Route::post('/notifications/{notification}/mark-as-read', [\App\Http\Controllers\NotificationController::class,'markAsRead'])
         ->name('notifications.markAsRead');
 
-    Route::post('/admin/notifications/mark-all-as-read', [\App\Http\Controllers\NotificationController::class,'markAllAsRead'])
+    Route::post('/notifications/mark-all-as-read', [\App\Http\Controllers\NotificationController::class,'markAllAsRead'])
         ->name('notifications.markAllAsRead');
 
 
