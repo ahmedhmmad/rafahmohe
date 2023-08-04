@@ -11,7 +11,32 @@
         cursor: pointer;
         padding: 5px;
     }
+/*Some modifications*/
+    .user-inputs , .time-inputs ,.visit-details{
+        background-color: rgba(203, 234, 177, 0.56);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #c7c7c7;
+        margin-bottom: 0.7rem;
+    }
 
+    /* Styling for labels */
+
+    label {
+        font-weight: bold;
+    }
+
+    /* Spacing */
+
+    .myform-label {
+        font-weight: 1000;
+        margin-bottom: 15px;
+    }
+
+    h3 {
+
+        margin-bottom: 20px;
+    }
 
 </style>
 
@@ -38,6 +63,7 @@
 
                 <form id="schoolVisitForm" action="{{ route('school.store-visits') }}" method="POST">
                     @csrf
+                    <div class="user-inputs">
 
                     <div class="mb-3">
                         <label for="visitorName" class="form-label">اسم الزائر</label>
@@ -52,8 +78,8 @@
                     <!-- Add the 'companionsContainer' element to the HTML -->
                     <div id="companionsContainer" style="display: none;"></div>
 
-
-
+                    </div>
+                    <div class="time-inputs">
 
                     <div class="row mb-3">
                         <div class="col">
@@ -69,6 +95,8 @@
                             <input type="time" class="form-control" id="leavingTime" required>
                         </div>
                     </div>
+                    </div>
+                    <div class="visit-details">
                     <div class="mb-3">
                         <label for="purpose" class="form-label">الهدف من الزيارة</label>
                         <textarea class="form-control" id="purpose" rows="3" required></textarea>
@@ -85,10 +113,11 @@
                     </h6>
                 </form>
             </div>
+            </div>
         </div>
     </div>
 
-    <!-- Include Bootstrap JS -->
+
 @endsection
 @push('scripts')
     <script>
