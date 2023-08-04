@@ -41,7 +41,7 @@ class CreateNewTicket extends Notification
     {
         return [
             'data' => $this->data,
-            //
+
         ];
     }
 }

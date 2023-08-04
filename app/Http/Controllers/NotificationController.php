@@ -19,7 +19,6 @@ class NotificationController extends Controller
     public function markAllAsRead(Request $request)
     {
         $request->user()->unreadNotifications->markAsRead();
-
         return redirect()->back()->with('success', 'تم تحديد جميع الإشعارات كمقروءة.');
     }
 }
