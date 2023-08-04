@@ -8,10 +8,8 @@ use App\Models\Plan;
 use App\Models\School;
 use App\Models\SchoolVisit;
 use App\Models\User;
-use App\Notifications\CreateNewSchoolVisit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
 
 class SchoolController extends Controller
 {
@@ -194,7 +192,6 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
-
         // Validate the form data
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -246,13 +243,6 @@ class SchoolController extends Controller
                 }
             }
         }
-        $manager=User::where('role_id',1)->get();
-        $data=[
-            'ticketSchoolName'=>auth()->user()->name,
-            'ticketSubject'=>$validatedData['visitDate'],
-            'ticketId'=>$storeVisit->id,
-        ];
-        Notification::send($manager,new CreateNewSchoolVisit($data));
 
         // Return a JSON response indicating success
         return response()->json(['message' => 'تم الحفظ بنجاح']);

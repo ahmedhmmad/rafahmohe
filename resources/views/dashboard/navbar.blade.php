@@ -25,62 +25,60 @@
             <!-- Notifications -->
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="bx bxs-bell-ring"></i>
-                    @if(count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications) > 0)
-                        <span class="badge bg-label-danger">{{ count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications) }}</span>
-                    @endif
+                    <i class="bx bxs-bell-ring">
+                        @if(count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications) > 0)
+                            <span class="badge bg-label-danger">{{ count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications) }}</span>
+                        @endif
+                    </i>
                 </a>
-                @if(count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications) > 0)
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
-
-                        <!-- Your existing notification loop -->
-                        @foreach(\Illuminate\Support\Facades\Auth::user()->unreadNotifications as $notification)
-                            @php
-                                $data = $notification->data['data'];
-                            @endphp
-                            <a class="dropdown-item" href="{{ $data['ticketId'] }}">
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0 me-3">
-                                        <div class="avatar avatar-online">
-                                            <img src="{{ $data['ticketAttachment'] }}" alt class="w-px-40 h-auto rounded-circle" />
-                                        </div>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                    <!-- Fetch and display notifications from the database -->
+                    @foreach(\Illuminate\Support\Facades\Auth::user()->notifications as $notification)
+                        @php
+                            $data = $notification->data['data'];
+                        @endphp
+                        <a class="dropdown-item" href="{{ $data['ticketId'] }}">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar avatar-online">
+                                        <img src="{{ $data['ticketAttachment'] }}" alt class="w-px-40 h-auto rounded-circle" />
                                     </div>
-                                    <div class="flex-grow-1">
-                                        <span class="fw-semibold d-block">{{ $data['ticketSchoolName'] }}</span>
-                                        <small class="text-muted">{{ $data['ticketSubject'] }}</small>
-                                    </div>
-
-                                    <form action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item" data-bs-toggle="tooltip"
-                                                title="تحديد كمقروء"
-                                                data-bs-offset="0,4"
-                                                data-bs-placement="top">
-                                            <i class="bx bx-check me-2"></i>
-                                            <span class="align-middle"></span>
-                                        </button>
-                                    </form>
                                 </div>
-                            </a>
-                        @endforeach
+                                <div class="flex-grow-1">
+                                    <span class="fw-semibold d-block">{{ $data['ticketSchoolName'] }}</span>
+                                    <small class="text-muted">{{ $data['ticketSubject'] }}</small>
+                                </div>
 
-                        <form action="{{ route('notifications.markAllAsRead') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="dropdown-item">
-                                <i class="bx bx-check me-2"></i>
-                                <span class="align-middle">
-                    <strong>
-                        تعليم الكل كمقروء
-                    </strong>
-                </span>
-                            </button>
-                        </form>
+                                <form action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">
 
-                    </div>
-                @endif
+                                        <i class="bx bx-check me-2"></i>
+                                        <span class="align-middle"></span>
+                                    </button>
+                                </form>
+                            </div>
+                        </a>
+                        <!-- Add mark as read button -->
+
+                    @endforeach
+                    <!-- End of notifications -->
+                    <!-- Add mark all as read button -->
+                    <form action="{{ route('notifications.markAllAsRead') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="dropdown-item">
+                            <i class="bx bx-check me-2"></i>
+                            <span class="align-middle">
+                                <strong>
+                                    تعليم الكل كمقروء
+                                </strong>
+                            </span>
+                        </button>
+                    </form>
+                </div>
             </li>
-            <!--/ Notifications -->
 
+            <!--/ Notifications -->
             <!-- User -->
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
