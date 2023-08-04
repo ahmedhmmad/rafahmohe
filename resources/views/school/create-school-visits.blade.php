@@ -5,15 +5,15 @@
         <div class="card py-2">
             <div class="card-header">
                 <a href="{{route('school.add-visits')}}">
-                <button type="button" class="btn btn-primary">
+                <button type="button" class="btn btn-success">
                     <span class="tf-icons bx bx-plus-circle"></span>&nbsp; إضافة زيارة
                 </button>
                 </a>
             </div>
             <div class="card-body">
                 <div class="table-responsive text-wrap">
-                    <table class="table table-hover">
-                        <thead>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-primary">
 
                         <tr>
                             <th><strong>اليوم</strong></th>
