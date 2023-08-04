@@ -48,9 +48,14 @@
                                     <span class="fw-semibold d-block">{{ $data['ticketSchoolName'] }}</span>
                                     <small class="text-muted">{{ $data['ticketSubject'] }}</small>
                                 </div>
+
                                 <form action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="dropdown-item">تعليم كمقروء</button>
+                                    <button type="submit" class="dropdown-item">
+
+                                        <i class="bx bx-check me-2"></i>
+                                        <span class="align-middle"></span>
+                                    </button>
                                 </form>
                             </div>
                         </a>
@@ -61,7 +66,14 @@
                     <!-- Add mark all as read button -->
                     <form action="{{ route('notifications.markAllAsRead') }}" method="POST">
                         @csrf
-                        <button type="submit" class="dropdown-item">Mark All as Read</button>
+                        <button type="submit" class="dropdown-item">
+                            <i class="bx bx-check me-2"></i>
+                            <span class="align-middle">
+                                <strong>
+                                    تعليم الكل كمقروء
+                                </strong>
+                            </span>
+                        </button>
                     </form>
                 </div>
             </li>
