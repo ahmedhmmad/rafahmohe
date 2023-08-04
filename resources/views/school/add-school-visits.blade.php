@@ -13,7 +13,7 @@
     }
 /*Some modifications*/
     .user-inputs , .time-inputs ,.visit-details{
-        background-color: rgba(203, 234, 177, 0.56);
+        background-color: rgba(222, 241, 205, 0.56);
         padding: 1rem;
         border-radius: 0.5rem;
         border: 1px solid #c7c7c7;
@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-md-2">
                         <a href="{{ route('school.create-visits') }}">
-                            <button type="button" class="btn btn-secondary" id="returnButton">
+                            <button type="button" class="btn btn-success" id="returnButton">
                                 <span class="tf-icons bx bx-arrow-back"></span>&nbsp;العودة
                             </button>
                         </a>
