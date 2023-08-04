@@ -66,17 +66,17 @@
                             </a>
                         @endforeach
 
-{{--                        <form action="{{ route('notifications.markAllAsRead') }}" method="POST">--}}
-{{--                            @csrf--}}
-{{--                            <button type="submit" class="dropdown-item">--}}
-{{--                                <i class="bx bx-check me-2"></i>--}}
-{{--                                <span class="align-middle">--}}
-{{--                    <strong>--}}
-{{--                        تعليم الكل كمقروء--}}
-{{--                    </strong>--}}
-{{--                </span>--}}
-{{--                            </button>--}}
-{{--                        </form>--}}
+                        <form action="{{ route('notifications.markAllAsRead') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="dropdown-item">
+                                <i class="bx bx-check me-2"></i>
+                                <span class="align-middle">
+                    <strong>
+                        تعليم الكل كمقروء
+                    </strong>
+                </span>
+                            </button>
+                        </form>
 
                     </div>
                 @endif
