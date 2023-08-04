@@ -22,6 +22,7 @@
 {{--        </script>--}}
 
         <ul class="navbar-nav flex-row align-items-center mr-auto">
+            {{\Illuminate\Support\Facades\Auth::user()->notifications}}
             <!-- Notifications -->
 {{--            <li class="nav-item dropdown">--}}
 {{--                <a class="nav-link dropdown-toggle hide-arrow" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
