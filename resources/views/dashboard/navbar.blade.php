@@ -31,25 +31,26 @@
                         <span class="badge bg-label-danger">{{ count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications) }}</span>
                     @endif
                 </a>
-{{--                @if(count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications) > 0)--}}
-{{--                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">--}}
 
-{{--                        <!-- Your existing notification loop -->--}}
-{{--                        @foreach(\Illuminate\Support\Facades\Auth::user()->unreadNotifications as $notification)--}}
-{{--                            @php--}}
-{{--                                $data = $notification->data['data'];--}}
-{{--                            @endphp--}}
-{{--                            <a class="dropdown-item" href="{{ $data['ticketId'] }}">--}}
-{{--                                <div class="d-flex">--}}
-{{--                                    <div class="flex-shrink-0 me-3">--}}
-{{--                                        <div class="avatar avatar-online">--}}
-{{--                                            <img src="{{ $data['ticketAttachment'] }}" alt class="w-px-40 h-auto rounded-circle" />--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="flex-grow-1">--}}
-{{--                                        <span class="fw-semibold d-block">{{ $data['ticketSchoolName'] }}</span>--}}
-{{--                                        <small class="text-muted">{{ $data['ticketSubject'] }}</small>--}}
-{{--                                    </div>--}}
+                @if(count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications) > 0)
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+
+                        <!-- Your existing notification loop -->
+                        @foreach(\Illuminate\Support\Facades\Auth::user()->unreadNotifications as $notification)
+                            @php
+                                $data = $notification->data['data'];
+                            @endphp
+                            <a class="dropdown-item" href="{{ $data['ticketId'] }}">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="avatar avatar-online">
+                                            <img src="" alt class="w-px-40 h-auto rounded-circle" />
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <span class="fw-semibold d-block">{{ $data['ticketSchoolName'] }}</span>
+                                        <small class="text-muted">{{ $data['ticketSubject'] }}</small>
+                                    </div>
 
 {{--                                    <form action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST">--}}
 {{--                                        @csrf--}}
@@ -61,9 +62,9 @@
 {{--                                            <span class="align-middle"></span>--}}
 {{--                                        </button>--}}
 {{--                                    </form>--}}
-{{--                                </div>--}}
-{{--                            </a>--}}
-{{--                        @endforeach--}}
+                                </div>
+                            </a>
+                        @endforeach
 
 {{--                        <form action="{{ route('notifications.markAllAsRead') }}" method="POST">--}}
 {{--                            @csrf--}}
@@ -77,8 +78,8 @@
 {{--                            </button>--}}
 {{--                        </form>--}}
 
-{{--                    </div>--}}
-{{--                @endif--}}
+                    </div>
+                @endif
             </li>
             <!--/ Notifications -->
 
