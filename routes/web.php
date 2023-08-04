@@ -18,6 +18,12 @@ Route::middleware(['auth'])->group(function()
         return view('welcome');
     })->name('home');
 
+    Route::post('/notifications/{notification}/mark-as-read', [\App\Http\Controllers\NotificationController::class,'markAsRead'])
+        ->name('notifications.markAsRead');
+
+    Route::post('/notifications/mark-all-as-read', [\App\Http\Controllers\NotificationController::class,'markAllAsRead'])
+        ->name('notifications.markAllAsRead');
+
     Route::get('/employee/show-assigned-tickets', [TicketController::class,'showAssignedTickets'])
         ->name('employee.show-assigned-tickets');
 
@@ -72,12 +78,6 @@ Route::middleware(['auth', 'role:Employee'])->group(function ()
 //Department Head Routes
 Route::middleware(['auth', 'role:Department_Head'])->group(function ()
 {
-    Route::post('/notifications/{notification}/mark-as-read', [\App\Http\Controllers\NotificationController::class,'markAsRead'])
-        ->name('notifications.markAsRead');
-
-    Route::post('/notifications/mark-all-as-read', [\App\Http\Controllers\NotificationController::class,'markAllAsRead'])
-        ->name('notifications.markAllAsRead');
-
 
     Route::get('/head/showplan/{id}',[App\Http\Controllers\Head\HeadController::class,'show'])
         ->name('head.show-plan');
@@ -103,11 +103,7 @@ Route::middleware(['auth', 'role:Department_Head'])->group(function ()
 Route::middleware(['auth', 'role:Administrator'])->group(function ()
 {
 
-    Route::post('/notifications/{notification}/mark-as-read', [\App\Http\Controllers\NotificationController::class,'markAsRead'])
-        ->name('notifications.markAsRead');
 
-    Route::post('/notifications/mark-all-as-read', [\App\Http\Controllers\NotificationController::class,'markAllAsRead'])
-        ->name('notifications.markAllAsRead');
 
 
     Route::get('/admin/override-plan-restrictions', [AdminController::class, 'showOverridePlanRestrictionsForm'])->name('admin.override-plan-restrictions');
