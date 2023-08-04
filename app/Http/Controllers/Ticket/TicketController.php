@@ -9,12 +9,10 @@ use App\Models\Department;
 use App\Models\Ticket;
 use App\Models\TicketAssignment;
 use App\Models\User;
-use App\Notifications\CreateNewTicket;
-
+use App\Notifications\TicketCreatedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Config;
 
@@ -288,9 +286,6 @@ class TicketController extends Controller
         $ticket->department_id = $request->input('department');
         $ticket->description = $request->input('description');
         $ticket->user_id = auth()->user()->id;
-        //Fin school Name using user_id
-        $user = User::find(auth()->user()->id);
-        $schoolName= $user->name;
 
         if ($request->hasFile('attachment')) {
 
@@ -302,18 +297,6 @@ class TicketController extends Controller
         //dd($ticket);
 
         $ticket->save();
-        $data=[
-            'ticketId'=>$ticket->id,
-            'ticketSubject'=>$ticket->subject,
-            'ticketDescription'=>$ticket->description,
-            'ticketDepartment'=>$ticket->department_id,
-            'ticketAttachment'=>$ticket->attachment,
-            'ticketSchoolName'=>$schoolName,
-            'ticketStatus'=>$ticket->status,
-            'ticketCreatedAt'=>$ticket->created_at,
-            'ticketUpdatedAt'=>$ticket->updated_at,
-
-        ];
 
         // Send email to the selected department
         $department = Department::find($request->input('department'));
@@ -333,7 +316,7 @@ class TicketController extends Controller
                 ->where('role_id', 2)
                 ->first();
             if ($departmentHead) {
-               Notification::send($departmentHead, new CreateNewTicket($data));
+               // $departmentHead->notify(new TicketCreatedNotification($ticket));
 
 
             }
@@ -378,7 +361,7 @@ class TicketController extends Controller
 
 
         // Redirect to a success page or ticket details page
-        return redirect()->route('school.show-tickets')->with('success', 'تم انشاء الطلب بنجاح');
+        return redirect()->route('school.show-tickets')->with('success', 'Ticket created successfully.');
 
     }
 
