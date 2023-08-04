@@ -103,6 +103,13 @@ Route::middleware(['auth', 'role:Department_Head'])->group(function ()
 Route::middleware(['auth', 'role:Administrator'])->group(function ()
 {
 
+    Route::post('/admin/notifications/{notification}/mark-as-read', [\App\Http\Controllers\NotificationController::class,'markAsRead'])
+        ->name('notifications.markAsRead');
+
+    Route::post('/admin/notifications/mark-all-as-read', [\App\Http\Controllers\NotificationController::class,'markAllAsRead'])
+        ->name('notifications.markAllAsRead');
+
+
     Route::get('/admin/override-plan-restrictions', [AdminController::class, 'showOverridePlanRestrictionsForm'])->name('admin.override-plan-restrictions');
     Route::post('/admin/override-plan-restrictions', [AdminController::class, 'overridePlanRestrictions'])->name('admin.apply-override-plan-restrictions');
     Route::get('/fetch-department-users', [AdminController::class,'fetchDepartmentUsers'])->name('fetch.department.users');
