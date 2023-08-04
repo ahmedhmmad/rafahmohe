@@ -52,16 +52,16 @@
                                         <small class="text-muted">{{ $data['ticketSubject'] }}</small>
                                     </div>
 
-{{--                                    <form action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST">--}}
-{{--                                        @csrf--}}
-{{--                                        <button type="submit" class="dropdown-item" data-bs-toggle="tooltip"--}}
-{{--                                                title="تحديد كمقروء"--}}
-{{--                                                data-bs-offset="0,4"--}}
-{{--                                                data-bs-placement="top">--}}
-{{--                                            <i class="bx bx-check me-2"></i>--}}
-{{--                                            <span class="align-middle"></span>--}}
-{{--                                        </button>--}}
-{{--                                    </form>--}}
+                                    <form action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item" data-bs-toggle="tooltip"
+                                                title="تحديد كمقروء"
+                                                data-bs-offset="0,4"
+                                                data-bs-placement="top">
+                                            <i class="bx bx-check me-2"></i>
+                                            <span class="align-middle"></span>
+                                        </button>
+                                    </form>
                                 </div>
                             </a>
                         @endforeach
