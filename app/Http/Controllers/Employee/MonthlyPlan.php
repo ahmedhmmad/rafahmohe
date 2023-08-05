@@ -302,6 +302,7 @@ class MonthlyPlan extends Controller
                     // Retrieve the selected schools for the plan
                     $selectedSchoolIds = $plan->schools->pluck('id')->toArray();
                     $associatedSchoolIds = Plan::where('start', $selectedDate)
+                        ->whereNotIn('school_id', [34])
                         ->pluck('school_id')
                         ->toArray();
 
