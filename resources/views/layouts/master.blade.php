@@ -26,14 +26,27 @@
             <!-- Navbar -->
 
             @include('dashboard.navbar')
-
+            @if (session()->has('success') )
             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="direction: rtl; background-color: lightgreen;"  data-bs-delay="1500" data-bs-animation="true" data-bs-autohide="true">
 
                 <div class="toast-body">
                     {{ session('success')}}
+
                 </div>
             </div>
+                @endif
 
+            @if (session()->has('error') )
+
+             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="direction: rtl; background-color: lightgreen;"  data-bs-delay="1500" data-bs-animation="true" data-bs-autohide="true">
+
+                <div class="toast-body">
+                    {{ session('error')}}
+
+                </div>
+
+            </div>
+                @endif
 
 
 

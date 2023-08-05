@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\School;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\MessageBag;
 
 
@@ -281,37 +282,55 @@ class MonthlyPlan extends Controller
      */
     public function edit(string $id)
     {
-        try {
-            // Find the plan by ID and eager load the 'schools' relationship
-            $plan = Plan::with('schools')->findOrFail($id);
+        $planRestriction = Auth::user()->planRestrictions->first();
+        $canOverrideLastWeek = $planRestriction ? $planRestriction->can_override_last_week  && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now() : false;
+        $currentDate = now();
+        $currentMonth = $currentDate->month;
+        $currentYear = $currentDate->year;
+        $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
+        $lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
+        if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+            if ($canOverrideLastWeek) {
+                try {
+
+                    // Find the plan by ID and eager load the 'schools' relationship
+                    $plan = Plan::with('schools')->findOrFail($id);
 
 
-            // Get the date from the plan
-            $selectedDate = $plan->start;
+                    // Get the date from the plan
+                    $selectedDate = $plan->start;
+                    // Retrieve the selected schools for the plan
+                    $selectedSchoolIds = $plan->schools->pluck('id')->toArray();
+                    $associatedSchoolIds = Plan::where('start', $selectedDate)
+                        ->pluck('school_id')
+                        ->toArray();
 
+                    // Retrieve the list of schools that are not selected for the plan on the selected date
+                    $schools = School::whereNotIn('id', $associatedSchoolIds)->get();
 
-
-            // Retrieve the selected schools for the plan
-            $selectedSchoolIds = $plan->schools->pluck('id')->toArray();
-            $associatedSchoolIds = Plan::where('start', $selectedDate)
-                ->pluck('school_id')
-                ->toArray();
-
-            // Retrieve the list of schools that are not selected for the plan on the selected date
-            $schools = School::whereNotIn('id', $associatedSchoolIds)->get();
-
-            // Retrieve the list of schools
+                    // Retrieve the list of schools
 //            $schools = School::all();
 
-            // Retrieve the selected schools for the plan
-            $selectedSchool = $plan->schools->pluck('id')->first();
+                    // Retrieve the selected schools for the plan
+                    $selectedSchool = $plan->schools->pluck('id')->first();
 
-            // Pass the plan, schools, and selectedSchools to the view
-            return view('employee.edit-plan', compact('plan', 'schools', 'selectedSchool'));
-        } catch (\Exception $e) {
-            // Handle any exceptions that occur during the process
-            return back()->with('error', 'حدث خطأ أثناء تحميل البيانات. الرجاء المحاولة مرة أخرى.');
+                    // Pass the plan, schools, and selectedSchools to the view
+                    return view('employee.edit-plan', compact('plan', 'schools', 'selectedSchool'));
+                } catch (\Exception $e) {
+                    // Handle any exceptions that occur during the process
+//                    return redirect()->back()->with('error', 'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.');
+                    return redirect()
+                        ->back()
+                        ->withErrors(['error'=>'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
+                }
+
+            }
         }
+
+//        return redirect()->back()->with('success', 'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.');
+        return redirect()
+            ->back()
+            ->withErrors(['error'=>'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
     }
 
 
