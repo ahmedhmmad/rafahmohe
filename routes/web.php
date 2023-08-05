@@ -65,7 +65,6 @@ Route::middleware(['auth'])->group(function()
         ->name('employee.add-day');
     Route::post('/employee/storeDay',[App\Http\Controllers\Employee\MonthlyPlan::class,'storeDay'])
         ->name('employee.store-day');
-
 });
 
 //Employee Routes
