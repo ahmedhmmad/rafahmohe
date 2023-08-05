@@ -386,19 +386,91 @@ class MonthlyPlan extends Controller
     }
 
     //Add single day to plan
-    public function addDay($date)
+    public function addDay_old($date)
     {
         $schools = School::all();
         return view('employee.add-day', compact('date', 'schools'));
     }
+    public function addDay($date)
+    {
+        $errors = collect([]);
+        $departmentId = Auth::user()->department->id;
+        $planRestriction = Auth::user()->planRestrictions->first();
+        $canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
+        $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
+        $canOverrideLastWeek = $planRestriction ? ($planRestriction->can_override_last_week && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
+
+        $currentDate = Carbon::parse($date);
+        try {
+
+            $existingPlans = Plan::where('start', $currentDate->format('Y-m-d'))
+                ->get();
+
+
+            $planRestriction = Auth::user()->planRestrictions->first();
+            $canOverrideLastWeek = $planRestriction ? ($planRestriction->can_override_last_week && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
+
+        } catch (\Exception $e) {
+            $errors->push('اختر الشهر والسنة المطلوبة.');
+        }
+
+        // Calculate the last day of the month
+        $lastDayOfMonth = $currentDate->copy()->endOfMonth();
+
+        // Check if the current date is within the allowed range for entering the plan
+        $lastWeekOfMonth = $lastDayOfMonth->copy()->subWeek();
+        if ($currentDate->month != $lastDayOfMonth->month || $currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+            if (!$canOverrideLastWeek) {
+                $validDates = $lastWeekOfMonth->format('d/m/Y') . ' - ' . $lastDayOfMonth->format('d/m/Y');
+                $errorMessage = 'لا يمكن تعديل الخطة إلا خلال الأسبوع الأخير من الشهر الحالي:: الفترة المسموحة: ' . $validDates;
+                $errors->push($errorMessage);
+            }
+        }
+        if ($errors->isNotEmpty()) {
+            return redirect()->back()->withErrors($errors);
+        }
+
+        $schools = School::all();
+        //dd($date, $schools, $existingPlanSchools, $existingPlans, $canOverrideMultiDepartment);
+        return view('employee.add-day', compact('date', 'schools', 'existingPlans', 'canOverrideMultiDepartment','departmentId'));
+    }
 
     public function storeDay(Request $request)
+    {
+//dd($request->all());
+
+        $date = $request->input('date');
+        $schools = $request->input('schools');
+        $user = Auth::user();
+        $departmentId = $user->department->id;
+        //dd($date, $schools, $user->id, $departmentId);
+
+
+
+        foreach ($schools as $schoolId) {
+            $plan = new Plan();
+            $plan->school_id = $schoolId;
+            $plan->user_id = $user->id;
+            $plan->department_id = $departmentId;
+            $plan->start = $date;
+            $plan->end = $date;
+
+            $plan->save();
+        }
+
+        session()->flash('success', 'تم الحفظ بنجاح');
+
+        return redirect()->route('employee.show-plan');
+    }
+
+    public function storeDay_old(Request $request)
     {
 
         $date = $request->input('date');
         $schools = $request->input('schools');
         $user = Auth::user();
         $departmentId = $user->department->id;
+
 
         foreach ($schools as $schoolId) {
             $plan = new Plan();

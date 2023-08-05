@@ -45,7 +45,6 @@
                                                         if ($existingPlan) {
                                                             $existingPlanDepartmentId = $existingPlan->department_id ?? null;
 
-
                                                             if ($existingPlanDepartmentId == $departmentId)
                                                             {
                                                                 $isRestricted = in_array($dateKey, $existingPlanDates) && !$canOverrideDepartment;
