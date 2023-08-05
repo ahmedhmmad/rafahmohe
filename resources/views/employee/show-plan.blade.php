@@ -3,6 +3,16 @@
 @section('content')
 
     <div class="container py-4">
+        {{-- Show errors --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul style="list-style: none;">
+                    @foreach ($errors->all() as $error)
+                        <li style="color: red;">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="row">
             <div class="col-md-12">
                 <h3>عرض الخطة الشهرية</h3>
