@@ -285,8 +285,23 @@ class MonthlyPlan extends Controller
             // Find the plan by ID and eager load the 'schools' relationship
             $plan = Plan::with('schools')->findOrFail($id);
 
+
+            // Get the date from the plan
+            $selectedDate = $plan->start;
+
+
+
+            // Retrieve the selected schools for the plan
+            $selectedSchoolIds = $plan->schools->pluck('id')->toArray();
+            $associatedSchoolIds = Plan::where('start', $selectedDate)
+                ->pluck('school_id')
+                ->toArray();
+
+            // Retrieve the list of schools that are not selected for the plan on the selected date
+            $schools = School::whereNotIn('id', $associatedSchoolIds)->get();
+
             // Retrieve the list of schools
-            $schools = School::all();
+//            $schools = School::all();
 
             // Retrieve the selected schools for the plan
             $selectedSchool = $plan->schools->pluck('id')->first();
