@@ -457,7 +457,7 @@ class MonthlyPlan extends Controller
         if ($currentDate->month != $lastDayOfMonth->month || $currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
             if (!$canOverrideLastWeek) {
 //                $validDates = $lastWeekOfMonth->format('d/m/Y') . ' - ' . $lastDayOfMonth->format('d/m/Y');
-                $errorMessage = 'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.';
+                $errorMessage = 'لا يمكنك الاضافة على الخطة الشهرية في هذا الوقت.';
                 $errors->push($errorMessage);
             }
         }
