@@ -11,12 +11,6 @@
                 </a>
             </div>
             <div class="card-body">
-{{--                Export Excel Button--}}
-                <a href="{{route('school.export-excel')}}">
-                    <button type="button" class="btn btn-success">
-                        <span class="tf-icons bx bx-export"></span>&nbsp; تصدير إكسل
-                    </button>
-                </a>
                 <div class="table-responsive text-wrap">
                     <table class="table table-bordered table-hover">
                         <thead class="table-primary">

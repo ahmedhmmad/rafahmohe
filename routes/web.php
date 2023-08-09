@@ -163,7 +163,6 @@ Route::middleware(['auth', 'role:School'])->group(function () {
     Route::get('/school/fetchdepartmentusers', [App\Http\Controllers\School\SchoolController::class, 'fetchDepartmentUsers'])->name('school.fetch.department.users');
     Route::post('/school/storevisits', [App\Http\Controllers\School\SchoolController::class,  'store'])->name('school.store-visits');
     Route::delete('/school/deletevisits/{id}', [App\Http\Controllers\School\SchoolController::class, 'destroy'])->name('school.delete-visit');
-    Route::get('/scool/excel', [App\Http\Controllers\School\SchoolController::class, 'exportExcel'])->name('school.export-excel');
 
     Route::get('/school/show-tickets', [App\Http\Controllers\Ticket\TicketController::class, 'index'])->name('school.show-tickets');
     Route::get('/school/create-ticket', [App\Http\Controllers\Ticket\TicketController::class, 'create'])->name('school.create-ticket');
