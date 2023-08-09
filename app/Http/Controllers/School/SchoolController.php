@@ -12,7 +12,6 @@ use App\Notifications\CreateNewSchoolVisit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
-use Rap2hpoutre\FastExcel\FastExcel;
 
 class SchoolController extends Controller
 {
@@ -184,19 +183,7 @@ class SchoolController extends Controller
 
         return view('school.create-school-visits',compact('schoolVisits'));
     }
-    public function exportExcel()
-    {
-        //Get all school visits from schoolvisits table and paginate them if there is any.
-        $schoolVisits = SchoolVisit::where('school_id', auth()->user()->id)
-            ->orderBy(DB::raw('DATE(visit_date)'), 'desc') // Order by the date (newest to oldest)
-            ->orderBy('coming_time', 'desc') // Order by the time (latest to earliest)
-            ->get();
 
-
-
-        (new FastExcel($schoolVisits))->export('schoolVisits.xlsx');
-
-    }
     public function addvisits()
     {
         return view('school.add-school-visits');
