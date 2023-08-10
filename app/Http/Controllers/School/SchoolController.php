@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\School;
 
+use App\Exports\SchoolVisitExport;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Plan;
@@ -12,6 +13,7 @@ use App\Notifications\CreateNewSchoolVisit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SchoolController extends Controller
 {
@@ -167,7 +169,10 @@ class SchoolController extends Controller
         return view('admin.show-schools-visits',compact('schoolVisits','schools','departments','users'));
     }
 
-
+    public function exportExcel()
+    {
+        return Excel::download(new SchoolVisitExport(), 'custom-school-visits.xlsx');
+    }
     /**
      * Show the form for creating a new resource.
      */
