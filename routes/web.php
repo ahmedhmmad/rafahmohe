@@ -24,6 +24,9 @@ Route::middleware(['auth'])->group(function()
     Route::post('/notifications/mark-all-as-read', [\App\Http\Controllers\NotificationController::class,'markAllAsRead'])
         ->name('notifications.markAllAsRead');
 
+    //Export Excel
+    Route::get('/export', [App\Http\Controllers\School\SchoolController::class,'exportExcel'])->name('export-excel');
+
     Route::get('/employee/show-assigned-tickets', [TicketController::class,'showAssignedTickets'])
         ->name('employee.show-assigned-tickets');
 
