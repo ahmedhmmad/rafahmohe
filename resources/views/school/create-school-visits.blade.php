@@ -9,11 +9,6 @@
                     <span class="tf-icons bx bx-plus-circle"></span>&nbsp; إضافة زيارة
                 </button>
                 </a>
-                <a href="{{route('export-excel')}}">
-                    <button type="button" class="btn btn-success">
-                        <span class="tf-icons bx bx-export"></span>&nbsp; تصدير إكسل
-                    </button>
-                </a>
             </div>
             <div class="card-body">
                 <div class="table-responsive text-wrap">
