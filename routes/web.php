@@ -176,7 +176,7 @@ Route::middleware(['auth', 'role:School'])->group(function () {
     Route::get('/tickets/comments', [TicketController::class, 'getComments'])
         ->name('school.tickets.comments');
 
-    Route::get('/exports/export-excel', [App\Http\Controllers\Report\ReportController::class,'exportExcel'])
+    Route::get('/school/export-excel', [App\Http\Controllers\Report\ReportController::class,'exportExcel'])
         ->name('exports.exportExcel');
 
 });
