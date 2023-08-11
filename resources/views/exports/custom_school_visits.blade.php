@@ -65,6 +65,9 @@
         <th>تاريخ الزيارة</th>
         <th>وقت الحضور</th>
         <th>وقت المغادرة</th>
+        <th>المسمى الوظيفي</th>
+        <th>أهداف الزيارة</th>
+        <th>ما تم تنفيذه</th>
     </tr>
     </thead>
     <tbody>
@@ -76,6 +79,9 @@
                 <td>{{ $visit->visit_date }}</td>
                 <td>{{ $visit->coming_time }}</td>
                 <td>{{ $visit->leaving_time }}</td>
+                <td>{{$visit->job_title}}</td>
+                <td>{{$visit->purpose}}</td>
+                <td>{{$visit->activities}}</td>
             </tr>
         @endforeach
     @endforeach
