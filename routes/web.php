@@ -18,8 +18,7 @@ Route::middleware(['auth'])->group(function()
         return view('welcome');
     })->name('home');
 
-    Route::get('/exports/export-excel', [App\Http\Controllers\Report\ReportController::class,'exportExcel'])
-        ->name('exports.exportExcel');
+
 
     Route::post('/notifications/{notification}/mark-as-read', [\App\Http\Controllers\NotificationController::class,'markAsRead'])
         ->name('notifications.markAsRead');
@@ -176,5 +175,8 @@ Route::middleware(['auth', 'role:School'])->group(function () {
 
     Route::get('/tickets/comments', [TicketController::class, 'getComments'])
         ->name('school.tickets.comments');
+
+    Route::get('/exports/export-excel', [App\Http\Controllers\Report\ReportController::class,'exportExcel'])
+        ->name('exports.exportExcel');
 
 });
