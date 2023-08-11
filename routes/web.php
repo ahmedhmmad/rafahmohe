@@ -18,8 +18,8 @@ Route::middleware(['auth'])->group(function()
         return view('welcome');
     })->name('home');
 
-    Route::get('/export-excel', [App\Http\Controllers\Report\ReportController::class,'exportExcel'])
-        ->name('export-excel');
+    Route::get('/exports/export-excel', [App\Http\Controllers\Report\ReportController::class,'exportExcel'])
+        ->name('exports.exportExcel');
 
     Route::post('/notifications/{notification}/mark-as-read', [\App\Http\Controllers\NotificationController::class,'markAsRead'])
         ->name('notifications.markAsRead');
