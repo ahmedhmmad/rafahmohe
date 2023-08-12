@@ -52,8 +52,8 @@ class SchoolVisitExport implements FromView
 
             // Apply styling to the header cell
             $headerStyle = [
-                'font' => ['bold' => true, 'color' => ['rgb' => '5A5A5A']],
-                'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => '333333']],
+                'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+                'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => '5A5A5A']],
                 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
             ];
 
