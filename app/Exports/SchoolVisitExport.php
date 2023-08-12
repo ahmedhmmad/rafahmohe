@@ -40,14 +40,21 @@ class SchoolVisitExport implements FromView
         $drawing->setName('Logo')->setPath($logoPath)->setCoordinates('D1')->setWorksheet($sheet);
 
         $sheet->setCellValue('B1', 'مديرية التربية والتعليم رفح');
+        $sheet->getStyle('B1')->getFont()->setBold(true)->setSize(14);
+
         $sheet->setCellValue('B2', 'مكتب المدير');
+        $sheet->getStyle('B2')->getFont()->setBold(true)->setSize(14);
         $sheet->setCellValue('B3', 'تقرير زيارات مدرسة ' . $groupedData->first()->first()->school->name);
+        $sheet->getStyle('B3')->getFont()->setBold(true)->setSize(12);
         //Leave a blank row
         $sheet->setCellValue('B4', '');
         $sheet->getStyle('B1:B4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         $sheet->setCellValue('H1', 'Directorate of Education and Education Rafah');
+        $sheet->getStyle('H1')->getFont()->setBold(true)->setSize(14);
+
         $sheet->setCellValue('H2', 'Director Office');
+        $sheet->getStyle('H2')->getFont()->setBold(true)->setSize(14);
         $sheet->setCellValue('H3', '');
         //Leave a blank row
         $sheet->setCellValue('H4', '');
@@ -79,7 +86,9 @@ class SchoolVisitExport implements FromView
         $row = 6;
         $index=1;
                 foreach ($groupedData as $departmentName => $visits) {
+
                     foreach ($visits as $visit) {
+
                         $sheet->setCellValue('A' . $row, $index++);
                         $sheet->setCellValue('B' . $row, $departmentName);
                         $sheet->setCellValue('C' . $row, $visit->user->name);
@@ -90,6 +99,8 @@ class SchoolVisitExport implements FromView
                         $sheet->setCellValue('H' . $row, $visit->purpose);
                         $sheet->setCellValue('I' . $row, $visit->activities);
 
+                        $cellRange = 'A' . $row . ':I' . $row;
+                        $sheet->getStyle($cellRange)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
                         // Adjust the width of the columns
                         $sheet->getColumnDimension('A')->setWidth(4);
                         $sheet->getColumnDimension('B')->setWidth(25);
