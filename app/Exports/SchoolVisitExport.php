@@ -37,7 +37,13 @@ class SchoolVisitExport implements FromView
 // Add custom header and logo (adjust coordinates as needed)
         $logoPath = public_path('/img/logo.webp');
         $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-        $drawing->setName('Logo')->setPath($logoPath)->setCoordinates('D1')->setWorksheet($sheet);
+        $drawing->setName('Logo')->setPath($logoPath)->setCoordinates('D1');
+        $drawing->setOffsetX(50); // Adjust the X offset to center the logo
+        $drawing->setOffsetY(20); // Adjust the Y offset to center the logo
+        $drawing->setWorksheet($sheet);
+
+// Merge cells D1:F3 and center-align the logo within it
+        $sheet->mergeCells('D1:F3')->getStyle('D1:F3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
         $sheet->mergeCells('A1:C1');
@@ -80,7 +86,7 @@ class SchoolVisitExport implements FromView
         $sheet->setCellValue('D3', ''); // Empty cell for spacing
 
 // Merge D1:F1 to D4:F4
-        $sheet->mergeCells('D1:F3')->getStyle('D1:F3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
 
 //        $sheet->getStyle('D1')->getFont()->setBold(true)->setSize(14);
 //        $sheet->mergeCells('D2:F2');
