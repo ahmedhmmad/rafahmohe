@@ -31,37 +31,63 @@ class SchoolVisitExport implements FromView
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // Set right-to-left direction for the entire sheet
+// Set right-to-left direction for the entire sheet
         $spreadsheet->getActiveSheet()->setRightToLeft(true);
 
-        // Add custom header and logo (adjust coordinates as needed)
+// Add custom header and logo (adjust coordinates as needed)
         $logoPath = public_path('/img/logo.webp');
         $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
         $drawing->setName('Logo')->setPath($logoPath)->setCoordinates('D1')->setWorksheet($sheet);
 
-        $sheet->setCellValue('B1', 'مديرية التربية والتعليم رفح');
-        $sheet->getStyle('B1')->getFont()->setBold(true)->setSize(14);
 
-        $sheet->setCellValue('B2', 'مكتب المدير');
-        $sheet->getStyle('B2')->getFont()->setBold(true)->setSize(14);
-        $sheet->setCellValue('B3', 'تقرير زيارات مدرسة ' . $groupedData->first()->first()->school->name);
-        $sheet->getStyle('B3')->getFont()->setBold(true)->setSize(12);
-        //Leave a blank row
-        $sheet->setCellValue('B4', '');
-        $sheet->getStyle('B1:B4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->mergeCells('A1:C1');
+        $sheet->setCellValue('A1', 'مديرية التربية والتعليم رفح');
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-        $sheet->setCellValue('H1', 'Directorate of Education and Education Rafah');
-        $sheet->getStyle('H1')->getFont()->setBold(true)->setSize(14);
 
-        $sheet->setCellValue('H2', 'Director Office');
-        $sheet->getStyle('H2')->getFont()->setBold(true)->setSize(14);
-        $sheet->setCellValue('H3', '');
-        //Leave a blank row
-        $sheet->setCellValue('H4', '');
-        $sheet->getStyle('H1:H4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->mergeCells('A2:C2');
+        $sheet->setCellValue('A2', 'مكتب المدير');
+        $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-        // Add column headers directly
-        $columnHeaders = ['م.','القسم', 'الزائر', 'تاريخ الزيارة', 'وقت الحضور', 'وقت المغادرة', 'المسمى الوظيفي', 'أهداف الزيارة', 'ما تم تنفيذه'];
+
+        $sheet->mergeCells('A3:C3');
+        $sheet->setCellValue('A3', 'تقرير زيارات مدرسة ' . $groupedData->first()->first()->school->name);
+        $sheet->getStyle('A3')->getFont()->setBold(true)->setSize(12);
+
+        $sheet->setCellValue('B4', ''); // Leave a blank row
+
+        $sheet->mergeCells('G1:I1');
+        $sheet->setCellValue('G1', 'Directorate of Education and Education Rafah');
+        $sheet->getStyle('G1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('G1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+
+        $sheet->mergeCells('G2:I2');
+        $sheet->setCellValue('G2', 'Director Office');
+        $sheet->getStyle('G2')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('G2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+
+        $sheet->setCellValue('G3', ''); // Leave a blank row
+        $sheet->setCellValue('H4', ''); // Leave a blank row
+
+        $sheet->setCellValue('D1', ''); // Empty cell for spacing
+        $sheet->setCellValue('D2', ''); // Empty cell for spacing
+        $sheet->setCellValue('D3', ''); // Empty cell for spacing
+
+// Merge D1:F1 to D4:F4
+        $sheet->mergeCells('D1:F1');
+        $sheet->getStyle('D1')->getFont()->setBold(true)->setSize(14);
+        $sheet->mergeCells('D2:F2');
+        $sheet->getStyle('D2')->getFont()->setBold(true)->setSize(14);
+        $sheet->mergeCells('D3:F3');
+        $sheet->getStyle('D3')->getFont()->setBold(true)->setSize(12);
+        $sheet->setCellValue('D4', ''); // Leave a blank row
+
+// Add column headers directly
+        $columnHeaders = ['م.', 'القسم', 'الزائر', 'تاريخ الزيارة', 'وقت الحضور', 'وقت المغادرة', 'المسمى الوظيفي', 'أهداف الزيارة', 'ما تم تنفيذه'];
         $columnIndex = 'A';
         foreach ($columnHeaders as $header) {
             $cellCoordinate = $columnIndex . '5';
@@ -78,10 +104,8 @@ class SchoolVisitExport implements FromView
             $sheet->getStyle($cellCoordinate)->applyFromArray($headerStyle);
             $sheet->getRowDimension(4)->setRowHeight(20);
 
-
             $columnIndex++;
         }
-
         // Fill in your data from $groupedData
         $row = 6;
         $index=1;
