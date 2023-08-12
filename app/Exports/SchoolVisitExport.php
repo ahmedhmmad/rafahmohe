@@ -39,7 +39,7 @@ class SchoolVisitExport implements FromView
         $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
         $drawing->setName('Logo')->setPath($logoPath)->setCoordinates('D1');
         $drawing->setOffsetX(50); // Adjust the X offset to center the logo
-        $drawing->setOffsetY(20); // Adjust the Y offset to center the logo
+        $drawing->setOffsetY(5); // Adjust the Y offset to center the logo
         $drawing->setWorksheet($sheet);
 
 // Merge cells D1:F3 and center-align the logo within it
