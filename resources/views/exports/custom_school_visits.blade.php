@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Excel Header and Data</title>
+    <title> مديرية التربية والتعليم رفح</title>
     <style>
         table {
             width: 100%;
@@ -34,24 +34,40 @@
 <body>
 <table class="borderless">
     <tr>
-        <td colspan="2" class="center"><strong>مديرية التربية والتعليم رفح</strong></td>
-        <td colspan="2" class="center logo-cell">
+        <td colspan="2" class="center borderless">
+            <strong>مديرية التربية والتعليم رفح</strong>
+        </td>
+        <td colspan="2" class="center logo-cell borderless">
             <img class="logo" src="{{ public_path('/img/logo.webp') }}" alt="Logo">
+        </td>
+        <td colspan="2" class="center borderless">
+            <strong>Directrate of Education -Rafah</strong>
         </td>
     </tr>
     <tr>
-        <td colspan="2" class="center"><strong>مكتب المدير</strong></td>
-        <td colspan="2" class="center"><strong>Director Office</strong></td>
+        <td colspan="2" class="center borderless">
+            <strong>مكتب المدير</strong>
+        </td>
+        <td colspan="2" class="center borderless"></td>
+
+        <td colspan="2" class="center borderless">
+            <strong>Director Office</strong>
+        </td>
     </tr>
 </table>
+
 
 <table>
     <thead>
     <tr>
         <th>القسم</th>
         <th>الزائر</th>
+        <th>تاريخ الزيارة</th>
         <th>وقت الحضور</th>
         <th>وقت المغادرة</th>
+        <th>المسمى الوظيفي</th>
+        <th>أهداف الزيارة</th>
+        <th>ما تم تنفيذه</th>
     </tr>
     </thead>
     <tbody>
@@ -60,8 +76,12 @@
             <tr>
                 <td>{{ $departmentName }}</td>
                 <td>{{ $visit->user->name }}</td>
+                <td>{{ $visit->visit_date }}</td>
                 <td>{{ $visit->coming_time }}</td>
                 <td>{{ $visit->leaving_time }}</td>
+                <td>{{$visit->job_title}}</td>
+                <td>{{$visit->purpose}}</td>
+                <td>{{$visit->activities}}</td>
             </tr>
         @endforeach
     @endforeach
@@ -69,4 +89,3 @@
 </table>
 </body>
 </html>
-
