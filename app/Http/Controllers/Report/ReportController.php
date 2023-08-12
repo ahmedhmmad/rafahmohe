@@ -9,8 +9,15 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
-    public function exportExcel()
+//    public function exportExcel()
+//    {
+//        return Excel::download(new SchoolVisitExport(), 'custom-school-visits.xlsx');
+//    }
+
+
+        public function exportExcel()
     {
-        return Excel::download(new SchoolVisitExport(), 'custom-school-visits.xlsx');
+        return (new SchoolVisitExport())->downloadExcel();
     }
+
 }
