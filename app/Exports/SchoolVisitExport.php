@@ -55,6 +55,8 @@ class SchoolVisitExport implements FromView
         $sheet->mergeCells('A3:C3');
         $sheet->setCellValue('A3', 'تقرير زيارات مدرسة ' . $groupedData->first()->first()->school->name);
         $sheet->getStyle('A3')->getFont()->setBold(true)->setSize(12);
+        $sheet->getStyle('A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
 
         $sheet->setCellValue('B4', ''); // Leave a blank row
 
@@ -78,12 +80,13 @@ class SchoolVisitExport implements FromView
         $sheet->setCellValue('D3', ''); // Empty cell for spacing
 
 // Merge D1:F1 to D4:F4
-        $sheet->mergeCells('D1:F1');
-        $sheet->getStyle('D1')->getFont()->setBold(true)->setSize(14);
-        $sheet->mergeCells('D2:F2');
-        $sheet->getStyle('D2')->getFont()->setBold(true)->setSize(14);
-        $sheet->mergeCells('D3:F3');
-        $sheet->getStyle('D3')->getFont()->setBold(true)->setSize(12);
+        $sheet->mergeCells('D1:F3')->getStyle('D1:F3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+//        $sheet->getStyle('D1')->getFont()->setBold(true)->setSize(14);
+//        $sheet->mergeCells('D2:F2');
+//        $sheet->getStyle('D2')->getFont()->setBold(true)->setSize(14);
+//        $sheet->mergeCells('D3:F3');
+//        $sheet->getStyle('D3')->getFont()->setBold(true)->setSize(12);
         $sheet->setCellValue('D4', ''); // Leave a blank row
 
 // Add column headers directly
