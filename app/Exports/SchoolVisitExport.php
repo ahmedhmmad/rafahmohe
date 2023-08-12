@@ -37,14 +37,18 @@ class SchoolVisitExport implements FromView
         // Add custom header and logo (adjust coordinates as needed)
         $logoPath = public_path('/img/logo.webp');
         $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-        $drawing->setName('Logo')->setPath($logoPath)->setCoordinates('B1')->setWorksheet($sheet);
+        $drawing->setName('Logo')->setPath($logoPath)->setCoordinates('D1')->setWorksheet($sheet);
 
-        $sheet->setCellValue('F1', 'مديرية التربية والتعليم رفح');
-        $sheet->setCellValue('F2', 'مكتب المدير');
-        $sheet->getStyle('F1:F2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('B1', 'مديرية التربية والتعليم رفح');
+        $sheet->setCellValue('B2', 'مكتب المدير');
+        $sheet->getStyle('B1:B2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $sheet->setCellValue('G1', 'Directorate of Education and Education Rafah');
+        $sheet->setCellValue('G2', 'Director Office');
+        $sheet->getStyle('G1:G2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         // Add column headers directly
-        $columnHeaders = ['القسم', 'الزائر', 'تاريخ الزيارة', 'وقت الحضور', 'وقت المغادرة', 'المسمى الوظيفي', 'أهداف الزيارة', 'ما تم تنفيذه'];
+        $columnHeaders = ['م.','القسم', 'الزائر', 'تاريخ الزيارة', 'وقت الحضور', 'وقت المغادرة', 'المسمى الوظيفي', 'أهداف الزيارة', 'ما تم تنفيذه'];
         $columnIndex = 'A';
         foreach ($columnHeaders as $header) {
             $cellCoordinate = $columnIndex . '4';
@@ -55,9 +59,11 @@ class SchoolVisitExport implements FromView
                 'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
                 'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => '5A5A5A']],
                 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+                'borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]],
             ];
 
             $sheet->getStyle($cellCoordinate)->applyFromArray($headerStyle);
+            $sheet->getRowDimension(4)->setRowHeight(20);
 
 
             $columnIndex++;
@@ -65,37 +71,32 @@ class SchoolVisitExport implements FromView
 
         // Fill in your data from $groupedData
         $row = 5;
-        foreach ($groupedData as $departmentName => $visits) {
-            foreach ($visits as $visit) {
-                $sheet->setCellValue('A' . $row, $departmentName);
-                $sheet->setCellValue('B' . $row, $visit->user->name);
-                $sheet->getRowDimension($row)->$row = 5;
+        $index=1;
                 foreach ($groupedData as $departmentName => $visits) {
                     foreach ($visits as $visit) {
-                        $sheet->setCellValue('A' . $row, $departmentName);
-                        $sheet->setCellValue('B' . $row, $visit->user->name);
-                        $sheet->setCellValue('C' . $row, $visit->visit_date);
-                        $sheet->setCellValue('D' . $row, $visit->coming_time);
-                        $sheet->setCellValue('E' . $row, $visit->leaving_time);
-                        $sheet->setCellValue('F' . $row, $visit->job_title);
-                        $sheet->setCellValue('G' . $row, $visit->purpose);
-                        $sheet->setCellValue('H' . $row, $visit->activities);
-                        // Adjust the width of the column containing user names
-                        $sheet->getColumnDimension('B')->setWidth(30); // Adjust the width as needed
-                        $sheet->getColumnDimension('G')->setWidth(30);
+                        $sheet->setCellValue('A' . $row, $index++);
+                        $sheet->setCellValue('B' . $row, $departmentName);
+                        $sheet->setCellValue('C' . $row, $visit->user->name);
+                        $sheet->setCellValue('D' . $row, $visit->visit_date);
+                        $sheet->setCellValue('E' . $row, $visit->coming_time);
+                        $sheet->setCellValue('F' . $row, $visit->leaving_time);
+                        $sheet->setCellValue('G' . $row, $visit->job_title);
+                        $sheet->setCellValue('H' . $row, $visit->purpose);
+                        $sheet->setCellValue('I' . $row, $visit->activities);
+
+                        // Adjust the width of the columns
+                        $sheet->getColumnDimension('A')->setWidth(4);
+                        $sheet->getColumnDimension('B')->setWidth(25);
+                        $sheet->getColumnDimension('C')->setWidth(30);
+                        $sheet->getColumnDimension('D')->setWidth(10);
+                        $sheet->getColumnDimension('E')->setWidth(10);
+                        $sheet->getColumnDimension('F')->setWidth(10);
+                        $sheet->getColumnDimension('G')->setWidth(15);
                         $sheet->getColumnDimension('H')->setWidth(30);
+                        $sheet->getColumnDimension('I')->setWidth(30);
 
                         $row++;
-                    }
-                }
-                // Adjust the height as needed
-                $sheet->setCellValue('C' . $row, $visit->visit_date);
-                $sheet->setCellValue('D' . $row, $visit->coming_time);
-                $sheet->setCellValue('E' . $row, $visit->leaving_time);
-                $sheet->setCellValue('F' . $row, $visit->job_title);
-                $sheet->setCellValue('G' . $row, $visit->purpose);
-                $sheet->setCellValue('H' . $row, $visit->activities);
-                $row++;
+
             }
         }
 
@@ -118,3 +119,5 @@ class SchoolVisitExport implements FromView
         unlink($tempFilePath);
     }
 }
+
+
