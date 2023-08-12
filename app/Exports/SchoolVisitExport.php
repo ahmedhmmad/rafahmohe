@@ -43,12 +43,23 @@ class SchoolVisitExport implements FromView
         $sheet->setCellValue('F2', 'مكتب المدير');
         $sheet->getStyle('F1:F2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-        // Adjust column widths
-        $numberOfColumns = 8; // Change this to match the number of columns in your view
+        // Add column headers directly
+        $columnHeaders = ['القسم', 'الزائر', 'تاريخ الزيارة', 'وقت الحضور', 'وقت المغادرة', 'المسمى الوظيفي', 'أهداف الزيارة', 'ما تم تنفيذه'];
         $columnIndex = 'A';
+        foreach ($columnHeaders as $header) {
+            $cellCoordinate = $columnIndex . '4';
+            $sheet->setCellValue($cellCoordinate, $header);
 
-        foreach (range(0, $numberOfColumns - 1) as $col) {
-            $sheet->getColumnDimension($columnIndex)->setAutoSize(true);
+            // Apply styling to the header cell
+            $headerStyle = [
+                'font' => ['bold' => true, 'color' => ['rgb' => '5A5A5A']],
+                'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => '333333']],
+                'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+            ];
+
+            $sheet->getStyle($cellCoordinate)->applyFromArray($headerStyle);
+
+
             $columnIndex++;
         }
 
@@ -58,6 +69,26 @@ class SchoolVisitExport implements FromView
             foreach ($visits as $visit) {
                 $sheet->setCellValue('A' . $row, $departmentName);
                 $sheet->setCellValue('B' . $row, $visit->user->name);
+                $sheet->getRowDimension($row)->$row = 5;
+                foreach ($groupedData as $departmentName => $visits) {
+                    foreach ($visits as $visit) {
+                        $sheet->setCellValue('A' . $row, $departmentName);
+                        $sheet->setCellValue('B' . $row, $visit->user->name);
+                        $sheet->setCellValue('C' . $row, $visit->visit_date);
+                        $sheet->setCellValue('D' . $row, $visit->coming_time);
+                        $sheet->setCellValue('E' . $row, $visit->leaving_time);
+                        $sheet->setCellValue('F' . $row, $visit->job_title);
+                        $sheet->setCellValue('G' . $row, $visit->purpose);
+                        $sheet->setCellValue('H' . $row, $visit->activities);
+                        // Adjust the width of the column containing user names
+                        $sheet->getColumnDimension('B')->setWidth(30); // Adjust the width as needed
+                        $sheet->getColumnDimension('G')->setWidth(30);
+                        $sheet->getColumnDimension('H')->setWidth(30);
+
+                        $row++;
+                    }
+                }
+                // Adjust the height as needed
                 $sheet->setCellValue('C' . $row, $visit->visit_date);
                 $sheet->setCellValue('D' . $row, $visit->coming_time);
                 $sheet->setCellValue('E' . $row, $visit->leaving_time);
@@ -69,7 +100,8 @@ class SchoolVisitExport implements FromView
         }
 
 
-    // Create a temporary file path
+
+        // Create a temporary file path
         $tempFilePath = tempnam(sys_get_temp_dir(), 'exported_excel');
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save($tempFilePath);
