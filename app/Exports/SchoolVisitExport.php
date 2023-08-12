@@ -41,17 +41,23 @@ class SchoolVisitExport implements FromView
 
         $sheet->setCellValue('B1', 'مديرية التربية والتعليم رفح');
         $sheet->setCellValue('B2', 'مكتب المدير');
-        $sheet->getStyle('B1:B2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('B3', 'تقرير زيارات مدرسة ' . $groupedData->first()->first()->school->name);
+        //Leave a blank row
+        $sheet->setCellValue('B4', '');
+        $sheet->getStyle('B1:B4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-        $sheet->setCellValue('G1', 'Directorate of Education and Education Rafah');
-        $sheet->setCellValue('G2', 'Director Office');
-        $sheet->getStyle('G1:G2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('H1', 'Directorate of Education and Education Rafah');
+        $sheet->setCellValue('H2', 'Director Office');
+        $sheet->setCellValue('H3', '');
+        //Leave a blank row
+        $sheet->setCellValue('H4', '');
+        $sheet->getStyle('H1:H4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         // Add column headers directly
         $columnHeaders = ['م.','القسم', 'الزائر', 'تاريخ الزيارة', 'وقت الحضور', 'وقت المغادرة', 'المسمى الوظيفي', 'أهداف الزيارة', 'ما تم تنفيذه'];
         $columnIndex = 'A';
         foreach ($columnHeaders as $header) {
-            $cellCoordinate = $columnIndex . '4';
+            $cellCoordinate = $columnIndex . '5';
             $sheet->setCellValue($cellCoordinate, $header);
 
             // Apply styling to the header cell
@@ -70,7 +76,7 @@ class SchoolVisitExport implements FromView
         }
 
         // Fill in your data from $groupedData
-        $row = 5;
+        $row = 6;
         $index=1;
                 foreach ($groupedData as $departmentName => $visits) {
                     foreach ($visits as $visit) {
