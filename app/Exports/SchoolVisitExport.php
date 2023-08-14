@@ -15,6 +15,7 @@ class SchoolVisitExport implements FromView
     public function view(): View
     {
         $groupedData = SchoolVisit::with('user', 'department')
+            ->where('school_id', auth()->user()->id)
             ->get()
             ->groupBy('department.name');
 
