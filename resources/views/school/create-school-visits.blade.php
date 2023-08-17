@@ -3,6 +3,50 @@
 @section('content')
     <div class="container py-1">
         <div class="card py-2">
+            <!-- Modal for Excel Export -->
+            <div class="modal fade" id="showExportExcelModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">تصدير إكسل</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{{ route('exports.exportExcel') }}" method="GET">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="month" class="form-label">اختر الشهر</label>
+                                    <select name="month" id="month" class="form-control">
+                                        <option value="1" {{ date('n') == 1 ? 'selected' : '' }}>يناير</option>
+                                        <option value="2" {{ date('n') == 2 ? 'selected' : '' }}>فبراير</option>
+                                        <option value="3" {{ date('n') == 3 ? 'selected' : '' }}>مارس</option>
+                                        <option value="4" {{ date('n') == 4 ? 'selected' : '' }}>ابريل</option>
+                                        <option value="5" {{ date('n') == 5 ? 'selected' : '' }}>مايو</option>
+                                        <option value="6" {{ date('n') == 6 ? 'selected' : '' }}>يونيو</option>
+                                        <option value="7" {{ date('n') == 7 ? 'selected' : '' }}>يوليو</option>
+                                        <option value="8" {{ date('n') == 8 ? 'selected' : '' }}>اغسطس</option>
+                                        <option value="9" {{ date('n') == 9 ? 'selected' : '' }}>سبتمبر</option>
+                                        <option value="10" {{ date('n') == 10 ? 'selected' : '' }}>اكتوبر</option>
+                                        <option value="11" {{ date('n') == 11 ? 'selected' : '' }}>نوفمبر</option>
+                                        <option value="12" {{ date('n') == 12 ? 'selected' : '' }}>ديسمبر</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="orderBy" class="form-label">ترتيب حسب</label>
+                                    <select name="orderBy" id="orderBy" class="form-control">
+                                        <option value="date">التاريخ</option>
+                                        <option value="department">القسم</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">الغاء</button>
+                                <button type="submit" class="btn btn-primary">تصدير</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <div class="card-header">
                 <a href="{{route('school.add-visits')}}">
                 <button type="button" class="btn btn-success">
@@ -10,11 +54,14 @@
                 </button>
                 </a>
 {{--                export excel button--}}
-                <a href="{{ route('exports.exportExcel') }}">
-                    <button type="button" class="btn btn-success">
-                        <span class="tf-icons bx bx-export"></span>&nbsp; تصدير إكسل
-                    </button>
-                </a>
+{{--                <a href="{{ route('exports.exportExcel') }}">--}}
+{{--                    <button type="button" class="btn btn-success">--}}
+{{--                        <span class="tf-icons bx bx-export"></span>&nbsp; تصدير إكسل--}}
+{{--                    </button>--}}
+{{--                </a>--}}
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#showExportExcelModal">
+                    <span class="tf-icons bx bx-export"></span>&nbsp; تصدير إكسل
+                </button>
             </div>
             <div class="card-body">
                 <div class="table-responsive text-wrap">
