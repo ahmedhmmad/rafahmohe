@@ -75,13 +75,13 @@ class SchoolVisitExport implements FromView
 
 
         $sheet->mergeCells('A1:C1');
-        $sheet->setCellValue('A1', 'مديرية التربية والتعليم رفح');
+        $sheet->setCellValue('A1', 'وزارة التربية والتعليم');
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
         $sheet->mergeCells('A2:C2');
-        $sheet->setCellValue('A2', 'مكتب المدير');
+        $sheet->setCellValue('A2', 'مديرية التربية والتعليم رفح');
         $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
@@ -95,13 +95,13 @@ class SchoolVisitExport implements FromView
         $sheet->setCellValue('B4', ''); // Leave a blank row
 
         $sheet->mergeCells('G1:I1');
-        $sheet->setCellValue('G1', 'Directorate of Education and Education Rafah');
+        $sheet->setCellValue('G1', 'Ministry of Education and Higher Education');
         $sheet->getStyle('G1')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('G1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
         $sheet->mergeCells('G2:I2');
-        $sheet->setCellValue('G2', 'Director Office');
+        $sheet->setCellValue('G2', 'Directorate of Education and Education Rafah');
         $sheet->getStyle('G2')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('G2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
