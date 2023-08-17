@@ -15,9 +15,13 @@ class ReportController extends Controller
 //    }
 
 
-        public function exportExcel()
+        public function exportExcel(Request $request)
     {
-        return (new SchoolVisitExport())->downloadExcel();
+        $month = $request->input('month');
+        $orderBy = $request->input('orderBy');
+
+
+        return (new SchoolVisitExport($month,$orderBy))->downloadExcel();
     }
 
 }

@@ -12,12 +12,39 @@ use Illuminate\Support\Facades\View as ViewFacade;
 
 class SchoolVisitExport implements FromView
 {
+    protected $month;
+    protected $orderBy;
+
+    public function __construct($month, $orderBy)
+    {
+        $this->month = $month;
+        $this->orderBy = $orderBy;
+    }
     public function view(): View
     {
-        $groupedData = SchoolVisit::with('user', 'department')
-            ->where('school_id', auth()->user()->id)
-            ->get()
-            ->groupBy('department.name');
+//        $groupedData = SchoolVisit::with('user', 'department')
+//            ->where('school_id', auth()->user()->id)
+//            ->get()
+//            ->groupBy('department.name');
+//
+//        return ViewFacade::make('exports.custom_school_visits', [
+//            'groupedData' => $groupedData,
+//        ]);
+        $query = SchoolVisit::with('user', 'department')
+            ->where('school_id', auth()->user()->id);
+
+        if ($this->month) {
+            $query->whereMonth('visit_date', $this->month);
+        }
+
+        if ($this->orderBy == 'department') {
+            $query->orderBy('department_id');
+        } else {
+            $query->orderBy('visit_date');
+        }
+
+
+        $groupedData = $query->get()->groupBy('department.name');
 
         return ViewFacade::make('exports.custom_school_visits', [
             'groupedData' => $groupedData,
