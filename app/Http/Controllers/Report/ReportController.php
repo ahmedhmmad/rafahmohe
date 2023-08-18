@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Report;
 
+use App\Exports\AdminSchoolVisitExport;
 use App\Exports\SchoolVisitExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -22,6 +23,18 @@ class ReportController extends Controller
 
 
         return (new SchoolVisitExport($month,$orderBy))->downloadExcel();
+    }
+
+    public function adminExportExcel(Request $request)
+    {
+//        dd($request->all());
+        $selectedDepartmentId = $request->input('selected_department_id');
+        $selectedUserId = $request->input('selected_user_id');
+        $school = $request->input('school');
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        return (new AdminSchoolVisitExport($selectedDepartmentId, $selectedUserId, $school, $month, $year))->downloadExcel();
     }
 
 }
