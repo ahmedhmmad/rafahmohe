@@ -154,6 +154,9 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
 
     Route::get('/admin/allschools', [App\Http\Controllers\Admin\AdminController::class, 'searchAllSchool'])->name('admin.search-all-schools');
 
+    Route::get('/admin/export-excel', [App\Http\Controllers\Report\ReportController::class,'adminExportExcel'])
+        ->name('admin.export-schools-visits');
+
 });
 Route::middleware(['auth', 'role:School'])->group(function () {
 

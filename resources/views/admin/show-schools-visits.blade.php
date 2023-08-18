@@ -79,7 +79,22 @@
                 </form>
             </div>
         </div>
+        <!-- Excel Export Button -->
+        <div class="mt-3">
+            @php
+                $exportRouteParams = [
+                    'selected_department_id' => request('selected_department_id'),
+                    'selected_user_id' => request('selected_user_id'),
+                    'school' => request('school'),
+                    'month' => request('month'),
+                    'year' => request('year')
+                ];
+            @endphp
+
+            <a href="{{ route('admin.export-schools-visits', $exportRouteParams) }}" class="btn btn-success">تصدير إلى Excel</a>
+        </div>
     </div>
+
     </div>
 
     <!-- TimeLine Modal -->
