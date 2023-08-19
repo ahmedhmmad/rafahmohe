@@ -27,14 +27,30 @@ class ReportController extends Controller
 
     public function adminExportExcel(Request $request)
     {
-//        dd($request->all());
+        // dd($request->all());
         $selectedDepartmentId = $request->input('selected_department_id');
         $selectedUserId = $request->input('selected_user_id');
         $school = $request->input('school');
         $month = $request->input('month');
         $year = $request->input('year');
 
-        return (new AdminSchoolVisitExport($selectedDepartmentId, $selectedUserId, $school, $month, $year))->downloadExcel();
+        // Determine the search parameter based on user selection
+        $searchItem = null;
+        if ($selectedDepartmentId !== null) {
+            $searchItem = 'department';
+        } elseif ($selectedUserId !== null) {
+            $searchItem = 'user';
+        } elseif ($school !== null) {
+            $searchItem = 'school';
+        } elseif ($month !== null) {
+            $searchItem = 'month';
+        } elseif ($year !== null) {
+            $searchItem = 'year';
+        }
+
+        return (new AdminSchoolVisitExport($selectedDepartmentId, $selectedUserId, $school, $month, $year))
+            ->downloadExcel($searchItem);
     }
+
 
 }

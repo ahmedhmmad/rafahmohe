@@ -54,8 +54,9 @@ class AdminSchoolVisitExport implements FromView
         ]);
     }
 
-    public function downloadExcel()
+    public function downloadExcel($searchItem)
     {
+        //dd($searchItem);
 
         $view = $this->view();
         $groupedData = $view->getData()['groupedData'];
@@ -91,7 +92,29 @@ class AdminSchoolVisitExport implements FromView
 
 
         $sheet->mergeCells('A3:C3');
-        $sheet->setCellValue('A3', 'مكتب المدير');
+        $title = 'تقرير زيارة ';
+        if ($groupedData->isNotEmpty()) {
+
+
+            $firstVisit = $groupedData->first()->first() ?? null;
+
+
+        if ($firstVisit) {
+            if ($searchItem == 'department') {
+                $title .= $firstVisit->department->name;
+
+            } elseif ($searchItem =='user') {
+                $title .= $firstVisit->user->name;
+
+            } elseif ($searchItem == 'school') {
+                $title .='مدرسة '. $firstVisit->school->name;
+
+            }
+        }
+        }
+
+        // Set the title in the Excel sheet
+        $sheet->setCellValue('A3', $title);
         $sheet->getStyle('A3')->getFont()->setBold(true)->setSize(12);
         $sheet->getStyle('A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
@@ -128,7 +151,7 @@ class AdminSchoolVisitExport implements FromView
         $sheet->setCellValue('D4', ''); // Leave a blank row
 
 // Add column headers directly
-        $columnHeaders = ['م.', 'القسم', 'الزائر', 'تاريخ الزيارة', 'وقت الحضور', 'وقت المغادرة', 'المسمى الوظيفي', 'أهداف الزيارة', 'ما تم تنفيذه'];
+        $columnHeaders = ['م.', 'القسم', 'الزائر','مكان الزيارة', 'تاريخ الزيارة', 'وقت الحضور', 'وقت المغادرة', 'المسمى الوظيفي', 'أهداف الزيارة', 'ما تم تنفيذه'];
         $columnIndex = 'A';
         foreach ($columnHeaders as $header) {
             $cellCoordinate = $columnIndex . '5';
@@ -157,25 +180,27 @@ class AdminSchoolVisitExport implements FromView
                 $sheet->setCellValue('A' . $row, $index++);
                 $sheet->setCellValue('B' . $row, $departmentName);
                 $sheet->setCellValue('C' . $row, $visit->user->name);
-                $sheet->setCellValue('D' . $row, $visit->visit_date);
-                $sheet->setCellValue('E' . $row, $visit->coming_time);
-                $sheet->setCellValue('F' . $row, $visit->leaving_time);
-                $sheet->setCellValue('G' . $row, $visit->job_title);
-                $sheet->setCellValue('H' . $row, $visit->purpose);
-                $sheet->setCellValue('I' . $row, $visit->activities);
+                $sheet->setCellValue('D' . $row, $visit->school->name);
+                $sheet->setCellValue('E' . $row, $visit->visit_date);
+                $sheet->setCellValue('F' . $row, $visit->coming_time);
+                $sheet->setCellValue('G' . $row, $visit->leaving_time);
+                $sheet->setCellValue('H' . $row, $visit->job_title);
+                $sheet->setCellValue('I' . $row, $visit->purpose);
+                $sheet->setCellValue('J' . $row, $visit->activities);
 
-                $cellRange = 'A' . $row . ':I' . $row;
+                $cellRange = 'A' . $row . ':J' . $row;
                 $sheet->getStyle($cellRange)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
                 // Adjust the width of the columns
                 $sheet->getColumnDimension('A')->setWidth(4);
-                $sheet->getColumnDimension('B')->setWidth(25);
-                $sheet->getColumnDimension('C')->setWidth(30);
-                $sheet->getColumnDimension('D')->setWidth(10);
+                $sheet->getColumnDimension('B')->setWidth(20);
+                $sheet->getColumnDimension('C')->setWidth(25);
+                $sheet->getColumnDimension('D')->setWidth(20);
                 $sheet->getColumnDimension('E')->setWidth(10);
                 $sheet->getColumnDimension('F')->setWidth(10);
-                $sheet->getColumnDimension('G')->setWidth(15);
-                $sheet->getColumnDimension('H')->setWidth(30);
-                $sheet->getColumnDimension('I')->setWidth(30);
+                $sheet->getColumnDimension('G')->setWidth(10);
+                $sheet->getColumnDimension('H')->setWidth(20);
+                $sheet->getColumnDimension('I')->setWidth(20);
+                $sheet->getColumnDimension('J')->setWidth(20);
 
                 $row++;
 
