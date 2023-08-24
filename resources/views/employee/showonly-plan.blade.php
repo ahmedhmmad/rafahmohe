@@ -5,7 +5,14 @@
     <div class="container py-4">
         <div class="row">
             <div class="col-md-12">
-                <h3>عرض الخطة الشهرية</h3>
+                <div class="card px-4">
+                    <div class="card-body">
+                        <h3>عرض الخطة الشهرية</h3>
+                    </div>
+
+                </div>
+
+                <div class="card-body">
                 <form method="GET" action="{{ route('employee.monthly-plan') }}">
                     <div class="row py-4">
                         <div class="col-md-4">
@@ -121,6 +128,7 @@
                 </table>
             </div>
         </div>
+    </div>
     </div>
 
 @endsection

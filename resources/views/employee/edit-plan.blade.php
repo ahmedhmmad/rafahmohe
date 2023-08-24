@@ -35,7 +35,15 @@
         {{-- Show errors --}}
                 <div class="row">
             <div class="col-md-12">
-                <h3>تعديل الخطة الشهرية</h3>
+                <div class="card px-4">
+                    <div class="card-body">
+                        <h3>تعديل الخطة الشهرية</h3>
+                    </div>
+
+                </div>
+                <div class="card-body">
+
+
                 <form action="{{ route('employee.update-plan', $plan) }}" method="POST">
                     @csrf
                     @method('PUT')
@@ -55,5 +63,6 @@
                 </form>
             </div>
         </div>
+    </div>
     </div>
 @endsection

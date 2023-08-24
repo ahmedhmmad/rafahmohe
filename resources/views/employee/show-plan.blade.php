@@ -15,7 +15,15 @@
         @endif
         <div class="row">
             <div class="col-md-12">
-                <h3>عرض الخطة الشهرية</h3>
+                <div class="card px-4">
+                    <div class="card-body">
+                        <h3>تعديل الخطة الشهرية</h3>
+                    </div>
+
+                </div>
+
+
+<div class="card-body">
                 <table class="table">
                     <thead>
                     <tr>
@@ -91,6 +99,8 @@
                 </table>
             </div>
         </div>
+    </div>
+
     </div>
 
 @endsection
