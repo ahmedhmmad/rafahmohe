@@ -56,6 +56,8 @@
                             <th scope="col">تاريخ الطلب</th>
                             <th scope="col">موضوع الطلب</th>
                             <th scope="col">حالة الطلب</th>
+                            <th scope="col">تصدير</th>
+
                         </tr>
                         </thead>
                         <tbody>
@@ -75,6 +77,11 @@
 
                                             {{ getStatusName($ticket->status) }}
                                         </span>
+                                </td>
+                                <td>
+                                    <a href="{{ route('school.export-ticket', ['ticketId' => $ticket->id]) }}">
+                                       <i class="bx bx-download"></i>
+                                    </a>
                                 </td>
 
                                 {{--                                    Modal for showing the ticket details--}}
@@ -110,6 +117,8 @@
 
                             </tr>
                         @endforeach
+
+
                         </tbody>
                     </table>
 

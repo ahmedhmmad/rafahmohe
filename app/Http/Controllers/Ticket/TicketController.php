@@ -292,6 +292,10 @@ class TicketController extends Controller
         $user = User::find(auth()->user()->id);
         $schoolName= $user->name;
 
+        // Check if the department is 16 and set the work_type قسم الأبنية
+        if ($ticket->department_id == 16) {
+            $ticket->work_type = $request->input('subdepartment');
+        }
         if ($request->hasFile('attachment')) {
 
             $attachment = $request->file('attachment');
@@ -381,6 +385,44 @@ class TicketController extends Controller
         return redirect()->route('school.show-tickets')->with('success', 'تم انشاء الطلب بنجاح');
 
     }
+    public function exportTicket($ticketId)
+    {
+        // Load the ticket data using the ticketId
+        $ticket = Ticket::find($ticketId);
+
+        if (!$ticket) {
+            // Handle the case when the ticket doesn't exist
+        }
+
+        // Generate and return the export response
+        // You can customize this part based on your export logic
+        $exportData = [
+            'ticketId' => $ticket->id,
+            'subject' => $ticket->subject,
+            // Add other ticket fields you want to export
+        ];
+
+        // For example, exporting to a CSV file
+        $filename = 'ticket_' . $ticketId . '.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $output = fopen('php://output', 'w');
+        fputcsv($output, array_keys($exportData));
+        fputcsv($output, $exportData);
+        fclose($output);
+
+        return response()->stream(
+            function () use ($output) {
+                fclose($output);
+            },
+            200,
+            $headers
+        );
+    }
+
 
     /**
      * Display the specified resource.
