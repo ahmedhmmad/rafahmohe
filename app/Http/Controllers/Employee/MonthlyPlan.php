@@ -30,8 +30,20 @@ class MonthlyPlan extends Controller
      */
     public function create($month, $year)
     {
+
         $errors = collect([]);
         $departmentId = Auth::user()->department->id;
+
+        $allowedDepartmentIds = [21, 10, 19, 17, 6, 20, 12];
+
+        if (!in_array($departmentId, $allowedDepartmentIds)) {
+
+            $errors->push('لا يمكنك إدخال الخطة لأنه ليس لقسمك خطة شهرية');
+            return redirect()->back()->withErrors($errors);
+        }
+
+
+
         $planRestriction = Auth::user()->planRestrictions->first();
         $canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
         $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
