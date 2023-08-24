@@ -57,6 +57,9 @@ class SchoolController extends Controller
         $schoolPlannedVisits = Plan::where('school_id', auth()->user()->id)
             ->whereMonth('start', $month)
             ->whereYear('start', $year)
+            ->where(function ($query) {
+                $query->where('department_id', '<>', 19); // Exclude departmentId == 19
+            })
             ->get();
        // dd($schoolPlannedVisits);
 
@@ -156,6 +159,7 @@ class SchoolController extends Controller
         }
 
         $schoolVisits = $query->orderBy('visit_date', 'desc')->paginate(10); // Order by visit_date in descending order
+        dd($schoolVisits);
 
 
         $schools=School::all();
