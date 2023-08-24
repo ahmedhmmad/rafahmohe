@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="p-2">
-        <h2 class="p-4">إنشاء تذكرة جديدة</h2>
+        <h2 class="p-4">إنشاء طلب صيانة جديد</h2>
         <div class="container py-2">
             <div class="card px-2">
                 <form method="POST" action="{{ route('school.store-ticket') }}" enctype="multipart/form-data">
@@ -27,6 +27,38 @@
                                 </select>
                                 <small class="form-text text-muted">يرجى اختيار القسم المطلوب.</small>
                             </div>
+                            <div id="subdept_select" class="col-md-6" style="display:none;">
+
+                                <div class="form-group">
+
+                                    <label class="text-danger" for="subdepartment"><span style="color: red">*</span>اختر نوع العمل المطلوب</label>
+
+                                    <select class="form-select" name="subdepartment" id="subdepartment">
+
+                                        <option value="">نوع العمل المطلوب</option>
+
+                                        <option value="حدادة">حدادة</option>
+
+                                        <option value="سباكة">سباكة</option>
+
+                                        <option value="كهرباء">كهرباء</option>
+
+                                        <option value="أعمال بناء">أعمال بناء</option>
+
+                                        <option value="بلاط">بلاط</option>
+
+                                        <option value="ألمنيوم">ألمنيوم</option>
+
+                                        <option value="دهانات">دهانات</option>
+
+                                        <option value="أخرى">أخرى</option>
+
+
+                                    </select>
+
+                                </div>
+
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
@@ -50,4 +82,25 @@
             </div>
         </div>
     </div>
+    <script>
+
+        const departmentSelect = document.getElementById('department');
+
+        departmentSelect.addEventListener('change', (e) => {
+
+            const value = e.target.value;
+
+            if(value === '16') {
+
+                document.getElementById('subdept_select').style.display = 'block';
+
+            } else {
+
+                document.getElementById('subdept_select').style.display = 'none';
+
+            }
+
+        });
+
+    </script>
 @endsection
