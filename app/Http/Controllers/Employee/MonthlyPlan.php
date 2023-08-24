@@ -85,6 +85,7 @@ class MonthlyPlan extends Controller
 
 
                 if (!$canOverrideLastWeek) {
+                    $lastWeekOfMonth->modify('+1 day');
                 $validDates = $lastWeekOfMonth->format('d/m/Y') . ' - ' . $lastDayOfMonth->format('d/m/Y');
                 $errorMessage = 'لا يمكن إدخال الخطة إلا خلال الأسبوع الأخير من الشهر الحالي:: الفترة المسموحة: ' . $validDates;
                 $errors->push($errorMessage);
