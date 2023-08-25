@@ -448,10 +448,11 @@ class MonthlyPlan extends Controller
         $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
         $canOverrideLastWeek = $planRestriction ? ($planRestriction->can_override_last_week && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
 
-        $currentDate = Carbon::parse($date);
+        $currentDate = now();
+        $targetDate=Carbon::parse($date);
         try {
 
-            $existingPlans = Plan::where('start', $currentDate->format('Y-m-d'))
+            $existingPlans = Plan::where('start', $targetDate->format('Y-m-d'))
                 ->get();
 
 
@@ -466,11 +467,17 @@ class MonthlyPlan extends Controller
         $lastDayOfMonth = $currentDate->copy()->endOfMonth();
 
         // Check if the current date is within the allowed range for entering the plan
-        $lastWeekOfMonth = $lastDayOfMonth->copy()->subWeek();
-        if ($currentDate->month != $lastDayOfMonth->month || $currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
-            if (!$canOverrideLastWeek) {
-//                $validDates = $lastWeekOfMonth->format('d/m/Y') . ' - ' . $lastDayOfMonth->format('d/m/Y');
-                $errorMessage = 'لا يمكنك الاضافة على الخطة الشهرية في هذا الوقت.';
+        $lastWeekOfMonth = $lastDayOfMonth->copy()->subWeek()->addDay();
+//        if ($currentDate->month != $lastDayOfMonth->month || $currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+//            if (!$canOverrideLastWeek) {
+////                $validDates = $lastWeekOfMonth->format('d/m/Y') . ' - ' . $lastDayOfMonth->format('d/m/Y');
+//                $errorMessage = 'لا يمكنك الاضافة على الخطة الشهرية في هذا الوقت.';
+//                $errors->push($errorMessage);
+//            }
+//        }
+        if ($currentDate > $lastDayOfMonth) {
+            $errorMessage = 'لا يمكنك الاضافة على الخطة الشهرية في هذا الوقت.';
+            if (!$canOverrideLastWeek || $currentDate > $lastWeekOfMonth) {
                 $errors->push($errorMessage);
             }
         }
