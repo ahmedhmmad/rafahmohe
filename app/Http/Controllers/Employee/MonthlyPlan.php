@@ -475,12 +475,15 @@ class MonthlyPlan extends Controller
 //                $errors->push($errorMessage);
 //            }
 //        }
-        if ($currentDate > $lastDayOfMonth) {
-            $errorMessage = 'لا يمكنك الاضافة على الخطة الشهرية في هذا الوقت.';
-            if (!$canOverrideLastWeek || $currentDate > $lastWeekOfMonth) {
+
+        if (!$canOverrideLastWeek)
+        {
+            if ($currentDate > $lastDayOfMonth || $currentDate < $lastWeekOfMonth) {
+                $errorMessage = 'لا يمكنك الاضافة على الخطة الشهرية في هذا الوقت.';
                 $errors->push($errorMessage);
             }
         }
+
         if ($errors->isNotEmpty()) {
             return redirect()->back()->withErrors($errors);
         }
