@@ -100,9 +100,9 @@
                 <table class="table table-bordered table-hover">
                     <thead class="table-primary">
                     <tr>
-                        <th>اليوم</th>
-                        <th>التاريخ</th>
-                        <th>المدارس</th>
+                        <th><strong>اليوم</strong></th>
+                        <th><strong>التاريخ</strong></th>
+                        <th> <strong>المدارس</strong></th>
                     </tr>
                     </thead>
                     <tbody>
