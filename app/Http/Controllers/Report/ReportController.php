@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Report;
 
 use App\Exports\AdminSchoolVisitExport;
+use App\Exports\PlanExport;
 use App\Exports\SchoolVisitExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -23,6 +24,15 @@ class ReportController extends Controller
 
 
         return (new SchoolVisitExport($month,$orderBy))->downloadExcel();
+    }
+
+    public function exportPlan(Request $request)
+    {
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+
+        return (new PlanExport($month,$year))->downloadExcel();
     }
 
     public function adminExportExcel(Request $request)

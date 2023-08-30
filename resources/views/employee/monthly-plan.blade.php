@@ -97,6 +97,9 @@
 {{--        </div>--}}
 {{--    </div>--}}
 {{--@endsection--}}
+                <button class="btn btn-success" onclick="window.print()">طباعة</button>
+                <a href="{{ route('exports.exportPlan') }}" class="btn btn-success">تصدير إلى ملف اكسل</a>
+
                 <table class="table table-bordered table-hover">
                     <thead class="table-primary">
                     <tr>

@@ -26,6 +26,11 @@ class Plan extends Model
         return $this->belongsTo(School::class, 'school_id');
     }
 
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'school_id');
+    }
+
 
     public function user()
     {
