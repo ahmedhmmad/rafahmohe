@@ -109,7 +109,8 @@ class MonthlyPlan extends Controller
         }
 
         //$schools = School::all();
-        $schools = School::orderBy('name')->get();
+//        $schools = School::orderBy('name')->get();
+        $schools = School::orderByRaw("id = 34 DESC, name ASC")->get();
 
         //dd($existingPlans, $existingPlanDates, $canOverrideDepartment, $canOverrideMultiDepartment, $departmentId);
 
