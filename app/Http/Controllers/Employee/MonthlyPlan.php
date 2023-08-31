@@ -229,8 +229,19 @@ class MonthlyPlan extends Controller
     }
     public function show()
     {
+        $errors = collect([]);
 
         $user = Auth::user();
+        $departmentId = $user->department->id;
+
+        $allowedDepartmentIds = [21, 10, 19, 17, 6, 20, 12];
+
+        if (!in_array($departmentId, $allowedDepartmentIds)) {
+
+            $errors->push('لا يمكنك إدخال/ تعديل الخطة لأنه ليس لقسمك خطة شهرية');
+            return redirect()->back()->withErrors($errors);
+        }
+
 
         // Get the start and end dates of the recent month
        // $startOfMonth = now()->addMonth()->startOfMonth();
