@@ -79,19 +79,19 @@ class PlanExport implements FromView
         $sheet->mergeCells('D1:F3')->getStyle('D1:F3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
-        $sheet->mergeCells('A1:B1');
+        $sheet->mergeCells('A1:C1');
         $sheet->setCellValue('A1', 'وزارة التربية والتعليم');
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
-        $sheet->mergeCells('A2:B2');
+        $sheet->mergeCells('A2:C2');
         $sheet->setCellValue('A2', 'مديرية التربية والتعليم رفح');
         $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
-        $sheet->mergeCells('A3:B3');
+        $sheet->mergeCells('A3:C3');
         $title = 'الخطة الشهرية ';
 
 
@@ -103,27 +103,20 @@ class PlanExport implements FromView
 
         $sheet->setCellValue('B4', ''); // Leave a blank row
 
-       // $sheet->mergeCells('G1:I1');
-        $sheet->setCellValue('D1', 'Ministry of Education and Higher Education');
-        $sheet->getStyle('D1')->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('D1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        // Merge and set value for Ministry of Education and Higher Education
+        $sheet->mergeCells('E1:G1');
+        $sheet->setCellValue('E1', 'Ministry of Education and Higher Education');
+        $sheet->getStyle('E1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('E1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
+// Merge and set value for Directorate of Education and Education Rafah
+        $sheet->mergeCells('E2:G2');
+        $sheet->setCellValue('E2', 'Directorate of Education and Education Rafah');
+        $sheet->getStyle('E2')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('E2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-       // $sheet->mergeCells('G2:I2');
-        $sheet->setCellValue('D2', 'Directorate of Education and Education Rafah');
-        $sheet->getStyle('D2')->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('D2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-
-        $sheet->setCellValue('D3', ''); // Leave a blank row
-        //$sheet->setCellValue('H4', ''); // Leave a blank row
-
-//        $sheet->setCellValue('D1', ''); // Empty cell for spacing
-//        $sheet->setCellValue('D2', ''); // Empty cell for spacing
-//        $sheet->setCellValue('D3', ''); // Empty cell for spacing
-//
-
-        $sheet->setCellValue('D4', ''); // Leave a blank row
+        $sheet->setCellValue('G3', ''); // Leave a blank row
+//$sheet->setCellValue('H4', ''); // Leave a blank row
 
 // Add column headers directly
         $columnHeaders = ['م.', 'اليوم', 'التاريخ', 'المدرسة'];
@@ -141,11 +134,11 @@ class PlanExport implements FromView
             ];
 
             $sheet->getStyle($cellCoordinate)->applyFromArray($headerStyle);
-            $sheet->getRowDimension(4)->setRowHeight(20);
+            $sheet->getRowDimension(5)->setRowHeight(20);
 
             $columnIndex++;
         }
-        // Fill in your data from $groupedData
+// Fill in your data from $groupedData
         $row = 6;
         $dayIndex = 1; // Initialize day index
 
@@ -158,26 +151,33 @@ class PlanExport implements FromView
                 $sheet->setCellValue('B' . $row, $dayName); // Set the day name
 
                 $sheet->setCellValue('C' . $row, $date);
+
+                // Merge cells D, E, and F
+                $sheet->mergeCells("D{$row}:F{$row}");
                 $sheet->setCellValue('D' . $row, $schoolNames);
 
-                $cellRange = 'A' . $row . ':D' . $row;
+                // Apply styling and formatting to the merged cell
+                $cellRange = 'A' . $row . ':F' . $row;
                 $sheet->getStyle($cellRange)->getAlignment()->setWrapText(false); // Wrap text in the cell
                 $sheet->getStyle($cellRange)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
                 $sheet->getStyle($cellRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-                //Font size 14
                 $sheet->getStyle($cellRange)->getFont()->setSize(14);
                 $sheet->getStyle($cellRange)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-                $sheet->getRowDimension($row)->setRowHeight(22); // Set the row height (optional
+                $sheet->getRowDimension($row)->setRowHeight(22); // Set the row height
+
                 // Adjust the width of the columns
                 $sheet->getColumnDimension('A')->setWidth(4);
-                $sheet->getColumnDimension('B')->setWidth(15);
-                $sheet->getColumnDimension('C')->setWidth(18);
-                $sheet->getColumnDimension('D')->setWidth(75);
+                $sheet->getColumnDimension('B')->setWidth(18);
+                $sheet->getColumnDimension('C')->setWidth(20);
+                $sheet->getColumnDimension('D')->setWidth(99); // Adjusted width for merged cells
+                $sheet->getColumnDimension('E')->setWidth(0);  // Hide unused columns
+                $sheet->getColumnDimension('F')->setWidth(0);  // Hide unused columns
 
                 $row++;
                 $dayIndex++; // Increment the day index
             }
         }
+
 
         // Create a temporary file path
             $tempFilePath = tempnam(sys_get_temp_dir(), 'exported_excel');
