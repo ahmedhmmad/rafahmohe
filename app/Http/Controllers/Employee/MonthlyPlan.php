@@ -232,8 +232,10 @@ class MonthlyPlan extends Controller
         $user = Auth::user();
 
         // Get the start and end dates of the recent month
-        $startOfMonth = now()->addMonth()->startOfMonth();
-        $endOfMonth = now()->addMonth()->endOfMonth();
+       // $startOfMonth = now()->addMonth()->startOfMonth();
+      //  $endOfMonth = now()->addMonth()->endOfMonth();
+        $startOfMonth = now()->startOfMonth()->addMonth();
+    $endOfMonth = now()->endOfMonth()->addMonth();
 
         // Retrieve the plans for the recent month and order them by date
         $plans = Plan::where('user_id', $user->id)
