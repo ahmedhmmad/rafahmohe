@@ -104,18 +104,18 @@ class PlanExport implements FromView
         $sheet->setCellValue('B4', ''); // Leave a blank row
 
 //        $sheet->mergeCells('E1:G1');
-//        $sheet->setCellValue('G1', 'Ministry of Education and Higher Education');
-//        $sheet->getStyle('G1')->getFont()->setBold(true)->setSize(14);
-//        $sheet->getStyle('G1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-//
+        $sheet->setCellValue('D1', 'Ministry of Education and Higher Education');
+        $sheet->getStyle('D1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('D1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
 //
 //        $sheet->mergeCells('E2:G2');
-//        $sheet->setCellValue('G2', 'Directorate of Education and Education Rafah');
-//        $sheet->getStyle('G2')->getFont()->setBold(true)->setSize(14);
-//        $sheet->getStyle('G2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('D2', 'Directorate of Education and Education Rafah');
+        $sheet->getStyle('D2')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('Ds2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
-        $sheet->setCellValue('G3', ''); // Leave a blank row
+        //$sheet->setCellValue('G3', ''); // Leave a blank row
         //$sheet->setCellValue('H4', ''); // Leave a blank row
 
 //        $sheet->setCellValue('D1', ''); // Empty cell for spacing
@@ -165,7 +165,7 @@ class PlanExport implements FromView
 
                 // Apply styling and formatting to the merged cell
                 $cellRange = 'A' . $row . ':F' . $row;
-                $sheet->getStyle($cellRange)->getAlignment()->setWrapText(false); // Wrap text in the cell
+                $sheet->getStyle($cellRange)->getAlignment()->setWrapText(true); // Wrap text in the cell
                 $sheet->getStyle($cellRange)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
                 $sheet->getStyle($cellRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
                 $sheet->getStyle($cellRange)->getFont()->setSize(14);
