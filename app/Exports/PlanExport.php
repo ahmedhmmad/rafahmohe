@@ -68,58 +68,58 @@ class PlanExport implements FromView
         $spreadsheet->getActiveSheet()->setRightToLeft(true);
 
 // Add custom header and logo (adjust coordinates as needed)
-        $logoPath = public_path('/img/logo.webp');
-        $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-        $drawing->setName('Logo')->setPath($logoPath)->setCoordinates('D1');
-        $drawing->setOffsetX(50); // Adjust the X offset to center the logo
-        $drawing->setOffsetY(5); // Adjust the Y offset to center the logo
-        $drawing->setWorksheet($sheet);
-
-// Merge cells D1:F3 and center-align the logo within it
-        $sheet->mergeCells('D1:F3')->getStyle('D1:F3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-
-        $sheet->mergeCells('A1:C1');
-        $sheet->setCellValue('A1', 'وزارة التربية والتعليم');
-        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-
-        $sheet->mergeCells('A2:C2');
-        $sheet->setCellValue('A2', 'مديرية التربية والتعليم رفح');
-        $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-
-        $sheet->mergeCells('A3:C3');
-        $title = 'الخطة الشهرية ';
-
-
-        // Set the title in the Excel sheet
-        $sheet->setCellValue('A3', $title);
-        $sheet->getStyle('A3')->getFont()->setBold(true)->setSize(12);
-        $sheet->getStyle('A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-
-        $sheet->setCellValue('B4', ''); // Leave a blank row
-
-//        $sheet->mergeCells('E1:G1');
-        // Create a rich text object
-        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
-
-// Add the first line
-        $richText->createTextRun('Ministry of Education and Higher Education');
-        $richText->createText("\n"); // Add a line break
-
-// Add the second line
-        $richText->createTextRun('Directorate of Education and Education Rafah');
-        $richText->createText("\n");
-// Set the rich text in the cell
-        $sheet->getCell('D1')->setValue($richText);
-
-// Apply styling to the cell
-        $sheet->getStyle('D1')->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('D1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+//        $logoPath = public_path('/img/logo.webp');
+//        $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+//        $drawing->setName('Logo')->setPath($logoPath)->setCoordinates('D1');
+//        $drawing->setOffsetX(50); // Adjust the X offset to center the logo
+//        $drawing->setOffsetY(5); // Adjust the Y offset to center the logo
+//        $drawing->setWorksheet($sheet);
+//
+//// Merge cells D1:F3 and center-align the logo within it
+//        $sheet->mergeCells('D1:F3')->getStyle('D1:F3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+//
+//
+//        $sheet->mergeCells('A1:C1');
+//        $sheet->setCellValue('A1', 'وزارة التربية والتعليم');
+//        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+//        $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+//
+//
+//        $sheet->mergeCells('A2:C2');
+//        $sheet->setCellValue('A2', 'مديرية التربية والتعليم رفح');
+//        $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(14);
+//        $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+//
+//
+//        $sheet->mergeCells('A3:C3');
+//        $title = 'الخطة الشهرية ';
+//
+//
+//        // Set the title in the Excel sheet
+//        $sheet->setCellValue('A3', $title);
+//        $sheet->getStyle('A3')->getFont()->setBold(true)->setSize(12);
+//        $sheet->getStyle('A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+//
+//
+//        $sheet->setCellValue('B4', ''); // Leave a blank row
+//
+////        $sheet->mergeCells('E1:G1');
+//        // Create a rich text object
+//        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+//
+//// Add the first line
+//        $richText->createTextRun('Ministry of Education and Higher Education');
+//        $richText->createText("\n"); // Add a line break
+//
+//// Add the second line
+//        $richText->createTextRun('Directorate of Education and Education Rafah');
+//        $richText->createText("\n");
+//// Set the rich text in the cell
+//        $sheet->getCell('D1')->setValue($richText);
+//
+//// Apply styling to the cell
+//        $sheet->getStyle('D1')->getFont()->setBold(true)->setSize(14);
+//        $sheet->getStyle('D1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
 //
 //        $sheet->mergeCells('E2:G2');
@@ -183,7 +183,7 @@ class PlanExport implements FromView
                 $sheet->getStyle($cellRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
                 $sheet->getStyle($cellRange)->getFont()->setSize(14);
                 $sheet->getStyle($cellRange)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-                $sheet->getRowDimension($row)->setRowHeight(22); // Set the row height
+                $sheet->getRowDimension($row)->setRowHeight(30); // Set the row height
 
                 // Adjust the width of the columns
                 $sheet->getColumnDimension('A')->setWidth(4);
