@@ -67,6 +67,10 @@ Route::middleware(['auth'])->group(function()
         ->name('employee.add-day');
     Route::post('/employee/storeDay',[App\Http\Controllers\Employee\MonthlyPlan::class,'storeDay'])
         ->name('employee.store-day');
+
+    //exportPlan
+    Route::get('/export-plan', [App\Http\Controllers\Report\ReportController::class,'exportPlan'])
+        ->name('exports.exportPlan');
 });
 
 //Employee Routes

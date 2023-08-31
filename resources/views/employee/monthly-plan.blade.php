@@ -97,6 +97,10 @@
 {{--        </div>--}}
 {{--    </div>--}}
 {{--@endsection--}}
+
+                <a href="{{ route('exports.exportPlan', ['month' => $selectedMonth, 'year' => $selectedYear]) }}" class="btn btn-success">
+                    تصدير إلى ملف اكسل
+                </a>
                 <table class="table table-bordered table-hover">
                     <thead class="table-primary">
                     <tr>
