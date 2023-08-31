@@ -183,13 +183,13 @@ class PlanExport implements FromView
                 $sheet->getStyle($cellRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
                 $sheet->getStyle($cellRange)->getFont()->setSize(14);
                 $sheet->getStyle($cellRange)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-                $sheet->getRowDimension($row)->setRowHeight(33); // Set the row height
+                $sheet->getRowDimension($row)->setRowHeight(35); // Set the row height
 
                 // Adjust the width of the columns
                 $sheet->getColumnDimension('A')->setWidth(4);
                 $sheet->getColumnDimension('B')->setWidth(18);
                 $sheet->getColumnDimension('C')->setWidth(20);
-                $sheet->getColumnDimension('D')->setWidth(99); // Adjusted width for merged cells
+                $sheet->getColumnDimension('D')->setWidth(85); // Adjusted width for merged cells
                 $sheet->getColumnDimension('E')->setWidth(0);  // Hide unused columns
                 $sheet->getColumnDimension('F')->setWidth(0);  // Hide unused columns
 
