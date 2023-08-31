@@ -50,7 +50,10 @@
                     </div>
                 </form>
             </div>
-
+                <a href="{{ route('exports.exportPlan', ['month' => now()->month, 'year' => now()->year]) }}" class="btn btn-success">
+                    <i class="fas fa-file-export"></i>
+                    تصدير الخطة الشهرية
+                </a>
                 <table class="table">
                     <thead>
                     <tr>
