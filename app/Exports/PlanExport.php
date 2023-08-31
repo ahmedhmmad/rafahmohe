@@ -183,7 +183,7 @@ class PlanExport implements FromView
                 $sheet->getStyle($cellRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
                 $sheet->getStyle($cellRange)->getFont()->setSize(14);
                 $sheet->getStyle($cellRange)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-                $sheet->getRowDimension($row)->setRowHeight(30); // Set the row height
+                $sheet->getRowDimension($row)->setRowHeight(33); // Set the row height
 
                 // Adjust the width of the columns
                 $sheet->getColumnDimension('A')->setWidth(4);
