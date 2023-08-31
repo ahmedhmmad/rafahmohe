@@ -229,6 +229,7 @@ class MonthlyPlan extends Controller
     }
     public function show()
     {
+
         $user = Auth::user();
 
         // Get the start and end dates of the recent month
@@ -556,6 +557,10 @@ class MonthlyPlan extends Controller
     {
         $month = $request->input('month');
         $year = $request->input('year');
+
+        $selectedMonth = $request->input('month');
+        $selectedYear = $request->input('year');
+
         $user = Auth::user()->id;
 
         // Validate the month and year inputs here if needed
@@ -572,7 +577,7 @@ class MonthlyPlan extends Controller
         // Generate the working days array for the selected month
         $workingDays = $this->generateWorkingDays($month, $year);
 
-        return view('employee.monthly-plan', compact('plans', 'workingDays', 'date'));
+        return view('employee.monthly-plan', compact('plans', 'workingDays', 'date','selectedMonth', 'selectedYear'));
     }
 
     private function generateWorkingDays($month, $year)

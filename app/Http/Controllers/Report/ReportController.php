@@ -28,9 +28,9 @@ class ReportController extends Controller
 
     public function exportPlan(Request $request)
     {
+
         $month = $request->input('month');
         $year = $request->input('year');
-
 
         return (new PlanExport($month,$year))->downloadExcel();
     }

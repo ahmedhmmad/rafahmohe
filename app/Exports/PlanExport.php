@@ -1,6 +1,6 @@
 <?php
-
 namespace App\Exports;
+
 
 use App\Models\Plan;
 use Illuminate\Contracts\View\View;
@@ -25,6 +25,8 @@ class PlanExport implements FromView
 
     public function view(): View
     {
+        //dd month and year
+       // dd($this->month, $this->year);
         $user = Auth::user();
         $plans = Plan::with('school')
             ->where('user_id', $user->id)
@@ -36,19 +38,21 @@ class PlanExport implements FromView
             })
             ->get();
 
+
         $groupedData = $plans->groupBy(function ($plan) {
-            $date = Carbon::parse($plan->visit_date);
-            return $date->translatedFormat('l');
+            return $plan->start;
         })->map(function ($plansPerDay) {
             return $plansPerDay->groupBy('start')->map(function ($plansPerDate) {
                 return $plansPerDate->pluck('school.name')->implode(', ');
             });
         });
 
+
         return ViewFacade::make('exports.custom_plans', [
             'groupedData' => $groupedData,
         ]);
     }
+
 
 // Inside the downloadExcel() method
     public function downloadExcel()
@@ -58,6 +62,7 @@ class PlanExport implements FromView
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
+
 
 // Set right-to-left direction for the entire sheet
         $spreadsheet->getActiveSheet()->setRightToLeft(true);
@@ -74,19 +79,19 @@ class PlanExport implements FromView
         $sheet->mergeCells('D1:F3')->getStyle('D1:F3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
-        $sheet->mergeCells('A1:C1');
+        $sheet->mergeCells('A1:B1');
         $sheet->setCellValue('A1', 'وزارة التربية والتعليم');
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
-        $sheet->mergeCells('A2:C2');
+        $sheet->mergeCells('A2:B2');
         $sheet->setCellValue('A2', 'مديرية التربية والتعليم رفح');
         $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
-        $sheet->mergeCells('A3:C3');
+        $sheet->mergeCells('A3:B3');
         $title = 'الخطة الشهرية ';
 
 
@@ -98,25 +103,25 @@ class PlanExport implements FromView
 
         $sheet->setCellValue('B4', ''); // Leave a blank row
 
-        $sheet->mergeCells('G1:I1');
-        $sheet->setCellValue('G1', 'Ministry of Education and Higher Education');
-        $sheet->getStyle('G1')->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('G1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+       // $sheet->mergeCells('G1:I1');
+        $sheet->setCellValue('D1', 'Ministry of Education and Higher Education');
+        $sheet->getStyle('D1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('D1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
-        $sheet->mergeCells('G2:I2');
-        $sheet->setCellValue('G2', 'Directorate of Education and Education Rafah');
-        $sheet->getStyle('G2')->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('G2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+       // $sheet->mergeCells('G2:I2');
+        $sheet->setCellValue('D2', 'Directorate of Education and Education Rafah');
+        $sheet->getStyle('D2')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('D2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
-        $sheet->setCellValue('G3', ''); // Leave a blank row
-        $sheet->setCellValue('H4', ''); // Leave a blank row
+        $sheet->setCellValue('D3', ''); // Leave a blank row
+        //$sheet->setCellValue('H4', ''); // Leave a blank row
 
-        $sheet->setCellValue('D1', ''); // Empty cell for spacing
-        $sheet->setCellValue('D2', ''); // Empty cell for spacing
-        $sheet->setCellValue('D3', ''); // Empty cell for spacing
-
+//        $sheet->setCellValue('D1', ''); // Empty cell for spacing
+//        $sheet->setCellValue('D2', ''); // Empty cell for spacing
+//        $sheet->setCellValue('D3', ''); // Empty cell for spacing
+//
 
         $sheet->setCellValue('D4', ''); // Leave a blank row
 
@@ -142,45 +147,56 @@ class PlanExport implements FromView
         }
         // Fill in your data from $groupedData
         $row = 6;
-        $index=1;
-
+        $dayIndex = 1; // Initialize day index
 
         foreach ($groupedData as $dayName => $plansPerDate) {
             foreach ($plansPerDate as $date => $schoolNames) {
-                $sheet->setCellValue('A' . $row, $index++);
-                $sheet->setCellValue('B' . $row, $dayName);
+                $sheet->setCellValue('A' . $row, $dayIndex); // Set the day index
+
+                // Use Carbon to get the day name from the date
+                $dayName = Carbon::parse($date)->translatedFormat('l');
+                $sheet->setCellValue('B' . $row, $dayName); // Set the day name
+
                 $sheet->setCellValue('C' . $row, $date);
                 $sheet->setCellValue('D' . $row, $schoolNames);
 
-                $cellRange = 'A' . $row . ':J' . $row;
+                $cellRange = 'A' . $row . ':D' . $row;
+                $sheet->getStyle($cellRange)->getAlignment()->setWrapText(false); // Wrap text in the cell
+                $sheet->getStyle($cellRange)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $sheet->getStyle($cellRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+                //Font size 14
+                $sheet->getStyle($cellRange)->getFont()->setSize(14);
                 $sheet->getStyle($cellRange)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getRowDimension($row)->setRowHeight(22); // Set the row height (optional
                 // Adjust the width of the columns
                 $sheet->getColumnDimension('A')->setWidth(4);
-                $sheet->getColumnDimension('B')->setWidth(10);
-                $sheet->getColumnDimension('C')->setWidth(12);
-                $sheet->getColumnDimension('D')->setWidth(60);
-
+                $sheet->getColumnDimension('B')->setWidth(15);
+                $sheet->getColumnDimension('C')->setWidth(18);
+                $sheet->getColumnDimension('D')->setWidth(75);
 
                 $row++;
-
+                $dayIndex++; // Increment the day index
             }
+        }
 
         // Create a temporary file path
-        $tempFilePath = tempnam(sys_get_temp_dir(), 'exported_excel');
-        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $writer->save($tempFilePath);
+            $tempFilePath = tempnam(sys_get_temp_dir(), 'exported_excel');
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save($tempFilePath);
 
-        // Set the appropriate headers for downloading the file
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="exported_excel.xlsx"');
-        header('Cache-Control: max-age=0');
 
-        // Read and output the temporary file
-        readfile($tempFilePath);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment; filename="exported_excel.xlsx"');
+            header('Cache-Control: max-age=0');
 
-        // Clean up the temporary file
-        unlink($tempFilePath);
-    }
-}}
+            // Read and output the temporary file
+            readfile($tempFilePath);
+
+            // Clean up the temporary file
+            unlink($tempFilePath);
+        }
+
+}
+
 
 
