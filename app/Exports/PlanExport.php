@@ -103,16 +103,16 @@ class PlanExport implements FromView
 
         $sheet->setCellValue('B4', ''); // Leave a blank row
 
-        $sheet->mergeCells('E1:G1');
-        $sheet->setCellValue('G1', 'Ministry of Education and Higher Education');
-        $sheet->getStyle('G1')->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('G1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-
-        $sheet->mergeCells('E2:G2');
-        $sheet->setCellValue('G2', 'Directorate of Education and Education Rafah');
-        $sheet->getStyle('G2')->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('G2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+//        $sheet->mergeCells('E1:G1');
+//        $sheet->setCellValue('G1', 'Ministry of Education and Higher Education');
+//        $sheet->getStyle('G1')->getFont()->setBold(true)->setSize(14);
+//        $sheet->getStyle('G1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+//
+//
+//        $sheet->mergeCells('E2:G2');
+//        $sheet->setCellValue('G2', 'Directorate of Education and Education Rafah');
+//        $sheet->getStyle('G2')->getFont()->setBold(true)->setSize(14);
+//        $sheet->getStyle('G2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
         $sheet->setCellValue('G3', ''); // Leave a blank row
