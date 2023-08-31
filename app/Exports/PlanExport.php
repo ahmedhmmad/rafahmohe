@@ -104,15 +104,28 @@ class PlanExport implements FromView
         $sheet->setCellValue('B4', ''); // Leave a blank row
 
 //        $sheet->mergeCells('E1:G1');
-        $sheet->setCellValue('D1', 'Ministry of Education and Higher Education');
+        // Create a rich text object
+        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+
+// Add the first line
+        $richText->createTextRun('Ministry of Education and Higher Education');
+        $richText->createText("\n"); // Add a line break
+
+// Add the second line
+        $richText->createTextRun('Directorate of Education and Education Rafah');
+        $richText->createText("\n");
+// Set the rich text in the cell
+        $sheet->getCell('D1')->setValue($richText);
+
+// Apply styling to the cell
         $sheet->getStyle('D1')->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('D1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('D1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
 //
 //        $sheet->mergeCells('E2:G2');
-        $sheet->setCellValue('D2', 'Directorate of Education and Education Rafah');
-        $sheet->getStyle('D2')->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('Ds2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+//        $sheet->setCellValue('D2', 'Directorate of Education and Education Rafah');
+//        $sheet->getStyle('D2')->getFont()->setBold(true)->setSize(14);
+//        $sheet->getStyle('Ds2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
         //$sheet->setCellValue('G3', ''); // Leave a blank row
