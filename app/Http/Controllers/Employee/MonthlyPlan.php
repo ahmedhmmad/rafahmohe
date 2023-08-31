@@ -246,9 +246,18 @@ class MonthlyPlan extends Controller
         // Get the start and end dates of the recent month
        // $startOfMonth = now()->addMonth()->startOfMonth();
       //  $endOfMonth = now()->addMonth()->endOfMonth();
-        $startOfMonth = now()->startOfMonth()->addMonth();
-    $endOfMonth = now()->endOfMonth()->addMonth()->subDay();
-    //dd($startOfMonth,$endOfMonth);
+//        $startOfMonth = now()->timezone('Asia/Gaza')->addMonth()->startOfMonth();
+//        $endOfMonth = now()->timezone('Asia/Gaza')->addMonth()->endOfMonth();
+
+//        $testDate = Carbon::create(2023, 9, 1, 11, 59, 0, 'Asia/Gaza');
+//        $startOfMonth = $testDate->copy()->addMonthNoOverflow()->startOfMonth();
+//        $endOfMonth = $testDate->copy()->addMonthNoOverflow()->endOfMonth();
+
+
+        $startOfMonth = now()->timezone('Asia/Gaza')->addMonthNoOverflow()->startOfMonth();
+        $endOfMonth = now()->timezone('Asia/Gaza')->addMonthNoOverflow()->endOfMonth();
+        //dd($startOfMonth, $endOfMonth);
+        //dd($startOfMonth, $endOfMonth);
 
         // Retrieve the plans for the recent month and order them by date
         $plans = Plan::where('user_id', $user->id)
