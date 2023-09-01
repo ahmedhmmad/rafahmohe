@@ -159,7 +159,7 @@ class SchoolController extends Controller
         }
 
         $schoolVisits = $query->orderBy('visit_date', 'desc')->paginate(10); // Order by visit_date in descending order
-        dd($schoolVisits);
+        //dd($schoolVisits);
 
 
         $schools=School::all();
