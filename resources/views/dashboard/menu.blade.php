@@ -262,6 +262,11 @@
                           <div>استثناءات الخطط</div>
                         </a>
                     </li>
+                    <li class ="menu-item">
+                        <a href ="{{route('admin.summary')}}" class="menu-link">
+                            ملخص ادخال الخطط
+                        </a>
+                    </li>
                     <li class="menu-item">
                         <a href="{{route('admin.search-all-schools')}}" class="menu-link">
                             <div> جميع المدارس</div>

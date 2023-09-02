@@ -342,4 +342,32 @@ public function timeline()
 
         return view('admin.search-all-schools', compact('schools', 'groupedPlans', 'month', 'unvisitedSchools'));
     }
+
+    public function summaryDepartmentsWithPlans()
+    {
+        // Define the allowed department IDs
+        $allowedDepartmentIds = [21, 10, 19, 17, 6, 20, 12];
+
+        // Retrieve the list of departments that are in the allowed list
+        $departments = Department::whereIn('id', $allowedDepartmentIds)->get();
+
+        // Initialize arrays to store departments with plans and without plans
+        $departmentsWithPlans = [];
+        $departmentsWithoutPlans = [];
+
+        // Loop through each department in the allowed list
+        foreach ($departments as $department) {
+            $usersInDepartment = User::where('department_id', $department->id)->pluck('id')->toArray();
+            $hasPlans = Plan::whereIn('user_id', $usersInDepartment)->exists();
+
+            if ($hasPlans) {
+                $departmentsWithPlans[] = $department;
+            } else {
+                $departmentsWithoutPlans[] = $department;
+            }
+        }
+
+        // Return the departments with plans and departments without plans to a view
+        return view('admin.department-plan-summary', compact('departmentsWithPlans', 'departmentsWithoutPlans'));
+    }
 }
