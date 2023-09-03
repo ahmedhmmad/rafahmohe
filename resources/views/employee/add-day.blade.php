@@ -39,24 +39,24 @@
 
                             if ($existingPlan) {
 
-//                            $existingPlanDepartmentId = $existingPlan->department_id ?? null;
-//
-//                            // Check if the selected date ($date) is in the plan and the user can override the department
-//                            $dateKey = $date->format('Y-m-d');
-//                            $canOverrideDepartment = $canOverrideMultiDepartment || $dateKey === $existingPlan->date;
-//
-//                            if ($existingPlanDepartmentId != $departmentId) {
-//                                $isRestricted = true &&!$canOverrideDepartment;
-//                            }
-                                $dateKey = $date->format('Y-m-d');
-                               $existingPlanDepartmentId = $existingPlan->department_id ?? null;
-                               if ($existingPlanDepartmentId == 19) {
-                                // Special case for department 19
-                                  $isRestricted = count($existingPlans->where('start', $dateKey)->where('department_id', 19)) > 3;
-                               } else {
-                                   // Other departments
-                                         $isRestricted = in_array($dateKey, $existingPlanDates) && !$canOverrideMultiDepartment;
-                               }
+                            $existingPlanDepartmentId = $existingPlan->department_id ?? null;
+
+                            // Check if the selected date ($date) is in the plan and the user can override the department
+                            $dateKey = $date->format('Y-m-d');
+                            $canOverrideDepartment = $canOverrideMultiDepartment || $dateKey === $existingPlan->date;
+
+                            if ($existingPlanDepartmentId != $departmentId) {
+                                $isRestricted = true &&!$canOverrideDepartment;
+                            }
+//                                $dateKey = $date->format('Y-m-d');
+//                               $existingPlanDepartmentId = $existingPlan->department_id ?? null;
+//                               if ($existingPlanDepartmentId == 19) {
+//                                // Special case for department 19
+//                                  $isRestricted = count($existingPlans->where('start', $dateKey)->where('department_id', 19)) > 3;
+//                               } else {
+//                                   // Other departments
+//                                         $isRestricted = in_array($dateKey, $existingPlanDates) && !$canOverrideMultiDepartment;
+//                               }
 
                                  }
 
