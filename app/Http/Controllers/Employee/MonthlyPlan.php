@@ -564,13 +564,14 @@ class MonthlyPlan extends Controller
     }
     public function addDay($date)
     {
+
         $errors = collect([]);
         $departmentId = Auth::user()->department->id;
         $planRestriction = Auth::user()->planRestrictions->first();
         $canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
         $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
         $canOverrideLastWeek = $planRestriction ? ($planRestriction->can_override_last_week && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
-
+//dd($canOverrideLastWeek);
         $currentDate = now();
         $targetDate=Carbon::parse($date);
         try {
