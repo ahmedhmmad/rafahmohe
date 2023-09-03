@@ -45,7 +45,8 @@ class MonthlyPlan extends Controller
 
 
         $planRestriction = Auth::user()->planRestrictions->first();
-        $canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
+      //  $canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
+        $canOverrideDepartment=true;
         $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
 
         // Check if the month is a valid value
