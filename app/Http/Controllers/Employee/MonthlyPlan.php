@@ -45,7 +45,8 @@ class MonthlyPlan extends Controller
 
 
         $planRestriction = Auth::user()->planRestrictions->first();
-        $canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
+      //  $canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
+        $canOverrideDepartment=true;
         $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
 
         // Check if the month is a valid value
@@ -227,58 +228,153 @@ class MonthlyPlan extends Controller
 
         return redirect()->route('home');
     }
+//    public function show()
+//    {
+//        $errors = collect([]);
+//
+//        $user = Auth::user();
+//        $departmentId = $user->department->id;
+//
+//        $allowedDepartmentIds = [21, 10, 19, 17, 6, 20, 12];
+//
+//        if (!in_array($departmentId, $allowedDepartmentIds)) {
+//
+//            $errors->push('لا يمكنك إدخال/ تعديل الخطة لأنه ليس لقسمك خطة شهرية');
+//            return redirect()->back()->withErrors($errors);
+//        }
+//
+//        // Get the start and end dates of the recent month
+//
+//
+//        $startOfMonth = now()->timezone('Asia/Gaza')->addMonthNoOverflow()->startOfMonth();
+//        $endOfMonth = now()->timezone('Asia/Gaza')->addMonthNoOverflow()->endOfMonth();
+//
+//
+//        // Retrieve the plans for the recent month and order them by date
+//        $plans = Plan::where('user_id', $user->id)
+//            ->whereBetween('start', [$startOfMonth, $endOfMonth])
+//            ->orderBy('start')
+//            ->get();
+//
+//        // Generate an array of working days for the recent month
+//        $workingDays = [];
+//        $currentDay = $startOfMonth->copy();
+//
+//        while ($currentDay <= $endOfMonth) {
+//            // Check if the current day is a working day (excluding Fridays and Saturdays)
+//            if (!$currentDay->isFriday() && !$currentDay->isSaturday()) {
+//                $workingDays[] = $currentDay->format('Y-m-d');
+//            }
+//
+//            $currentDay->addDay();
+//        }
+//
+////        dd($workingDays);
+//
+//        return view('employee.show-plan', compact('plans', 'workingDays'));
+//    }
+//
+
+//    public function show() {
+//
+//        $errors = collect([]);
+//
+//        $user = Auth::user();
+//
+//        $departmentId = $user->department->id;
+//
+//        $allowedDepartmentIds = [21, 10, 19, 17, 6, 20, 12];
+//
+//        if (!in_array($departmentId, $allowedDepartmentIds)) {
+//            $errors->push('لا يمكنك إدخال/ تعديل الخطة لأنه ليس لقسمك خطة شهرية');
+//            return redirect()->back()->withErrors($errors);
+//        }
+//
+//        // Check if current date is in last week of month
+//        $inLastWeek = now()->endOfMonth()->subDays(6)->isPast();
+//
+//        if ($inLastWeek) {
+//
+//            // Get the start and end dates of the recent month
+//            $startOfMonth = now()->timezone('Asia/Gaza')->addMonthNoOverflow()->startOfMonth();
+//            $endOfMonth = now()->timezone('Asia/Gaza')->addMonthNoOverflow()->endOfMonth();
+//
+//        } else {
+//
+//            // Use the current month
+//            $startOfMonth = now()->timezone('Asia/Gaza')->startOfMonth();
+//            $endOfMonth = now()->timezone('Asia/Gaza')->endOfMonth();
+//
+//        }
+//
+//        // Retrieve the plans for the month and order them by date
+//        $plans = Plan::where('user_id', $user->id)
+//            ->whereBetween('start', [$startOfMonth, $endOfMonth])
+//            ->orderBy('start')
+//            ->get();
+//
+//        // Generate working days array
+//        $workingDays = [];
+//        $currentDay = $startOfMonth->copy();
+//
+//        while ($currentDay <= $endOfMonth) {
+//            if (!$currentDay->isFriday() && !$currentDay->isSaturday()) {
+//                $workingDays[] = $currentDay->format('Y-m-d');
+//            }
+//            $currentDay->addDay();
+//        }
+//
+//        return view('employee.show-plan', compact('plans', 'workingDays'));
+//
+//    }
+
     public function show()
     {
         $errors = collect([]);
-
         $user = Auth::user();
         $departmentId = $user->department->id;
-
         $allowedDepartmentIds = [21, 10, 19, 17, 6, 20, 12];
 
         if (!in_array($departmentId, $allowedDepartmentIds)) {
-
             $errors->push('لا يمكنك إدخال/ تعديل الخطة لأنه ليس لقسمك خطة شهرية');
             return redirect()->back()->withErrors($errors);
         }
 
+        // Replace '2023-09-26' with the specific date for testing
+        $testDate = now();
 
-        // Get the start and end dates of the recent month
-       // $startOfMonth = now()->addMonth()->startOfMonth();
-      //  $endOfMonth = now()->addMonth()->endOfMonth();
-//        $startOfMonth = now()->timezone('Asia/Gaza')->addMonth()->startOfMonth();
-//        $endOfMonth = now()->timezone('Asia/Gaza')->addMonth()->endOfMonth();
+        // Get the first day of the current month
+        $firstDayOfMonth = Carbon::parse($testDate)->timezone('Asia/Gaza')->startOfMonth();
 
-//        $testDate = Carbon::create(2023, 9, 1, 11, 59, 0, 'Asia/Gaza');
-//        $startOfMonth = $testDate->copy()->addMonthNoOverflow()->startOfMonth();
-//        $endOfMonth = $testDate->copy()->addMonthNoOverflow()->endOfMonth();
+        // Calculate the last week's start date (7 days before the last day of the current month)
+        $lastWeekStart = $firstDayOfMonth->copy()->endOfMonth()->subDays(6);
 
+        if (Carbon::parse($testDate) >= $lastWeekStart) {
+            // Get the start and end dates of the recent month
+            $startOfMonth = Carbon::parse($testDate)->timezone('Asia/Gaza')->addMonthNoOverflow()->startOfMonth();
+            $endOfMonth = Carbon::parse($testDate)->timezone('Asia/Gaza')->addMonthNoOverflow()->endOfMonth();
+        } else {
+            // Use the current month
+            $startOfMonth = Carbon::parse($testDate)->timezone('Asia/Gaza')->startOfMonth();
+            $endOfMonth = Carbon::parse($testDate)->timezone('Asia/Gaza')->endOfMonth();
+        }
 
-        $startOfMonth = now()->timezone('Asia/Gaza')->addMonthNoOverflow()->startOfMonth();
-        $endOfMonth = now()->timezone('Asia/Gaza')->addMonthNoOverflow()->endOfMonth();
-        //dd($startOfMonth, $endOfMonth);
-        //dd($startOfMonth, $endOfMonth);
-
-        // Retrieve the plans for the recent month and order them by date
+        // Retrieve the plans for the month and order them by date
         $plans = Plan::where('user_id', $user->id)
             ->whereBetween('start', [$startOfMonth, $endOfMonth])
             ->orderBy('start')
             ->get();
 
-        // Generate an array of working days for the recent month
+        // Generate working days array
         $workingDays = [];
         $currentDay = $startOfMonth->copy();
 
         while ($currentDay <= $endOfMonth) {
-            // Check if the current day is a working day (excluding Fridays and Saturdays)
             if (!$currentDay->isFriday() && !$currentDay->isSaturday()) {
                 $workingDays[] = $currentDay->format('Y-m-d');
             }
-
             $currentDay->addDay();
         }
-
-//        dd($workingDays);
 
         return view('employee.show-plan', compact('plans', 'workingDays'));
     }
