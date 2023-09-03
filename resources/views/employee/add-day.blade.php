@@ -45,20 +45,18 @@
                             $dateKey = $date->format('Y-m-d');
                             $canOverrideDepartment = $canOverrideMultiDepartment || $dateKey === $existingPlan->date;
 
-                            if ($existingPlanDepartmentId != $departmentId) {
-                                $isRestricted = true &&!$canOverrideDepartment;
-                            }
-//                                $dateKey = $date->format('Y-m-d');
-//                               $existingPlanDepartmentId = $existingPlan->department_id ?? null;
-//                               if ($existingPlanDepartmentId == 19) {
-//                                // Special case for department 19
-//                                  $isRestricted = count($existingPlans->where('start', $dateKey)->where('department_id', 19)) > 3;
-//                               } else {
-//                                   // Other departments
-//                                         $isRestricted = in_array($dateKey, $existingPlanDates) && !$canOverrideMultiDepartment;
-//                               }
+//                            if ($existingPlanDepartmentId != $departmentId) {
+//                                $isRestricted = true &&!$canOverrideDepartment;
+//                            }
+                              if ($existingPlanDepartmentId == 19) {
+                              // Special case for department 19
+                              $isRestricted = count($existingPlans->where('start', $dateKey)->where('department_id', 19)) > 3;
+                               } else {
+                                                                // Other departments
+                              $isRestricted = true &&!$canOverrideDepartment;
+                              }
 
-                                 }
+                            }
 
                             $disabled = $isRestricted && ($existingPlan && $existingPlan->school_id !== 34);
 
