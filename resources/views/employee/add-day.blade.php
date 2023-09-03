@@ -48,6 +48,7 @@
 //                            if ($existingPlanDepartmentId != $departmentId) {
 //                                $isRestricted = true &&!$canOverrideDepartment;
 //                            }
+                                $dateKey = $date->format('Y-m-d');
                                $existingPlanDepartmentId = $existingPlan->department_id ?? null;
                                if ($existingPlanDepartmentId == 19) {
                                 // Special case for department 19
