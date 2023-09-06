@@ -1,38 +1,72 @@
-@extends('layouts.template')
+@extends('layouts.master')
 
 @section('content')
-    <div class="container">
-        <div class="card login-card">
-            <div class="row no-gutters">
-                <div class="col-md-5">
-                    <img src="{{url('/img/login.jpg')}}" alt="login" class="login-card-img">
-                </div>
-                <div class="col-md-7">
+    <div class="container p-4">
+        {{-- Show errors --}}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card px-4">
                     <div class="card-body">
-                        <div class="brand-wrapper">
-                            <img src="{{url('/img/logo.png')}}" alt="logo" class="logo">
+                        <div class="row">
+
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <div class="brand-wrapper">
+                                        {{-- <img src="{{ url('/img/logo.png') }}" alt="logo" class="logo"> --}}
+                                    </div>
+                                    <p class="login-card-description">حسابي</p>
+                                    <form method="POST" action="{{ route('auth.update-password') }}">
+                                        @csrf
+                                        {{-- <input type="hidden" name="token" value="{{ $request->route('token') }}"> --}}
+
+                                        <!-- Error message for current_password -->
+                                        @error('current_password')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="current_password">كلمة المرور الحالية</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <input type="password" name="current_password" id="current_password" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="password">كلمة المرور الجديدة</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <input type="password" name="password" id="password" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="password_confirmation">تأكيد كلمة المرور الجديدة</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <input type="password" name="password_confirmation" id="password_confirmation" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-center"> <!-- Added center alignment -->
+                                            <button type="submit" class="btn btn-success mt-4">تحديث كلمة المرور</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <p class="login-card-description">حسابي</p>
-                        <form method="POST" action="{{ route('password.update') }}">
-                            @csrf
-                            <input type="hidden" name="token" value="{{ $request->route('token') }}">
-                            <div class="form-group">
-                                <label for="password" class="sr-only">كلمة المرور</label>
-                                <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" required autocomplete="new-password" placeholder="كلمة المرور الجديدة">
-                                @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="form-group mb-4">
-                                <label for="password_confirmation" class="sr-only">تأكيد كلمة المرور</label>
-                                <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password" placeholder="تأكيد كلمة المرور">
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                تغيير كلمة المرور
-                            </button>
-                        </form>
                     </div>
                 </div>
             </div>
