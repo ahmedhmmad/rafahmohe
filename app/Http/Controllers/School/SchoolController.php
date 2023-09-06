@@ -47,7 +47,6 @@ class SchoolController extends Controller
     }
     public function index(Request $request)
     {
-
         $currentMonth = now()->month;
         $currentYear = now()->year;
 
@@ -60,11 +59,12 @@ class SchoolController extends Controller
             ->where(function ($query) {
                 $query->where('department_id', '<>', 19); // Exclude departmentId == 19
             })
+            ->orderBy('start', 'asc') // Add this line to order by 'start' column in ascending order
             ->get();
-       // dd($schoolPlannedVisits);
 
         return view('school.show-school-visitors', compact('schoolPlannedVisits'));
     }
+
 
 //    public function viewDepVisits()
 //
