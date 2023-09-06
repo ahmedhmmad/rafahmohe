@@ -18,6 +18,12 @@ Route::middleware(['auth'])->group(function()
         return view('welcome');
     })->name('home');
 
+    //Change Password
+    Route::get('/change-password', [App\Http\Controllers\Auth\ChangePasswordController::class,'showChangePasswordForm'])
+        ->name('auth.change-password');
+
+    Route::post('/change-password', [App\Http\Controllers\Auth\ChangePasswordController::class,'changePassword'])
+        ->name('auth.update-password');
 
 
     Route::post('/notifications/{notification}/mark-as-read', [\App\Http\Controllers\NotificationController::class,'markAsRead'])

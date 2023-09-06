@@ -110,13 +110,13 @@
                         <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="{{route('auth.change-password')}}">
                             <i class="bx bx-user me-2"></i>
                             <span class="align-middle">حسابي</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="">
                             <i class="bx bx-cog me-2"></i>
                             <span class="align-middle">الاعدادت</span>
                         </a>
