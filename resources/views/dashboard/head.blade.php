@@ -40,7 +40,7 @@
 <link rel="stylesheet" href="{{url('/assets/vendor/libs/apex-charts/apex-charts.css')}}" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
-
+<link rel="stylesheet" href="{{url('/css/select2.min.css')}}" />
 <!-- Page CSS -->
 
 <!-- Helpers -->
