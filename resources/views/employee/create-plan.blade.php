@@ -116,7 +116,17 @@
 
                                                             if ($existingPlanDepartmentId == 19) {
                                                                 // Special case for department 19
-                                                                $isRestricted = count($existingPlans->where('start', $dateKey)->where('department_id', 19)) > 3;
+                                                               // $isRestricted = count($existingPlans->where('start', $dateKey)->where('department_id', 19)) > 3;
+                                                $isRestricted = count($existingPlans->where('start', $dateKey)
+                                  ->where('department_id', 19)
+                                  ->where(function ($query) {
+                                      $query->where('school_id', '!=', 34)
+                                            ->where('school_id', '!=', 35)
+                                            ->where('school_id', '!=', 3434343404)
+                                            ->where('school_id', '!=', 3434343405)
+                                            ->where('school_id', '!=', 34343406)
+                                            ->where('school_id', '!=', 34343405);
+                                  })) > 3;
                                                             } else {
                                                                 // Other departments
                                                                 $isRestricted = in_array($dateKey, $existingPlanDates) && !$canOverrideMultiDepartment;
