@@ -103,7 +103,8 @@
                                         </div>
                                         <div class="col-7">
                                             <label class="form-label" style="color: #1e0ace">المدرسة</label>
-                                            <select name="days[{{ $startOfMonth->format('Y-m-d') }}][schools][]" multiple class="form-select" id="schoolSelect{{ $day }}" required>
+{{--                                            s--}}
+                                                <select class="js-example-basic-multiple" name="days[{{ $startOfMonth->format('Y-m-d') }}][schools][]" id="schoolSelect{{ $day }}" multiple="multiple" required>
                                                 @foreach($schools as $school)
                                                     @php
                                                         $schoolId = $school->id;
@@ -163,3 +164,4 @@
     </div>
 
 @endsection
+
