@@ -45,8 +45,8 @@ class MonthlyPlan extends Controller
 
 
         $planRestriction = Auth::user()->planRestrictions->first();
-      //  $canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
-        $canOverrideDepartment=true;
+       //$canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
+        $canOverrideDepartment = !$planRestriction || ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now());
         $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
 
         // Check if the month is a valid value
@@ -95,8 +95,6 @@ class MonthlyPlan extends Controller
 
         if ($currentDate->month == $month || $currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
 
-
-
                 if (!$canOverrideLastWeek) {
                     $lastWeekOfMonth->modify('+1 day');
                 $validDates = $lastWeekOfMonth->format('d/m/Y') . ' - ' . $lastDayOfMonth->format('d/m/Y');
@@ -113,7 +111,7 @@ class MonthlyPlan extends Controller
 //        $schools = School::orderBy('name')->get();
         $schools = School::orderByRaw("id = 34 DESC, name ASC")->get();
 
-        //dd($existingPlans, $existingPlanDates, $canOverrideDepartment, $canOverrideMultiDepartment, $departmentId);
+       //dd($existingPlans, $existingPlanDates, $canOverrideDepartment, $canOverrideMultiDepartment, $departmentId);
 
         return view('employee.create-plan', compact('schools', 'month', 'year', 'existingPlanDates', 'existingPlans', 'canOverrideDepartment', 'canOverrideMultiDepartment', 'departmentId'));
     }
@@ -418,6 +416,82 @@ class MonthlyPlan extends Controller
      */
     public function edit(string $id)
     {
+        $errors = collect([]);
+
+        // 1. Check if user's department has permission
+        $departmentId = Auth::user()->department->id;
+        $allowedDepartmentIds = [21, 10, 19, 17, 6, 20, 12];
+        if (!in_array($departmentId, $allowedDepartmentIds)) {
+            $errors->push('لا يمكنك تعديل الخطة لأنه ليس لقسمك خطة شهرية');
+            return redirect()->back()->withErrors($errors);
+        }
+
+        // Fetch the plan to get its month and year
+        $plan = Plan::find($id);
+        if (!$plan) {
+            $errors->push('The plan does not exist.');
+            return redirect()->back()->withErrors($errors);
+        }
+
+        $planMonth = $plan->start->month;
+        $planYear = $plan->start->year;
+
+        // 2. Apply month and year validations
+        if ($planMonth < 1 || $planMonth > 12) {
+            $errors->push('اختر الشهر المطلوب.');
+        }
+
+        if ($planYear < 2020 || $planYear > 2099) {
+            $errors->push('اختر السنة المطلوبة.');
+        }
+
+        if ($errors->isNotEmpty()) {
+            return redirect()->back()->withErrors($errors);
+        }
+
+        // User's Plan Restrictions
+        $planRestriction = Auth::user()->planRestrictions->first();
+        $canOverrideLastWeek = $planRestriction ? $planRestriction->can_override_last_week && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now() : false;
+
+        // 3. Allow plan editing only during certain timeframes
+        $currentDate = now();
+        $currentMonth = $currentDate->month;
+        $currentYear = $currentDate->year;
+        $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
+        $lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
+
+        if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+            if (!$canOverrideLastWeek) {
+                return redirect()
+                    ->back()
+                    ->withErrors(['error' => 'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
+            }
+        }
+
+        // Process of Editing
+        try {
+            $plan = Plan::with('schools')->findOrFail($id);
+
+            $selectedDate = $plan->start;
+            $selectedSchoolIds = $plan->schools->pluck('id')->toArray();
+            $associatedSchoolIds = Plan::where('start', $selectedDate)
+                ->whereNotIn('school_id', [34])
+                ->pluck('school_id')
+                ->toArray();
+
+            $schools = School::whereNotIn('id', $associatedSchoolIds)->get();
+            $selectedSchool = $plan->schools->pluck('id')->first();
+
+            return view('employee.edit-plan', compact('plan', 'schools', 'selectedSchool'));
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->withErrors(['error' => 'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
+        }
+    }
+
+    public function edit_old(string $id)
+    {
         $planRestriction = Auth::user()->planRestrictions->first();
         $canOverrideLastWeek = $planRestriction ? $planRestriction->can_override_last_week  && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now() : false;
         $currentDate = now();
@@ -568,7 +642,8 @@ class MonthlyPlan extends Controller
         $errors = collect([]);
         $departmentId = Auth::user()->department->id;
         $planRestriction = Auth::user()->planRestrictions->first();
-        $canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
+        $canOverrideDepartment = !$planRestriction || ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now());
+
         $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
         $canOverrideLastWeek = $planRestriction ? ($planRestriction->can_override_last_week && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
 //dd($canOverrideLastWeek);
@@ -617,7 +692,7 @@ class MonthlyPlan extends Controller
 
         $schools = School::all();
         //dd($date, $schools, $existingPlanSchools, $existingPlans, $canOverrideMultiDepartment);
-        return view('employee.add-day', compact('date', 'schools', 'existingPlans', 'canOverrideMultiDepartment','departmentId'));
+        return view('employee.add-day', compact('date', 'schools', 'existingPlans','canOverrideDepartment', 'canOverrideMultiDepartment','departmentId'));
     }
 
     public function storeDay(Request $request)

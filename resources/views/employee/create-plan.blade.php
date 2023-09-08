@@ -167,8 +167,8 @@
                                                         if ($existingPlan) {
                                                             $existingPlanDepartmentId = $existingPlan->department_id ?? null;
 
-                                                            if ($existingPlanDepartmentId == 19) {
-                                                                // Special case for department 19
+                                                            // Case for department 19
+                                                            if ($departmentId == 19) {
                                                                 $isRestricted = count($existingPlans->where('start', $dateKey)
                                                                       ->where('department_id', 19)
                                                                       ->where(function ($query) {
@@ -179,9 +179,14 @@
                                                                                 ->where('school_id', '!=', 34343406)
                                                                                 ->where('school_id', '!=', 34343405);
                                                                       })) > 3;
-                                                            } else {
-                                                                // Other departments
-                                                                $isRestricted = in_array($dateKey, $existingPlanDates) && !$canOverrideMultiDepartment;
+                                                            }
+                                                            // Case when the school is booked by the user's department (other than 19)
+                                                            else if ($existingPlanDepartmentId == $departmentId) {
+                                                                $isRestricted = !$canOverrideDepartment;
+                                                            }
+                                                            // Case when the school is booked by another department
+                                                            else if (in_array($dateKey, $existingPlanDates)) {
+                                                                $isRestricted = !$canOverrideMultiDepartment;
                                                             }
                                                         }
 
@@ -194,6 +199,47 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+
+
+                                            {{--                                                                                        <select class="js-example-basic-multiple" name="days[{{ $startOfMonth->format('Y-m-d') }}][schools][]" id="schoolSelect{{ $day }}" multiple="multiple" required>--}}
+{{--                                                @foreach($schools as $school)--}}
+{{--                                                    @php--}}
+{{--                                                        $schoolId = $school->id;--}}
+{{--                                                        $dateKey = $startOfMonth->format('Y-m-d');--}}
+{{--                                                        $existingPlan = $existingPlans->where('start', $dateKey)->where('school_id', $schoolId)->first();--}}
+{{--                                                        $isRestricted = false;--}}
+
+{{--                                                        if ($existingPlan) {--}}
+{{--                                                            $existingPlanDepartmentId = $existingPlan->department_id ?? null;--}}
+
+{{--                                                            if ($existingPlanDepartmentId == 19) {--}}
+{{--                                                                // Special case for department 19--}}
+{{--                                                                $isRestricted = count($existingPlans->where('start', $dateKey)--}}
+{{--                                                                      ->where('department_id', 19)--}}
+{{--                                                                      ->where(function ($query) {--}}
+{{--                                                                          $query->where('school_id', '!=', 34)--}}
+{{--                                                                                ->where('school_id', '!=', 35)--}}
+{{--                                                                                ->where('school_id', '!=', 3434343404)--}}
+{{--                                                                                ->where('school_id', '!=', 3434343405)--}}
+{{--                                                                                ->where('school_id', '!=', 34343406)--}}
+{{--                                                                                ->where('school_id', '!=', 34343405);--}}
+{{--                                                                      })) > 3;--}}
+{{--                                                            }--}}
+{{--                                                            else {--}}
+{{--                                                                // Other departments--}}
+{{--                                                                $isRestricted = in_array($dateKey, $existingPlanDates) && !$canOverrideMultiDepartment;--}}
+{{--                                                            }--}}
+{{--                                                        }--}}
+
+{{--                                                        $disabled = $isRestricted && ($existingPlan && $existingPlan->school_id !== 34);--}}
+{{--                                                    @endphp--}}
+
+{{--                                                    <option value="{{ $schoolId }}" {{ $disabled ? 'disabled' : '' }} class="{{ $disabled ? 'disabled-option' : 'active-option' }}">--}}
+{{--                                                        {{ $school->name }}--}}
+{{--                                                        {{ $disabled ? ' (غير متاح)' : '' }}--}}
+{{--                                                    </option>--}}
+{{--                                                @endforeach--}}
+{{--                                            </select>--}}
                                         </div>
                                     </div>
                                 </div>

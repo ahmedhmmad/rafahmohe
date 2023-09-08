@@ -22,15 +22,18 @@
 
                 </div>
 
+                <div class="card mt-2">
+                    <div class="card-body">
 
-<div class="card-body">
-                <table class="table">
+
+                <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th>اليوم</th>
-                        <th>التاريخ</th>
-                        <th>المدارس</th>
-                        <th>عمليات</th>
+                        <th><strong>اليوم </strong></th>
+                        <th><strong>التاريخ</strong></th>
+                        <th><strong>المدارس</strong></th>
+                        <th><strong>عمليات </strong></th>
+
                     </tr>
                     </thead>
                     <tbody>
@@ -65,9 +68,9 @@
                         @if ($plan->schools)
                             <tr
                                 @if ($previousDate !== $currentDate)
-                                    style="border-top: 2px solid #487ebd;"
+                                    style="border-top: 2px solid rgba(143,187,178,0.85);"
                         @elseif (isset($plans[$index + 1]) && $plans[$index + 1]->start === $currentDate)
-                            style="border-top: 2px dot-dot-dash #000;"
+                            style="border-top: 2px dot-dot-dash rgba(143,187,178,0.18);"
                         @endif
                         >
                         <td>
@@ -84,7 +87,7 @@
                         <td>
                             <a href="{{ route('employee.edit-plan', $plan->id) }}" class="btn btn-outline-primary">تعديل</a>
                             <a href="{{ route('employee.delete-plan', $plan->id) }}" class="btn btn-outline-danger">حذف</a>
-                            <a href="{{ route('employee.add-day', $plan->start) }}" class="btn btn-outline-success">إضافة مدرسة</a>
+                            <a href="{{ route('employee.add-day', $plan->start) }}" class="btn btn-outline-success">إضافة</a>
                         </td>
                         </tr>
                         @endif
@@ -114,7 +117,8 @@
             </div>
         </div>
     </div>
-
+        </div>
+    </div>
     </div>
 
 @endsection
