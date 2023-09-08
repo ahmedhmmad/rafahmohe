@@ -26,9 +26,9 @@
                         <input type="text" class="form-control" id="date" name="date" value="{{ $date->format('Y-m-d') }}" readonly>
 
                     </div>
-                    <div class="form-group">
+                    <div class="form-group m-2">
                         <label for="schools">المدارس:</label>
-                    <select class="form-control" id="schools" name="schools[]" multiple>
+                    <select class="js-example-basic-multiple" id="schools"  style="width: 90%" name="schools[]" multiple="multiple">
 
                         @foreach ($schools as $school)
 
@@ -50,7 +50,19 @@
 //                            }
                               if ($existingPlanDepartmentId == 19) {
                               // Special case for department 19
-                              $isRestricted = count($existingPlans->where('start', $dateKey)->where('department_id', 19)) > 3;
+                              $isRestricted = count($existingPlans->where('start', $dateKey)
+                                                                      ->where('department_id', 19)
+                                                                      ->where(function ($query) {
+                                                                          $query->where('school_id', '!=', 34)
+                                                                                ->where('school_id', '!=', 35)
+                                                                                ->where('school_id', '!=', 3434343404)
+                                                                                ->where('school_id', '!=', 3434343405)
+                                                                                ->where('school_id', '!=', 34343406)
+                                                                                ->where('school_id', '!=', 34343405);
+                                                                      })) > 3;
+//                              $isRestricted = count($existingPlans->where('start', $dateKey)->where('department_id', 19)) > 3;
+
+
                                } else {
                                                                 // Other departments
                               $isRestricted = true &&!$canOverrideDepartment;

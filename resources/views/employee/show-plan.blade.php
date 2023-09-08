@@ -37,11 +37,14 @@
                     @php
                         $previousDate = null;
                         $currentDate = null;
+                        $previousDayName = null;
                         $dayNames = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
+                        $currentDayName = null;
                     @endphp
-                    @foreach ($plans as $plan)
+                    @foreach ($plans as $index => $plan)
                         @php
                             $currentDate = $plan->start;
+                            $currentDayName = $dayNames[date('N', strtotime($plan->start)) - 1];
                         @endphp
 
                         {{-- Display a row for working days with no schools --}}
@@ -60,24 +63,35 @@
                         @endforeach
 
                         @if ($plan->schools)
-                            <tr>
-                                <td>{{ $dayNames[date('N', strtotime($plan->start)) - 1] }}</td>
-                                <td>
-                                    @if ($plan->start !== $previousDate)
-                                        <strong>{{ $plan->start }}</strong>
-                                    @endif
-                                </td>
-                                <td>{{ $plan->schools->name }}</td>
-                                <td>
-                                    <a href="{{ route('employee.edit-plan', $plan->id) }}" class="btn btn-primary">تعديل</a>
-                                    <a href="{{ route('employee.delete-plan', $plan->id) }}" class="btn btn-danger">حذف</a>
-                                    <a href="{{ route('employee.add-day', $plan->start) }}" class="btn btn-success">إضافة مدرسة</a>
-                                </td>
-                            </tr>
+                            <tr
+                                @if ($previousDate !== $currentDate)
+                                    style="border-top: 2px solid #487ebd;"
+                        @elseif (isset($plans[$index + 1]) && $plans[$index + 1]->start === $currentDate)
+                            style="border-top: 2px dot-dot-dash #000;"
+                        @endif
+                        >
+                        <td>
+                            @if ($currentDayName !== $previousDayName)
+                                {{ $currentDayName }}
+                            @endif
+                        </td>
+                        <td>
+                            @if ($plan->start !== $previousDate)
+                                <strong>{{ $plan->start }}</strong>
+                            @endif
+                        </td>
+                        <td>{{ $plan->schools->name }}</td>
+                        <td>
+                            <a href="{{ route('employee.edit-plan', $plan->id) }}" class="btn btn-outline-primary">تعديل</a>
+                            <a href="{{ route('employee.delete-plan', $plan->id) }}" class="btn btn-outline-danger">حذف</a>
+                            <a href="{{ route('employee.add-day', $plan->start) }}" class="btn btn-outline-success">إضافة مدرسة</a>
+                        </td>
+                        </tr>
                         @endif
 
                         @php
                             $previousDate = $currentDate;
+                            $previousDayName = $currentDayName; // Update the previous day name for the next iteration
                         @endphp
                     @endforeach
 

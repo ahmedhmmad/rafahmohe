@@ -62,6 +62,18 @@
             }
         );
     });
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2(
+            {
+                theme: "classic",
+
+                dir: "rtl",
+                placeholder: "اختر",
+                allowClear: true,
+
+            }
+        );
+    });
 </script>
 
 @stack('scripts')
