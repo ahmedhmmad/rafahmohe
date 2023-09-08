@@ -3,10 +3,17 @@
 @section('content')
 
     <div class="container p-4">
+        <div class="card">
+            <div class="card-title p-2">
+                <h3>إضافة مدرسة لليوم</h3>
+            </div>
+        </div>
+            <div class="card mt-2">
+            <div class="card-body">
 
         <div class="row">
             <div class="col-md-12">
-                <h3>إضافة مدرسة لليوم</h3>
+
                 @php
                     $url = $_SERVER['REQUEST_URI'];
                     $parts = explode("/", $url);
@@ -86,6 +93,10 @@
             </div>
         </div>
     </div>
+
+        </div>
+    </div>
+
 
 @endsection
 
