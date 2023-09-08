@@ -117,6 +117,11 @@
             color: black;
             font-weight: bold;
         }
+        .school-label,
+        .js-example-basic-multiple {
+            display: block;
+            width: 100%; /* Optional, but ensures they take up the full width */
+        }
     </style>
 
     <div class="p-4">
