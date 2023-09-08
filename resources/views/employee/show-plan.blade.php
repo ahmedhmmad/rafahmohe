@@ -69,9 +69,9 @@
                                 </td>
                                 <td>{{ $plan->schools->name }}</td>
                                 <td>
-                                    <a href="{{ route('employee.edit-plan', $plan->id) }}" class="btn btn-primary">تعديل</a>
-                                    <a href="{{ route('employee.delete-plan', $plan->id) }}" class="btn btn-danger">حذف</a>
-                                    <a href="{{ route('employee.add-day', $plan->start) }}" class="btn btn-success">إضافة مدرسة</a>
+                                    <a href="{{ route('employee.edit-plan', $plan->id) }}" class="btn btn-outline-primary">تعديل</a>
+                                    <a href="{{ route('employee.delete-plan', $plan->id) }}" class="btn btn-outline-danger">حذف</a>
+                                    <a href="{{ route('employee.add-day', $plan->start) }}" class="btn btn-outline-dark">إضافة مدرسة</a>
                                 </td>
                             </tr>
                         @endif

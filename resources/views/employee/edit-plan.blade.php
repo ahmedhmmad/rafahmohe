@@ -51,9 +51,9 @@
                         <label for="date">التاريخ:</label>
                         <input type="text" class="form-control" id="date" name="date" value="{{ $plan->start }}" readonly>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group m-2">
                         <label for="school">المدرسة:</label>
-                        <select class="form-control" id="school" name="school">
+                        <select class="js-example-basic-single" style="width: 90%" id="school" name="school">
                             @foreach ($schools as $school)
                                 <option value="{{ $school->id }}" @if ($school->id == $selectedSchool) selected @endif>{{ $school->name }}</option>
                             @endforeach
