@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Head;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -53,6 +54,7 @@ class HeadController extends Controller
             ->get();
 
         $userId=$id;
+        $userName=User::findorfail($id)->name;
 
 
         // Generate an array of working days for the recent month
@@ -71,7 +73,7 @@ class HeadController extends Controller
 
 
 
-        return view('head.show-plan', compact('plans', 'workingDays','userId'));
+        return view('head.show-plan', compact('plans', 'workingDays','userId','userName'));
     }
 
 

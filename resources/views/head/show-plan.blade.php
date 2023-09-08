@@ -6,7 +6,7 @@
         <div class="row">
             <div class="card mt-4 mx-2">
                 <div class="col-md-12">
-                    <h3 class="pt-2 ">عرض الخطة الشهرية</h3>
+                    <h3 class="pt-2 ">عرض الخطة الشهرية للموظف:  <span style="color:red"> {{$userName}}</span></h3>
                     <form method="GET" action="{{ route('head.monthly-plan') }}">
                         <input type="hidden" name="userId" value="{{ $userId }}">
                         <div class="row py-4">
@@ -109,10 +109,10 @@
                                     <td>{{ $dayNames[date('N', strtotime($workingDay)) - 1] }}</td>
                                     <td><strong>{{ $workingDay }}</strong></td>
                                     <td>لا توجد مدارس</td>
-                                    <td>
-                                        {{-- Add the appropriate action for adding schools --}}
-                                        {{-- <a href="{{ route('employee.add-day', $workingDay) }}" class="btn btn-success">إضافة مدرسة</a> --}}
-                                    </td>
+{{--                                    <td>--}}
+{{--                                        --}}{{-- Add the appropriate action for adding schools --}}
+{{--                                        --}}{{-- <a href="{{ route('employee.add-day', $workingDay) }}" class="btn btn-success">إضافة مدرسة</a> --}}
+{{--                                    </td>--}}
                                 </tr>
                             @endif
                         @endforeach
