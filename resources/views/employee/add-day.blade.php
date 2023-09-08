@@ -154,7 +154,7 @@
                                                                     ->where('school_id', '!=', 3434343405)
                                                                     ->where('school_id', '!=', 34343406)
                                                                     ->where('school_id', '!=', 34343405);
-                                                          })) > 2;
+                                                          })) > 3;
                                                 }
                                                 // Case when the school is booked by the user's department (other than 19)
                                                 else if ($existingPlanDepartmentId == $departmentId) {
