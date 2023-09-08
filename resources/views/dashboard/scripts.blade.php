@@ -49,6 +49,19 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script src="{{url('/js/printout.min.js')}}"></script>
+<script>
+    function printTable() {
+        printout('table', {
+            pageTitle: 'الخطة الشهرية',
+            printContainer:true,
+            header:null,
+            footer:null,
+
+        });
+    }
+</script>
+
 <script>
     $(document).ready(function() {
         $('.js-example-basic-multiple').select2(
@@ -75,6 +88,8 @@
         );
     });
 </script>
+
+
 
 @stack('scripts')
 

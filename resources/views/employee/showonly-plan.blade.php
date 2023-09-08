@@ -54,7 +54,14 @@
                     <i class="fas fa-file-export"></i>
                     تصدير الخطة الشهرية
                 </a>
-                <table class="table">
+                <button class="btn btn-primary" onclick="printTable()">
+                    <i class="fas fa-print"></i>
+                    طباعة الخطة الشهرية
+                </button>
+                <div class="card mt-2">
+                    <div class="card-body">
+
+                        <table class="table" id="printTable">
                     <thead>
                     <tr>
                         <th>اليوم</th>
@@ -180,5 +187,9 @@
         </div>
     </div>
     </div>
+
+    </div>
+    </div>
+
 
 @endsection
