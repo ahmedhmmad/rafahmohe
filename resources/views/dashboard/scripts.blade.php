@@ -51,7 +51,16 @@
 
 <script>
     $(document).ready(function() {
-        $('.js-example-basic-multiple').select2();
+        $('.js-example-basic-multiple').select2(
+            {
+                theme: "classic",
+                width: 'resolve',
+                dir: "rtl",
+                placeholder: "اختر",
+                allowClear: true,
+
+            }
+        );
     });
 </script>
 
