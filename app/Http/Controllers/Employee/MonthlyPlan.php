@@ -411,138 +411,111 @@ class MonthlyPlan extends Controller
         return view('employee.showonly-plan', compact('plans', 'workingDays'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        $errors = collect([]);
-
-        // 1. Check if user's department has permission
-        $departmentId = Auth::user()->department->id;
-        $allowedDepartmentIds = [21, 10, 19, 17, 6, 20, 12];
-        if (!in_array($departmentId, $allowedDepartmentIds)) {
-            $errors->push('لا يمكنك تعديل الخطة لأنه ليس لقسمك خطة شهرية');
-            return redirect()->back()->withErrors($errors);
-        }
-
-        // Fetch the plan to get its month and year
-        $plan = Plan::find($id);
-        if (!$plan) {
-            $errors->push('The plan does not exist.');
-            return redirect()->back()->withErrors($errors);
-        }
-
-        $planMonth = $plan->start->month;
-        $planYear = $plan->start->year;
-
-        // 2. Apply month and year validations
-        if ($planMonth < 1 || $planMonth > 12) {
-            $errors->push('اختر الشهر المطلوب.');
-        }
-
-        if ($planYear < 2020 || $planYear > 2099) {
-            $errors->push('اختر السنة المطلوبة.');
-        }
-
-        if ($errors->isNotEmpty()) {
-            return redirect()->back()->withErrors($errors);
-        }
-
-        // User's Plan Restrictions
         $planRestriction = Auth::user()->planRestrictions->first();
-        $canOverrideLastWeek = $planRestriction ? $planRestriction->can_override_last_week && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now() : false;
-
-        // 3. Allow plan editing only during certain timeframes
-        $currentDate = now();
-        $currentMonth = $currentDate->month;
-        $currentYear = $currentDate->year;
-        $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
-        $lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
-
-        if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
-            if (!$canOverrideLastWeek) {
-                return redirect()
-                    ->back()
-                    ->withErrors(['error' => 'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
-            }
-        }
-
-        // Process of Editing
-        try {
-            $plan = Plan::with('schools')->findOrFail($id);
-
-            $selectedDate = $plan->start;
-            $selectedSchoolIds = $plan->schools->pluck('id')->toArray();
-            $associatedSchoolIds = Plan::where('start', $selectedDate)
-                ->whereNotIn('school_id', [34])
-                ->pluck('school_id')
-                ->toArray();
-
-            $schools = School::whereNotIn('id', $associatedSchoolIds)->get();
-            $selectedSchool = $plan->schools->pluck('id')->first();
-
-            return view('employee.edit-plan', compact('plan', 'schools', 'selectedSchool'));
-        } catch (\Exception $e) {
-            return redirect()
-                ->back()
-                ->withErrors(['error' => 'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
-        }
-    }
-
-    public function edit_old(string $id)
-    {
-        $planRestriction = Auth::user()->planRestrictions->first();
+        $departmentId=Auth::user()->department->id;
         $canOverrideLastWeek = $planRestriction ? $planRestriction->can_override_last_week  && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now() : false;
+
+        // Assuming you have methods or attributes to determine these:
+        $canOverrideDepartment = !$planRestriction || ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now());
+        $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
+
+
         $currentDate = now();
         $currentMonth = $currentDate->month;
         $currentYear = $currentDate->year;
         $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
         $lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
+
         if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
             if ($canOverrideLastWeek) {
                 try {
-
                     // Find the plan by ID and eager load the 'schools' relationship
                     $plan = Plan::with('schools')->findOrFail($id);
 
-
-                    // Get the date from the plan
-                    $selectedDate = $plan->start;
-                    // Retrieve the selected schools for the plan
-                    $selectedSchoolIds = $plan->schools->pluck('id')->toArray();
-                    $associatedSchoolIds = Plan::where('start', $selectedDate)
-                        ->whereNotIn('school_id', [34])
-                        ->pluck('school_id')
-                        ->toArray();
-
-                    // Retrieve the list of schools that are not selected for the plan on the selected date
-                    $schools = School::whereNotIn('id', $associatedSchoolIds)->get();
-
-                    // Retrieve the list of schools
-//            $schools = School::all();
-
-                    // Retrieve the selected schools for the plan
+                    // Retrieve the selected school for the plan
                     $selectedSchool = $plan->schools->pluck('id')->first();
 
-                    // Pass the plan, schools, and selectedSchools to the view
-                    return view('employee.edit-plan', compact('plan', 'schools', 'selectedSchool'));
+                    // As we're not restricting the list of schools based on the plan's date, we can fetch all the schools
+                    $schools = School::all();
+
+                    // Retrieve all plans with the same start date as the plan being edited
+                    $existingPlans = Plan::where('start', $plan->start)->get();
+
+                    // Pass the plan, schools, selectedSchool, canOverrideMultiDepartment, canOverrideDepartment, and existingPlans to the view
+                    return view('employee.edit-plan', compact('plan','departmentId','existingPlans', 'schools', 'selectedSchool', 'canOverrideMultiDepartment', 'canOverrideDepartment', 'existingPlans'));
+
                 } catch (\Exception $e) {
                     // Handle any exceptions that occur during the process
-//                    return redirect()->back()->with('error', 'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.');
                     return redirect()
                         ->back()
                         ->withErrors(['error'=>'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
                 }
-
             }
+
         }
 
-//        return redirect()->back()->with('success', 'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.');
         return redirect()
             ->back()
             ->withErrors(['error'=>'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
     }
+
+
+//    public function edit(string $id)
+//    {
+//        $planRestriction = Auth::user()->planRestrictions->first();
+//        $canOverrideLastWeek = $planRestriction ? $planRestriction->can_override_last_week  && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now() : false;
+//
+//        $currentDate = now();
+//        $currentMonth = $currentDate->month;
+//        $currentYear = $currentDate->year;
+//        $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
+//        $lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
+//        if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+//            if ($canOverrideLastWeek) {
+//                try {
+//
+//                    // Find the plan by ID and eager load the 'schools' relationship
+//                    $plan = Plan::with('schools')->findOrFail($id);
+//
+//
+//                    // Get the date from the plan
+//                    $selectedDate = $plan->start;
+//                    // Retrieve the selected schools for the plan
+//                    $selectedSchoolIds = $plan->schools->pluck('id')->toArray();
+//                    $associatedSchoolIds = Plan::where('start', $selectedDate)
+//                        ->whereNotIn('school_id', [34])
+//                        ->pluck('school_id')
+//                        ->toArray();
+//
+//                    // Retrieve the list of schools that are not selected for the plan on the selected date
+//                    $schools = School::whereNotIn('id', $associatedSchoolIds)->get();
+//
+//                    // Retrieve the list of schools
+////            $schools = School::all();
+//
+//                    // Retrieve the selected schools for the plan
+//                    $selectedSchool = $plan->schools->pluck('id')->first();
+//
+//                    // Pass the plan, schools, and selectedSchools to the view
+//                    return view('employee.edit-plan', compact('plan', 'schools', 'selectedSchool'));
+//                } catch (\Exception $e) {
+//                    // Handle any exceptions that occur during the process
+////                    return redirect()->back()->with('error', 'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.');
+//                    return redirect()
+//                        ->back()
+//                        ->withErrors(['error'=>'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
+//                }
+//
+//            }
+//        }
+//
+////        return redirect()->back()->with('success', 'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.');
+//        return redirect()
+//            ->back()
+//            ->withErrors(['error'=>'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
+//    }
 
 
     /**
