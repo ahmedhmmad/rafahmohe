@@ -134,7 +134,7 @@
 
                     @for ($day = 1; $day <= $daysInMonth; $day++)
                         @if ($startOfMonth->dayOfWeek !== 5 && $startOfMonth->dayOfWeek !== 6)
-                            <div class="col-md-10 dotted-border">
+                            <div class="col-md-10 dotted-border mb-2">
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-5">
