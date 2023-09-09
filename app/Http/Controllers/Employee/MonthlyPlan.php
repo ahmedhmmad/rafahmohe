@@ -109,9 +109,11 @@ class MonthlyPlan extends Controller
 
         //$schools = School::all();
 //        $schools = School::orderBy('name')->get();
-        $schools = School::orderByRaw("id = 34 DESC, name ASC")->get();
+//        $schools = School::orderByRaw("id = 34 DESC, name ASC")->get();
+        $schools = School::orderByRaw("FIELD(id, 34, 35, 3434343404, 3434343405, 34343406, 34343405) DESC, name ASC")->get();
 
-       //dd($existingPlans, $existingPlanDates, $canOverrideDepartment, $canOverrideMultiDepartment, $departmentId);
+
+        //dd($existingPlans, $existingPlanDates, $canOverrideDepartment, $canOverrideMultiDepartment, $departmentId);
 
         return view('employee.create-plan', compact('schools', 'month', 'year', 'existingPlanDates', 'existingPlans', 'canOverrideDepartment', 'canOverrideMultiDepartment', 'departmentId'));
     }
