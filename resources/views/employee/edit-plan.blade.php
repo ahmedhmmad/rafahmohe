@@ -33,14 +33,16 @@
                                                 $existingPlanDepartmentId = $existingPlan->department_id ?? null;
 
                                                 // Case for department 19
-                                                           if ($departmentId == 19) {
-        // Count existing plans for department 19 excluding the exception schools
-        $countDepartment19Plans = $existingPlans->where('start', $dateKey)
-            ->where('department_id', 19)
-            ->whereNotIn('school_id', [34, 35, 3434343404, 3434343405, 34343406, 34343405])
-            ->count();
+                                                       if ($departmentId == 19) {
+                                                                // Count existing plans for department 19 excluding the exception schools
+                                                                $countDepartment19Plans = $existingPlans->where('start', $dateKey)
+                                                                    ->where('department_id', 19)
+                                                                    ->whereNotIn('school_id', [34, 35, 3434343404, 3434343405, 34343406, 34343405])
+                                                                    ->where('school_id', $schoolId)
+                                                                    ->count();
 
-        $isRestricted = $countDepartment19Plans >= 2;
+                                                                $isRestricted = $countDepartment19Plans >= 2;
+                                                            }
     }
                                                 // Case when the school is booked by the user's department (other than 19)
                                                 else if ($existingPlanDepartmentId == $departmentId) {
