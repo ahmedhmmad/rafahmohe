@@ -176,6 +176,7 @@
                                                                 $countDepartment19Plans = $existingPlans->where('start', $dateKey)
                                                                     ->where('department_id', 19)
                                                                     ->whereNotIn('school_id', [34, 35, 3434343404, 3434343405, 34343406, 34343405])
+                                                                    ->where('school_id', $schoolId)
                                                                     ->count();
 
                                                                 $isRestricted = $countDepartment19Plans >= 2;
