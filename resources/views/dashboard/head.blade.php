@@ -41,6 +41,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 <link rel="stylesheet" href="{{url('/css/select2.min.css')}}" />
+<link rel="stylesheet" href="{{url('/css/clockface.css')}}" />
 <!-- Page CSS -->
 
 <!-- Helpers -->
