@@ -49,8 +49,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script src="{{url('/js/clockface.js')}}"></script>
-
 <script src="{{url('/js/printout.min.js')}}"></script>
 <script>
     function printTable() {
