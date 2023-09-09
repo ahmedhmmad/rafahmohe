@@ -151,7 +151,7 @@
             ->whereNotIn('school_id', [34, 35, 3434343404, 3434343405, 34343406, 34343405])
             ->count();
 
-        $isRestricted = $countDepartment19Plans >= 2;
+        $isRestricted = $countDepartment19Plans > 3;
     }
                                                 // Case when the school is booked by the user's department (other than 19)
                                                 else if ($existingPlanDepartmentId == $departmentId) {
