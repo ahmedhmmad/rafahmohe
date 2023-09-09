@@ -88,12 +88,17 @@
                         </div>
                         <div class="col">
                             <label for="comingTime" class="form-label">وقت الحضور</label>
-                            <input type="time" class="form-control" id="comingTime" required>
+                            <div class="input-group clockface">
+                                <input  data-format="hh:mm A" type="text" class="form-control" id="comingTime" required>
+                            </div>
                         </div>
                         <div class="col">
-                            <label for="leavingTime" class="form-label">وقت الانصراف</label>
-                            <input type="time" class="form-control" id="leavingTime" required>
+                            <label for="comingTime" class="form-label">وقت الانصراف</label>
+                            <div class="input-group clockface">
+                                <input  data-format="hh:mm A" type="text" class="form-control" id="leavingTime" required>
+                            </div>
                         </div>
+
                     </div>
                     </div>
                     <div class="visit-details">
@@ -122,9 +127,43 @@
 @push('scripts')
     <script>
 
+        $(document).ready(function () {
+            $('#comingTime').clockface({
+                format: 'HH:mm', // You can customize the time format
+                trigger: 'manual', // We'll open the Clockface on focus manually
+            });
+            $('#leavingTime').clockface({
+                format: 'HH:mm', // You can customize the time format
+                trigger: 'manual', // We'll open the Clockface on focus manually
+            });
+            $('#comingTime').on('focus', function () {
+                // Open the Clockface
+                $(this).clockface('toggle');
+            });
+
+            // Add an event listener to set the selected time when Clockface selection is complete
+            $('#comingTime').on('clockface:close', function () {
+                // Get the selected time and set it in the input field
+                var selectedTime = $(this).clockface('value');
+                $(this).val(selectedTime);
+            });
+            $('#leavingTime').on('focus', function () {
+                // Open the Clockface
+                $(this).clockface('toggle');
+            });
+
+            // Add an event listener to set the selected time when Clockface selection is complete
+            $('#leavingTime').on('clockface:close', function () {
+                // Get the selected time and set it in the input field
+                var selectedTime = $(this).clockface('value');
+                $(this).val(selectedTime);
+            });
+        });
 
 
-        //global variable to store the user id
+
+
+            //global variable to store the user id
         var userId = null;
         // Function to clear the form fields
         function clearForm() {
