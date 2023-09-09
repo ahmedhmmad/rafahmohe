@@ -144,18 +144,15 @@
                                                 $existingPlanDepartmentId = $existingPlan->department_id ?? null;
 
                                                 // Case for department 19
-                                                if ($departmentId == 19) {
-                                                    $isRestricted = count($existingPlans->where('start', $dateKey)
-                                                          ->where('department_id', 19)
-                                                          ->where(function ($query) {
-                                                              $query->where('school_id', '!=', 34)
-                                                                    ->where('school_id', '!=', 35)
-                                                                    ->where('school_id', '!=', 3434343404)
-                                                                    ->where('school_id', '!=', 3434343405)
-                                                                    ->where('school_id', '!=', 34343406)
-                                                                    ->where('school_id', '!=', 34343405);
-                                                          })) > 3;
-                                                }
+                                                         if ($departmentId == 19) {
+        // Count existing plans for department 19 excluding the exception schools
+        $countDepartment19Plans = $existingPlans->where('start', $dateKey)
+            ->where('department_id', 19)
+            ->whereNotIn('school_id', [34, 35, 3434343404, 3434343405, 34343406, 34343405])
+            ->count();
+
+        $isRestricted = $countDepartment19Plans >= 2;
+    }
                                                 // Case when the school is booked by the user's department (other than 19)
                                                 else if ($existingPlanDepartmentId == $departmentId) {
                                                     $isRestricted = !$canOverrideDepartment;
