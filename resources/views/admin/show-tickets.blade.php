@@ -126,7 +126,7 @@
                                     </a>
                                 </td>
                                 <td>{{ $ticket->created_at->format('Y-m-d') }}</td>
-                                <td>{{ $ticket->user->name }}</td>
+                                <td> <a href="{{ route('employee.view-ticket', $ticket->id) }}" >{{ $ticket->user->name }}</a></td>
                                 <td>{{ $ticket->subject }}</td>
                                 <td>{{ $ticket->department->name }}</td>
                                 <td>

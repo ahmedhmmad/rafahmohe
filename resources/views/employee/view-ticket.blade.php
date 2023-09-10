@@ -16,6 +16,10 @@
                         <td>{{ $ticket->created_at->format('Y-m-d') }}</td>
                     </tr>
                     <tr>
+                        <th>المدرسة:</th>
+                        <td>{{ $ticket->user->name }}</td>
+                    </tr>
+                    <tr>
                         <th>الموضوع:</th>
                         <td>{{ $ticket->subject }}</td>
                     </tr>
