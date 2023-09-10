@@ -13,6 +13,7 @@
                         <tr>
                             <th scope="col">رقم التذكرة</th>
                             <th scope="col">تاريخ الإنشاء</th>
+                            <th scope="col">المدرسة</th>
                             <th scope="col">الموضوع</th>
                             <th scope="col">الحالة</th>
                             <th scope="col">الإجراء</th>
@@ -23,6 +24,7 @@
                             <tr>
                                 <td>{{ $ticket->ticket?->id }}</td>
                                 <td>{{ $ticket->created_at->format('Y-m-d') }}</td>
+                                <td>{{ $ticket->ticket?->user?->name }}</td>
                                 <td>{{ $ticket->ticket?->subject }}</td>
                                 <td>
                                         <span class="badge {{ getStatusStyle($ticket->ticket?->status) }}">
