@@ -32,6 +32,12 @@
                                         </span>
                                 </td>
                                 <td>
+                                    @if($ticket->status === 'closed')
+                                        <a href="{{ route('employee.view-ticket', $ticket->ticket?->id) }}" >
+                                            <i class="bx bx-show me-2"></i>
+                                        </a>
+                                    @endif
+
                                     @if($ticket->status === 'open')
                                         <a href="{{ route('employee.view-ticket', $ticket->ticket?->id) }}" class="btn btn-primary">فتح التذكرة</a>
                                     @elseif($ticket->status === 'assigned')
@@ -47,7 +53,10 @@
                                             <button type="submit" class="btn btn-danger" name="status" value="closed">تغيير الحالة إلى مغلقة</button>
                                         </form>
                                     @endif
+
+
                                 </td>
+
                             </tr>
                         @endforeach
                         </tbody>
