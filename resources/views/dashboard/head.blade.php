@@ -42,8 +42,10 @@
 
 <link rel="stylesheet" href="{{url('/css/select2.min.css')}}" />
 <!-- Page CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-<!-- Helpers -->
+
+    <!-- Helpers -->
 <script src="{{url('/assets/vendor/js/helpers.js')}}"></script>
 
 <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
