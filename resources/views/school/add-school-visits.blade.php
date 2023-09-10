@@ -88,8 +88,9 @@
                         </div>
                         <div class="col">
                             <label for="comingTime" class="form-label">وقت الحضور</label>
-                            <input type="time" class="form-control" id="comingTime" required>
+                            <input type="text" class="form-control" id="comingTime" required>
                         </div>
+
                         <div class="col">
                             <label for="leavingTime" class="form-label">وقت الانصراف</label>
                             <input type="time" class="form-control" id="leavingTime" required>
@@ -121,7 +122,35 @@
 @endsection
 @push('scripts')
     <script>
-
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr('#visitDate', {
+                enableTime: false, // Disable time selection
+                dateFormat: "Y-m-d", // 24-hour time format
+                time_24hr: true, // Use 24-hour time format
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr('#comingTime', {
+                enableTime: true, // Enable time selection
+                noCalendar: true, // Display time only
+                dateFormat: "H:i", // 24-hour time format
+                time_24hr: true, // Use 24-hour time format
+                minuteIncrement: 5, // Adjust the minute increment as needed
+                minTime: "6:00",
+                maxTime: "15:00"
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr('#leavingTime', {
+                enableTime: true, // Enable time selection
+                noCalendar: true, // Display time only
+                dateFormat: "H:i", // 24-hour time format
+                time_24hr: true, // Use 24-hour time format
+                minuteIncrement: 5, // Adjust the minute increment as needed
+                minTime: "6:00",
+                maxTime: "15:00"
+            });
+        });
 
 
         //global variable to store the user id
