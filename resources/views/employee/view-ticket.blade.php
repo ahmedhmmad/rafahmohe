@@ -50,6 +50,16 @@
                             </span>
                         </td>
                     </tr>
+                    @if ($ticket->status === 'closed')
+                    <tr>
+                        <th>سبب الاغلاق:</th>
+                        <td>
+                            <span class="badge bg-label-warning">
+                               {{$ticket->close_reason === 'work_completed' ? 'تم انجاز العمل' : 'تم التحويل للادارة العامة'}}
+                            </span>
+                        </td>
+                    </tr>
+                    @endif
                 </table>
             </div>
         </div>
