@@ -8,6 +8,7 @@ use App\Mail\TicketCreated;
 use App\Models\Department;
 use App\Models\Ticket;
 use App\Models\TicketAssignment;
+use App\Models\TicketComment;
 use App\Models\User;
 use App\Notifications\CreateNewTicket;
 
@@ -31,7 +32,7 @@ class TicketController extends Controller
 
             // Retrieve the tickets belonging to the user
             $tickets = Ticket::where('user_id', $user->id)
-                ->orderBy('created_at', 'asc')
+                ->orderBy('created_at', 'desc')
                 ->paginate(10);
 
             return view('ticket.show-tickets', [
@@ -450,14 +451,14 @@ class TicketController extends Controller
     {
 
         $ticket = Ticket::findOrFail($ticketId);
+        $ticket->status = $request->status;
 
-        $status = $request->input('status');
+        if ($request->status === 'closed') {
+            $ticket->close_reason = $request->close_reason;
+        }
 
-        // Perform necessary validation and logic here
-
-        // Update the status of the ticket
-        $ticket->status = $status;
         $ticket->save();
+
 
         // Redirect back or to another route as needed
         return redirect()->back()->with('success', 'تم تغيير حالة التذكرة بنجاح.');
@@ -471,10 +472,22 @@ class TicketController extends Controller
 
         $assignedTicket = TicketAssignment::where('ticket_id', $ticket->id)->first();
 
-        // Append the new comment to the existing comments using the .= concatenation operator
-        $assignedTicket->comments .= "\n" . $request->input('comment');
+        if (!$assignedTicket) {
+            return redirect()->back()->with('error', 'No assignment found for the ticket.');
+        }
 
-        $assignedTicket->save();
+        // Get the role ID for the current user (or however you're determining the user's role).
+        // This is just a placeholder; you'd need to determine the correct role_id based on your app's logic.
+        $roleId = auth()->user()->role_id;
+
+        // Create a new comment in the ticket_comments table
+        TicketComment::create([
+            'ticket_assignment_id' => $assignedTicket->id,
+            'user_id' => auth()->id(),
+            'role_id' => $roleId,
+            'comment' => $request->input('comment'),
+        ]);
+
         return redirect()->back()->with('success', 'Comment added successfully.');
     }
 

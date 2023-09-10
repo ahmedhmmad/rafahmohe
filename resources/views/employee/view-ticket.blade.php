@@ -5,7 +5,7 @@
         <h2 class="p-4">عرض التذكرة</h2>
         <div class="container py-2">
             <div class="card px-2">
-                <h4 class="p-2">تفاصيل التذكرة</h4>
+                <h4 class="p-2"><span class="text-primary">تفاصيل التذكرة</span></h4>
                 <table class="table">
                     <tr>
                         <th>رقم التذكرة:</th>
@@ -21,7 +21,7 @@
                     </tr>
                     <tr>
                         <th>الوصف:</th>
-                        <td>{{ $ticket->description }}</td>
+                        <td class="text-wrap" style="word-break: break-all;">{{ $ticket->description }}</td>
                     </tr>
                     <tr>
                         <th>المرفقات:</th>
@@ -52,17 +52,15 @@
         @if ($ticket->status === 'on-progress' || $ticket->status === 'closed')
             <div class="container py-2">
                 <div class="card">
-                    <h4 class="p-2">التعليقات</h4>
-                    @if ($ticket->ticketAssignments->count() > 0)
+                    <h4 class="p-2"><span class="text-primary">التعليقات</span></h4>
+                    @if ($ticket->ticketComments->count() > 0)
                         <ul class="list-group">
-                            @foreach ($ticket->ticketAssignments as $assignment)
-                                @if ($assignment->comments)
-                                    <li class="list-group-item">
-                                        {!! nl2br(e($assignment->comments)) !!}
-
-                                        {{-- Add attachment logic here if needed --}}
-                                    </li>
-                                @endif
+                            @foreach ($ticket->ticketComments->sortBy('created_at') as $comment)
+                                <li class="list-group-item">
+                                    <strong>{{ $comment->user->name }}</strong> ({{ $comment->user->job_title }})
+                                    <small class="text-muted">{{ $comment->created_at }}</small>
+                                    <p>{!! nl2br(e($comment->comment)) !!}</p>
+                                </li>
                             @endforeach
                         </ul>
                     @else
@@ -71,105 +69,89 @@
                 </div>
             </div>
 
-            @if ($ticket->status === 'on-progress')
-                <div class="container py-2">
-                    <div class="card px-2">
-                        <h4 class="p-2">إضافة تعليق</h4>
-                        <form action="{{ route('employee.tickets.addComment', $ticket->id) }}" method="POST">
-                            @csrf
-                            <div class="form-group">
-                                <textarea class="form-control" name="comment" rows="3" placeholder="أضف تعليقًا"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">إرسال</button>
-                        </form>
-                    </div>
-                </div>
-            @endif
-        @endif
 
+    @php
+        $canComment = ($ticket->status === 'on-progress' || auth()->user()->role_id == 2 || auth()->user()->role_id == 4 || $ticket->status === 'closed');
+    @endphp
 
-
-        <div class="container py-2">
-            <div class="card bg-light">
-                <h4 class="p-2">تغيير حالة التذكرة</h4>
-                <form action="{{ route('employee.tickets.changeStatus', $ticket->id) }}" method="POST">
-                    @csrf
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <select class="form-select" name="status" id="status">--}}
-                                                        <option value="on-progress">بدء التنفيذ</option>
-                                                        <option value="closed">إغلاق</option>
-                                                    </select>
+    @if ($canComment)
+                    <div class="container py-2">
+                        <div class="card px-2">
+                            <h4 class="p-2"><span class="text-primary">إضافة تعليق</span></h4>
+                            <form action="{{ route('employee.tickets.addComment', $ticket->id) }}" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <textarea class="form-control" name="comment" rows="3" placeholder="أضف تعليقًا"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">إرسال</button>
+                            </form>
                         </div>
-                        <div class="col-md-4">
-                            <button type="submit" class="btn btn-primary">حفظ</button>
                     </div>
+                @endif
+            @endif
 
-                </form>
+            <div class="container py-2">
+                <div class="card bg-light">
+                    <h4 class="p-2">تغيير حالة التذكرة</h4>
+                    <form action="{{ route('employee.tickets.changeStatus', $ticket->id) }}" method="POST">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-4 mb-4">
+                                <select class="form-select status-select" name="status" id="status">
+                                    <option value="on-progress">بدء التنفيذ</option>
+                                    <option value="closed">إغلاق</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-4 close-reason" style="display: none;">
+                                <select class="form-select" name="close_reason" id="close_reason">
+                                    <option value="work_completed">تم انجاز العمل</option>
+                                    <option value="transferred_to_general_management">تم التحويل للادارة العامة</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary">حفظ</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
+    @endsection
 
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
 
+                $('.status-select').change(function() {
+                    if ($(this).val() === 'closed') {
+                        $('.close-reason').show();
+                    } else {
+                        $('.close-reason').hide();
+                    }
+                });
 
-        @endsection
+                $('.assign-select').change(function() {
+                    var selectedValue = $(this).val();
+                    var ticketId = $(this).data('ticket-id');
+                    var assignModal = $('.assign-modal[data-ticket-id="' + ticketId + '"]');
 
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('.assign-select').change(function() {
-                var selectedValue = $(this).val();
-                var ticketId = $(this).data('ticket-id');
-                var assignModal = $('.assign-modal[data-ticket-id="' + ticketId + '"]');
+                    if (selectedValue === 'self') {
+                        assignModal.addClass('d-none');
+                        // Perform self-assignment logic here
+                    } else if (selectedValue === 'others') {
+                        assignModal.removeClass('d-none');
+                    }
+                });
 
-                if (selectedValue === 'self') {
-                    assignModal.addClass('d-none');
-                    // Perform self-assignment logic here
-                } else if (selectedValue === 'others') {
-                    assignModal.removeClass('d-none');
-                }
+                $('.assign-submit').click(function() {
+                    var ticketId = $(this).closest('.assign-modal').data('ticket-id');
+                    var selectedEmployee = $(this).closest('.assign-modal').find('select').val();
+
+                    // Perform assignment logic here using the ticketId and selectedEmployee
+
+                    $(this).closest('.assign-modal').addClass('d-none');
+                });
             });
-
-            $('.assign-submit').click(function() {
-                var ticketId = $(this).closest('.assign-modal').data('ticket-id');
-                var selectedEmployee = $(this).closest('.assign-modal').find('select').val();
-
-                // Perform assignment logic here using the ticketId and selectedEmployee
-
-                $(this).closest('.assign-modal').addClass('d-none');
-            });
-        });
-    </script>
-@endpush
-
-{{--@php--}}
-{{--    function getStatusStyle($status) {--}}
-{{--        switch ($status) {--}}
-{{--            case 'open':--}}
-{{--                return 'bg-label-primary';--}}
-{{--            case 'assigned':--}}
-{{--                return 'bg-label-success';--}}
-{{--            case 'on-progress':--}}
-{{--                return 'bg-label-warning';--}}
-{{--            case 'closed':--}}
-{{--                return 'bg-label-danger';--}}
-{{--            default:--}}
-{{--                return '';--}}
-{{--        }--}}
-{{--    }--}}
-
-{{--    function getStatusName($status) {--}}
-{{--        switch ($status) {--}}
-{{--            case 'open':--}}
-{{--                return 'قيد الانتظار';--}}
-{{--            case 'assigned':--}}
-{{--                return 'تم التعيين';--}}
-{{--            case 'on-progress':--}}
-{{--                return 'قيد التنفيذ';--}}
-{{--            case 'closed':--}}
-{{--                return 'مغلقة';--}}
-{{--            default:--}}
-{{--                return '';--}}
-{{--        }--}}
-{{--    }--}}
-{{--@endphp--}}
+        </script>
+    @endpush
 
