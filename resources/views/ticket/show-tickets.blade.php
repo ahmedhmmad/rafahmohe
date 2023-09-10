@@ -56,7 +56,7 @@
                             <th scope="col">تاريخ الطلب</th>
                             <th scope="col">موضوع الطلب</th>
                             <th scope="col">حالة الطلب</th>
-                            <th scope="col">تصدير</th>
+                            <th scope="col">الاجراءات</th>
 
                         </tr>
                         </thead>
@@ -79,9 +79,15 @@
                                         </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('school.export-ticket', ['ticketId' => $ticket->id]) }}">
-                                       <i class="bx bx-download"></i>
+                                    <a href="{{ route('employee.view-ticket', $ticket->id) }}" >
+                                        <i class="bx bx-show me-2"></i>
                                     </a>
+                                    <i class="bx bx-download"></i>
+
+
+{{--                                    <a href="{{ route('school.export-ticket', ['ticketId' => $ticket->id]) }}">--}}
+{{--                                       <i class="bx bx-download"></i>--}}
+{{--                                    </a>--}}
                                 </td>
 
                                 {{--                                    Modal for showing the ticket details--}}

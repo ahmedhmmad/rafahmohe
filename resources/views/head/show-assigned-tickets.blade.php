@@ -112,7 +112,7 @@
                             <th scope="col">موضوع الطلب</th>
 
                             <th scope="col">حالة الطلب</th>
-                            <th scope="col">التعيين</th>
+                            <th scope="col">الاجراء</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -134,6 +134,11 @@
 
                                         </div>
                                     @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('employee.view-ticket', $ticket->id) }}" >
+                                        <i class="bx bx-show me-2"></i>
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach

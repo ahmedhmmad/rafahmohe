@@ -71,7 +71,7 @@
 
 
     @php
-        $canComment = ($ticket->status === 'on-progress' || auth()->user()->role_id == 2 || auth()->user()->role_id == 4 || $ticket->status === 'closed');
+        $canComment = ($ticket->status === 'on-progress' || auth()->user()->role_id == 2 || $ticket->status === 'closed');
     @endphp
 
     @if ($canComment)
@@ -92,6 +92,12 @@
 
             <div class="container py-2">
                 <div class="card bg-light">
+                    @php
+                        $canChangeStatus = (auth()->user()->role_id == 2 || auth()->user()->role_id == 1);
+                    @endphp
+
+                    @if ($canChangeStatus)
+
                     <h4 class="p-2">تغيير حالة التذكرة</h4>
                     <form action="{{ route('employee.tickets.changeStatus', $ticket->id) }}" method="POST">
                         @csrf
@@ -113,6 +119,7 @@
                             </div>
                         </div>
                     </form>
+                    @endif
                 </div>
             </div>
         </div>
