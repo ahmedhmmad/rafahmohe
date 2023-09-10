@@ -131,12 +131,12 @@
                                                     <h5 class="modal-title" id="ticketModalLabel-{{ $ticket->id }}">تفاصيل التذكرة رقم {{ $ticket->id }}</h5>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div class="text-center">
-                                                        <!-- Loading spinner -->
-                                                        <div class="spinner-border text-primary" role="status">
-                                                            <span class="visually-hidden">Loading...</span>
-                                                        </div>
-                                                    </div>
+{{--                                                    <div class="text-center">--}}
+{{--                                                        <!-- Loading spinner -->--}}
+{{--                                                        <div class="spinner-border text-primary" role="status">--}}
+{{--                                                            <span class="visually-hidden">Loading...</span>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
                                                     <p><strong>تاريخ الطلب:</strong> {{ $ticket->created_at->format('Y-m-d') }}</p>
                                                     <p><strong>المدرسة:</strong> {{ $ticket->user->name }}</p>
                                                     <p><strong>موضوع الطلب:</strong> {{ $ticket->subject }}</p>
@@ -144,8 +144,8 @@
                                                     <p><strong>القسم:</strong> {{ $ticket->department->name }}</p>
                                                     <p><strong>حالة الطلب:</strong> <span class="badge {{ getStatusStyle($ticket->status) }}">{{ getStatusName($ticket->status) }}</span></p>
                                                     <p><strong>منفذ الطلب:</strong> {{ $ticket->assignedUser->name ?? 'لم يتم التعيين بعد' }}</p>
-                                                    <p><strong>التعليقات</strong></p>
-                                                    <div id="comments-{{ $ticket->id }}"></div>
+{{--                                                    <p><strong>التعليقات</strong></p>--}}
+{{--                                                    <div id="comments-{{ $ticket->id }}"></div>--}}
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
@@ -222,56 +222,56 @@
         });
 
 
-        $(document).ready(function() {
-            $('.ticket-link').click(function(e) {
-                e.preventDefault();
+        {{--$(document).ready(function() {--}}
+        {{--    $('.ticket-link').click(function(e) {--}}
+        {{--        e.preventDefault();--}}
 
-                var ticketId = $(this).data('ticket-id');
-                var spinner = $('#ticketModal-' + ticketId).find('.spinner-border');
-                var commentsContainer = $('#comments-' + ticketId);
+        {{--        var ticketId = $(this).data('ticket-id');--}}
+        {{--        var spinner = $('#ticketModal-' + ticketId).find('.spinner-border');--}}
+        {{--        var commentsContainer = $('#comments-' + ticketId);--}}
 
-                // Show the loading spinner
-                spinner.show();
+        {{--        // Show the loading spinner--}}
+        {{--        spinner.show();--}}
 
-                // Make an AJAX request to fetch the comments
-                $.ajax({
-                    url: '{{route('admin.tickets.comments')}}',
-                    type: 'GET',
-                    data: {
-                        ticketId: ticketId
-                    },
-                    success: function(response) {
-                        // Hide the loading spinner
-                        spinner.hide();
+        {{--        // Make an AJAX request to fetch the comments--}}
+        {{--        $.ajax({--}}
+        {{--            url: '{{route('admin.tickets.comments')}}',--}}
+        {{--            type: 'GET',--}}
+        {{--            data: {--}}
+        {{--                ticketId: ticketId--}}
+        {{--            },--}}
+        {{--            success: function(response) {--}}
+        {{--                // Hide the loading spinner--}}
+        {{--                spinner.hide();--}}
 
-                        commentsContainer.empty();
+        {{--                commentsContainer.empty();--}}
 
-                        // Generate the list of comments
-                        if (response.comments.length > 0) {
-                            response.comments.forEach(function(comment) {
-                                // Split the comment by new lines
-                                var lines = comment.split('\n');
+        {{--                // Generate the list of comments--}}
+        {{--                if (response.comments.length > 0) {--}}
+        {{--                    response.comments.forEach(function(comment) {--}}
+        {{--                        // Split the comment by new lines--}}
+        {{--                        var lines = comment.split('\n');--}}
 
-                                // Generate a list item for each line
-                                lines.forEach(function(line) {
-                                    if (line.trim() !== '') {
-                                        commentsContainer.append('<li class="list-group-item">' + line + '</li>');
-                                    }
-                                });
-                            });
-                        }  else {
-                            commentsContainer.html('<p>لا يوجد تعليقات.</p>');
-                        }
-                    },
-                    error: function(xhr) {
-                        // Hide the loading spinner
-                        spinner.hide();
+        {{--                        // Generate a list item for each line--}}
+        {{--                        lines.forEach(function(line) {--}}
+        {{--                            if (line.trim() !== '') {--}}
+        {{--                                commentsContainer.append('<li class="list-group-item">' + line + '</li>');--}}
+        {{--                            }--}}
+        {{--                        });--}}
+        {{--                    });--}}
+        {{--                }  else {--}}
+        {{--                    commentsContainer.html('<p>لا يوجد تعليقات.</p>');--}}
+        {{--                }--}}
+        {{--            },--}}
+        {{--            error: function(xhr) {--}}
+        {{--                // Hide the loading spinner--}}
+        {{--                spinner.hide();--}}
 
-                        // Handle the error scenario if needed
-                    }
-                });
-            });
-        });
+        {{--                // Handle the error scenario if needed--}}
+        {{--            }--}}
+        {{--        });--}}
+        {{--    });--}}
+        {{--});--}}
     </script>
 @endpush
 
