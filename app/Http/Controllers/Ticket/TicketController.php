@@ -31,7 +31,7 @@ class TicketController extends Controller
 
             // Retrieve the tickets belonging to the user
             $tickets = Ticket::where('user_id', $user->id)
-                ->orderBy('created_at', 'desc')
+                ->orderBy('created_at', 'asc')
                 ->paginate(10);
 
             return view('ticket.show-tickets', [
@@ -91,7 +91,7 @@ class TicketController extends Controller
         }
 
         // Continue building the query
-        $query->orderBy('created_at', 'desc');
+        $query->orderBy('created_at', 'asc');
 
         // Retrieve the filtered tickets using pagination
         $tickets = $query->paginate(10);
@@ -120,7 +120,7 @@ class TicketController extends Controller
         $department_id = $user->department_id;
 
         $tickets = Ticket::where('department_id', $department_id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->paginate(10);
 
          $assignedUserNames = [];
@@ -165,7 +165,7 @@ class TicketController extends Controller
         $user = Auth::user();
         $assignedTickets = TicketAssignment::join('tickets', 'ticket_assignments.ticket_id', '=', 'tickets.id')
             ->where('ticket_assignments.user_id', $user->id)
-            ->orderBy('ticket_assignments.created_at', 'desc')
+            ->orderBy('ticket_assignments.created_at', 'asc')
             ->select('ticket_assignments.*', 'tickets.subject', 'tickets.status')
             ->paginate(10);
 
@@ -185,7 +185,7 @@ class TicketController extends Controller
 
         // Retrieve the tickets belonging to the user
         $tickets = Ticket::where('department_id', $department_id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->paginate(10);
         $users = User::where('department_id', $department_id)
             ->where('id', '!=', $user->id)
@@ -234,7 +234,7 @@ class TicketController extends Controller
         }
 
         // Continue building the query
-        $query->orderBy('created_at', 'desc');
+        $query->orderBy('created_at', 'asc');
 
         // Retrieve the filtered tickets using pagination
         $tickets = $query->paginate(10);

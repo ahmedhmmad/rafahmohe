@@ -140,6 +140,7 @@
                                                     <p><strong>تاريخ الطلب:</strong> {{ $ticket->created_at->format('Y-m-d') }}</p>
                                                     <p><strong>المدرسة:</strong> {{ $ticket->user->name }}</p>
                                                     <p><strong>موضوع الطلب:</strong> {{ $ticket->subject }}</p>
+                                                    <p><strong>تفاصيل الطلب:</strong> {{ $ticket->description }}</p>
                                                     <p><strong>القسم:</strong> {{ $ticket->department->name }}</p>
                                                     <p><strong>حالة الطلب:</strong> <span class="badge {{ getStatusStyle($ticket->status) }}">{{ getStatusName($ticket->status) }}</span></p>
                                                     <p><strong>منفذ الطلب:</strong> {{ $ticket->assignedUser->name ?? 'لم يتم التعيين بعد' }}</p>
