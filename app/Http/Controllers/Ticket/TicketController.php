@@ -166,7 +166,7 @@ class TicketController extends Controller
         $user = Auth::user();
         $assignedTickets = TicketAssignment::join('tickets', 'ticket_assignments.ticket_id', '=', 'tickets.id')
             ->where('ticket_assignments.user_id', $user->id)
-            ->orderBy('ticket_assignments.created_at', 'asc')
+            ->orderBy('ticket_assignments.created_at', 'desc')
             ->select('ticket_assignments.*', 'tickets.subject', 'tickets.status')
             ->paginate(10);
 
