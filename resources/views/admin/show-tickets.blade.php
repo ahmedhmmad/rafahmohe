@@ -109,6 +109,9 @@
                             <th scope="col">رقم الطلب</th>
                             <th scope="col">تاريخ الطلب</th>
                             <th scope="col"> المدرسة</th>
+                            @if (auth()->user()->department_id == 1)
+                                <th scope="col">النوع</th>
+                            @endif
                             <th scope="col">موضوع الطلب</th>
                             <th scope="col">القسم</th>
                             <th scope="col">حالة الطلب</th>
@@ -127,6 +130,9 @@
                                 </td>
                                 <td>{{ $ticket->created_at->format('Y-m-d') }}</td>
                                 <td> <a href="{{ route('employee.view-ticket', $ticket->id) }}" >{{ $ticket->user->name }}</a></td>
+                                @if (auth()->user()->department_id == 1)
+                                    <td>{{ $ticket->work_type }}</td>
+                                @endif
                                 <td>{{ $ticket->subject }}</td>
                                 <td>{{ $ticket->department->name }}</td>
                                 <td>

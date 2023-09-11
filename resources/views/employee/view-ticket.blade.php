@@ -54,8 +54,8 @@
                     <tr>
                         <th>سبب الاغلاق:</th>
                         <td>
-                            <span class="badge bg-label-warning">
-                               {{$ticket->close_reason === 'work_completed' ? 'تم انجاز العمل' : 'تم التحويل للادارة العامة'}}
+                            <span class="badge bg-label-info">
+                               {{ getCloseReason($ticket->close_reason) }}
                             </span>
                         </td>
                     </tr>
@@ -126,6 +126,8 @@
                                 <select class="form-select" name="close_reason" id="close_reason">
                                     <option value="work_completed">تم انجاز العمل</option>
                                     <option value="transferred_to_general_management">تم التحويل للادارة العامة</option>
+                                    <option value="out_of_scope">خارج صلاحيات القسم</option>
+                                    <option value="no_money">لا يوجد ميزانية</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
