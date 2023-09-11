@@ -17,6 +17,20 @@
                                 <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>مغلقة</option>
                             </select>
                         </div>
+                        @if (auth()->user()->department_id==16)
+                            <div class="col-md-3">
+                                <label for="work_type" class="form-label"><strong>تصنيف حسب نوع العمل</strong></label>
+                                <select class="form-select" name="work_type" id="work_type" aria-label="Default select example">
+                                    <option value="">الكل</option>
+                                    <option value="سباكة" {{ request('work_type') == 'سباكة' ? 'selected' : '' }}>سباكة</option>
+                                    <option value="أعمال بناء" {{ request('work_type') == 'أعمال بناء' ? 'selected' : '' }}>أعمال بناء</option>
+                                    <option value="حدادة" {{ request('work_type') == 'حدادة' ? 'selected' : '' }}>حدادة</option>
+                                    <option value="كهرباء" {{ request('work_type') == 'كهرباء' ? 'selected' : '' }}>كهرباء</option>
+                                    <option value="ألمنيوم" {{ request('work_type') == 'ألمنيوم' ? 'selected' : '' }}>ألمنيوم</option>
+                                    <option value="أخرى" {{ request('work_type') == 'أخرى' ? 'selected' : '' }}>أخرى</option>
+                                </select>
+                            </div>
+                        @endif
                         <div class="col-md-3">
                             <label for="date" class="form-label"><strong>تصنيف حسب التاريخ</strong></label>
                             <input type="date" class="form-control" id="date" name="date" value="{{ request('date') }}">
@@ -48,6 +62,9 @@
                             <th scope="col">رقم الطلب</th>
                             <th scope="col">تاريخ الطلب</th>
                             <th scope="col"> المدرسة</th>
+                            @if (auth()->user()->department_id == 16)
+                                <th scope="col">النوع</th>
+                            @endif
                             <th scope="col">موضوع الطلب</th>
                             <th scope="col">حالة الطلب</th>
                             <th scope="col">التعيين</th>
@@ -64,6 +81,9 @@
                                 </td>
                                 <td>{{ $ticket->created_at->format('Y-m-d') }}</td>
                                 <td>{{ $ticket->user->name }}</td>
+                                @if (auth()->user()->department_id == 16)
+                                    <td>{{ $ticket->work_type }}</td>
+                                @endif
                                 <td>{{ $ticket->subject }}</td>
                                 <td>
                                     <span class="badge {{ getStatusStyle($ticket->status) }}">

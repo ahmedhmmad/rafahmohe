@@ -217,11 +217,13 @@ class TicketController extends Controller
 
     public function headfilterTickets(Request $request)
     {
+
         $user = Auth::user();
         $department_id = $user->department_id;
 
         $status = $request->input('status');
         $date = $request->input('date');
+        $work_type= $request->input('work_type');
 
         // Start building the query to retrieve the tickets belonging to the user
         $query = Ticket::where('department_id', $department_id);
@@ -232,6 +234,9 @@ class TicketController extends Controller
         }
         if ($date) {
             $query->whereDate('created_at', $date);
+        }
+        if($work_type){
+            $query->where('work_type', $work_type);
         }
 
         // Continue building the query
