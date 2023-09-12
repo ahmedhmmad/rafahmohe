@@ -107,7 +107,7 @@
             <div class="container py-2">
                 <div class="card bg-light">
                     @php
-                        $canChangeStatus = (auth()->user()->role_id == 2 || auth()->user()->role_id == 1);
+                        $canChangeStatus = (auth()->user()->role_id == 2 || auth()->user()->role_id == 1 || auth()->user()->role_id == 3);
                     @endphp
 
                     @if ($canChangeStatus)
