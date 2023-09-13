@@ -107,6 +107,8 @@ Route::middleware(['auth', 'role:Department_Head'])->group(function ()
 
     Route::get('/head/tickets/filter', [TicketController::class, 'headfilterTickets'])
         ->name('head.tickets.filter');
+    Route::get('/head/tickets/filter', [TicketController::class, 'headfilterAssignedTickets'])
+        ->name('head.assigned.tickets.filter');
 
     Route::get('/head/viewVisits',[\App\Http\Controllers\School\SchoolController::class,'viewDepVisits'])
         ->name('head.view-visits');
