@@ -173,17 +173,17 @@
                             <nav aria-label="Page navigation">
                                 <ul class="pagination">
                                     <li class="page-item {{ $tickets->onFirstPage() ? 'disabled' : '' }}">
-                                        <a class="page-link" href="{{ $tickets->previousPageUrl() }}" aria-label="Previous">
-                                            <i class="tf-icon bx bx-chevrons-right">السابق</i>
+                                        <a class="page-link" href="{{ $tickets->appends(request()->only(['status', 'date', 'work_type']))->previousPageUrl() }}" aria-label="Previous">
+                                        <i class="tf-icon bx bx-chevrons-right">السابق</i>
                                         </a>
                                     </li>
                                     @for($i = 1; $i <= $tickets->lastPage(); $i++)
                                         <li class="page-item {{ $tickets->currentPage() == $i ? 'active' : '' }}">
-                                            <a class="page-link" href="{{ $tickets->url($i) }}">{{ $i }}</a>
+                                            <a class="page-link" href="{{ $tickets->appends(request()->only(['status', 'date', 'work_type']))->url($i) }}">{{ $i }}</a>
                                         </li>
                                     @endfor
                                     <li class="page-item {{ $tickets->hasMorePages() ? '' : 'disabled' }}">
-                                        <a class="page-link" href="{{ $tickets->nextPageUrl() }}" aria-label="Next">
+                                        <a class="page-link" href="{{ $tickets->appends(request()->only(['status', 'date', 'work_type']))->nextPageUrl() }}" aria-label="Next">
                                             <i class="tf-icon bx bx-chevron-left">التالي</i>
                                         </a>
                                     </li>
