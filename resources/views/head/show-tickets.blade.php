@@ -163,9 +163,11 @@
                                                     <p><strong>تفاصيل الطلب:</strong> {{ $ticket->description }}</p>
                                                     <p><strong>القسم:</strong> {{ $ticket->department->name }}</p>
                                                     <p><strong>حالة الطلب:</strong> <span class="badge {{ getStatusStyle($ticket->status) }}">{{ getStatusName($ticket->status) }}</span></p>
+                                                    @if ($ticket->status == 'closed')
+                                                        <p><strong>سبب الاغلاق:</strong> {{ getCloseReason($ticket->close_reason)}}</p>
+                                                    @endif
                                                     <p><strong>منفذ الطلب:</strong> {{ $ticket->assignedUser->name ?? 'لم يتم التعيين بعد' }}</p>
-{{--                                                    <p><strong>التعليقات</strong></p>--}}
-{{--                                                    <div id="comments-{{ $ticket->id }}"></div>--}}
+
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
