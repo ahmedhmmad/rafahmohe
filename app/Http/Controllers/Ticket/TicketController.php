@@ -92,7 +92,7 @@ class TicketController extends Controller
         }
 
         // Continue building the query
-        $query->orderBy('created_at', 'asc');
+        $query->orderBy('created_at', 'desc');
 
         // Retrieve the filtered tickets using pagination
         $tickets = $query->paginate(10);
@@ -121,7 +121,7 @@ class TicketController extends Controller
         $department_id = $user->department_id;
 
         $tickets = Ticket::where('department_id', $department_id)
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
          $assignedUserNames = [];
@@ -186,7 +186,7 @@ class TicketController extends Controller
 
         // Retrieve the tickets belonging to the user
         $tickets = Ticket::where('department_id', $department_id)
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
         $users = User::where('department_id', $department_id)
             ->where('id', '!=', $user->id)
@@ -240,7 +240,7 @@ class TicketController extends Controller
         }
 
         // Continue building the query
-        $query->orderBy('created_at', 'asc');
+        $query->orderBy('created_at', 'desc');
 
         // Retrieve the filtered tickets using pagination
         $tickets = $query->paginate(10);
