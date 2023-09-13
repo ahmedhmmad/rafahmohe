@@ -69,7 +69,7 @@
         </div>
         <div class="container py-2">
             <div class="card px-2">
-                <form method="GET" action="{{ route('head.assigned.tickets.filter') }}">
+                <form method="GET" action="{{ route('head.tickets.filter') }}">
                     <div class="row py-4">
                         <div class="col-md-3">
                             <label for="status" class="form-label"><strong>تصنيف حسب الحالة</strong></label>
