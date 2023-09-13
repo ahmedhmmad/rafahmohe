@@ -44,7 +44,7 @@ function getStatusName($status)
             case 'no_money':
                 return 'لا يوجد ميزانية';
             default:
-                return '';
+                return 'غير محدد';
         }
 
 }
