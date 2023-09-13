@@ -52,7 +52,7 @@
                                                 else {
                                                     $isRestricted = !$canOverrideMultiDepartment;
                                                 }
-                                            }
+
 
                                             $disabled = $isRestricted && ($existingPlan && $existingPlan->school_id !== 34);
                                         @endphp
