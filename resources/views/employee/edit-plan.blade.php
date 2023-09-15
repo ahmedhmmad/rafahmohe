@@ -43,18 +43,24 @@
 
                                                                 $isRestricted = $countDepartment19Plans >= 2;
                                                             }
-    }
+
                                                 // Case when the school is booked by the user's department (other than 19)
                                                 else if ($existingPlanDepartmentId == $departmentId) {
                                                     $isRestricted = !$canOverrideDepartment;
                                                 }
+
                                                 // Case when the school is booked by another department
                                                 else {
                                                     $isRestricted = !$canOverrideMultiDepartment;
                                                 }
+                                                }
+                                              $excludedSchoolIds = [34, 35, 3434343404, 3434343405, 34343406, 34343405];
+                                              $disabled = $isRestricted && ($existingPlan && !in_array($existingPlan->school_id, $excludedSchoolIds));
 
 
-                                            $disabled = $isRestricted && ($existingPlan && $existingPlan->school_id !== 34);
+                                              //  $disabled = $isRestricted && ($existingPlan && in_array($existingPlan->school_id, $excludedSchoolIds));
+
+
                                         @endphp
                                         <option value="{{ $schoolId }}" {{ $disabled ? 'disabled' : '' }} style="font-weight: {{ $disabled ? 'normal' : 'bold' }}; color: {{ $disabled ? 'grey' : 'black' }};">
                                             {{ $school->name }} {{ $disabled ? '(غير متاح)' : '' }}
