@@ -117,7 +117,10 @@ class SchoolController extends Controller
 
 
         // Get the filtered school visits and paginate the results
-        $schoolVisits = $query->paginate(10);
+        //$schoolVisits = $query->paginate(10);
+        $schoolVisits = $query->orderBy('visit_date', 'asc') // 'asc' for ascending, 'desc' for descending
+        ->paginate(10);
+
         $schools = School::all();
 
         return view('head.show-schools-visits', compact('schoolVisits', 'schools'));
@@ -160,7 +163,7 @@ class SchoolController extends Controller
             $query->where('user_id', $selectedUser);
         }
 
-        $schoolVisits = $query->orderBy('visit_date', 'desc')->paginate(10); // Order by visit_date in descending order
+        $schoolVisits = $query->orderBy('visit_date', 'asc')->paginate(10); // Order by visit_date in descending order
         //dd($schoolVisits);
 
 
