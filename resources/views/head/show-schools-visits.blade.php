@@ -9,7 +9,16 @@
             <form method="GET" action="{{route('head.view-visits')}}">
                 @csrf
                 <div class="row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
+                        <label for="school">الموظف</label>
+                        <select name="user" id="user" class="form-control form-select">
+                            <option value="">اختر الموظف</option>
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
                         <label for="school">المدرسة</label>
                         <select name="school" id="school" class="form-control form-select">
                             <option value="">اختر المدرسة</option>
@@ -59,7 +68,7 @@
     <div class="container py-1">
         <div class="card py-2">
             <div class="card-body">
-                <table class="table table-bordered table-hover">
+                <table class="table table-bordered table-hover table-responsive">
                     <thead class="table-primary">
                             <tr>
                                 <th><strong>اليوم</strong></th>
@@ -112,12 +121,23 @@
 
                                         {{$schoolVisit->leaving_time}}
                                     </td>
-                                    <td>
-                                        {{$schoolVisit->purpose}}
-                                    </td>
-                                    <td>
-                                        {{$schoolVisit->activities}}
-                                    </td>
+{{--                                    <td>--}}
+{{--                                        {{$schoolVisit->purpose}}--}}
+{{--                                    </td>--}}
+{{--                                    <td>--}}
+{{--                                        {{$schoolVisit->activities}}--}}
+{{--                                    </td>--}}
+
+                                        <td>
+                                            <span title="{{$schoolVisit->purpose}}">
+                                                {{\Str::limit($schoolVisit->purpose, 25)}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span title="{{$schoolVisit->activities}}">
+                                                {{\Str::limit($schoolVisit->activities, 25)}}
+                                            </span>
+                                        </td>
 
 
 
@@ -144,6 +164,7 @@
                 <div class="col">
                     @php
                         $queryParams = [
+                            'user' => request('user'),
                             'school' => request('school'),
                             'month' => request('month'),
                             'year' => request('year')
