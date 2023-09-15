@@ -44,8 +44,8 @@
     <div class="container py-2">
         <div class="card py2">
             <div class="card-body">
-                <div class="toast-container p-3">
-                </div>
+{{--                <div class="toast-container p-3">--}}
+{{--                </div>--}}
                 <div class="row">
                     <div class="col-md-10">
                         <h3 class="mb-4">إضافة زيارة مدرسية</h3>
@@ -112,10 +112,17 @@
                     <h6 class="text-secondary mt-2">
                         <span class="tf-icons bx bx-help-circle"></span>&nbsp;ملاحظة: بعد الانتهاء من إضافة الزيارات يمكنك الضغط على زر العودة
                     </h6>
+
+                    </div>
+
                 </form>
+                <div class="toast-container p-3">
+                </div>
             </div>
-            </div>
+
         </div>
+
+
     </div>
 
 
@@ -288,7 +295,7 @@
 
                             // Event listener for selecting a user from the list
                             listItem.addEventListener('click', function() {
-                                console.log(user.name);
+                              //  console.log(user.name);
                                 userNameInput.value = user.name;
                                 //make the userName bold
                                 userNameInput.style.fontWeight = 'bold';
@@ -296,7 +303,7 @@
                                 // jobTitleInput.value = user.job_title;
                                 var userIdInput = userNameInput.parentNode.querySelector('.user-id-input');
                                 userIdInput.value = user.id;
-                                console.log(userIdInput.value);
+                                //console.log(userIdInput.value);
                                 //Remove List once a user is selected
                                 suggestionsList.remove();
                                 console.log('list is removed')
