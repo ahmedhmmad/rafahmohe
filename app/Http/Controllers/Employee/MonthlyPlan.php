@@ -440,7 +440,7 @@ class MonthlyPlan extends Controller
                     $selectedSchool = $plan->schools->pluck('id')->first();
 
                     // As we're not restricting the list of schools based on the plan's date, we can fetch all the schools
-                    $schools = School::all();
+                    $schools = School::orderByRaw("FIELD(id, 34, 35, 3434343404, 3434343405, 34343406, 34343405) DESC, name ASC")->get();
 
                     // Retrieve all plans with the same start date as the plan being edited
                     $existingPlans = Plan::where('start', $plan->start)->get();
@@ -665,7 +665,7 @@ class MonthlyPlan extends Controller
             return redirect()->back()->withErrors($errors);
         }
 
-        $schools = School::all();
+        $schools = School::orderByRaw("FIELD(id, 34, 35, 3434343404, 3434343405, 34343406, 34343405) DESC, name ASC")->get();
         //dd($date, $schools, $existingPlanSchools, $existingPlans, $canOverrideMultiDepartment);
         return view('employee.add-day', compact('date', 'schools', 'existingPlans','canOverrideDepartment', 'canOverrideMultiDepartment','departmentId'));
     }

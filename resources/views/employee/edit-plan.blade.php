@@ -43,10 +43,11 @@
 
                                                                 $isRestricted = $countDepartment19Plans >= 2;
                                                             }
-    }
+
                                                 // Case when the school is booked by the user's department (other than 19)
                                                 else if ($existingPlanDepartmentId == $departmentId) {
                                                     $isRestricted = !$canOverrideDepartment;
+                                                }
                                                 }
                                                 // Case when the school is booked by another department
                                                 else {
