@@ -90,12 +90,18 @@ class SchoolController extends Controller
         $users = User::where('department_id', $departmentId)->get();
 
         // Apply filters based on selected school and month/year
+        $selectedUser=$request->input('user');
         $selectedSchool = $request->input('school');
         $selectedMonth = $request->input('month');
         $selectedYear = $request->input('year');
 
+
         $query = SchoolVisit::whereIn('user_id', $users->pluck('id'));
 
+        if ($selectedUser) {
+
+            $query->where('user_id', $selectedUser);
+        }
         if ($selectedSchool) {
 
             $query->where('school_id', $selectedSchool);
@@ -123,7 +129,7 @@ class SchoolController extends Controller
 
         $schools = School::all();
 
-        return view('head.show-schools-visits', compact('schoolVisits', 'schools'));
+        return view('head.show-schools-visits', compact('schoolVisits', 'schools','users'));
     }
 
 
