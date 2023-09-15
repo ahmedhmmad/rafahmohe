@@ -24,7 +24,9 @@ class SchoolController extends Controller
         $name = $request->input('name');
 
 
-        $users = User::where('name', 'LIKE',  '%' . $name . '%')->get(['id', 'name', 'job_title']);
+        $users = User::where('name', 'LIKE', '%' . $name . '%')
+            ->where('role_id', '!=', 4)
+            ->get(['id', 'name', 'job_title']);
 
         return response()->json($users);
     }
