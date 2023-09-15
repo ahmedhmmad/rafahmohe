@@ -181,18 +181,20 @@
                                 {{$schoolVisit->leaving_time}}
                             </td>
                             <td>
+                                {{ $schoolVisit->purpose }}
                                 <!-- Display limited characters for "Purpose" -->
-                                <div class="limited-content" data-content="{{ $schoolVisit->purpose }}">{{ Str::limit($schoolVisit->purpose, 15) }}</div>
-                                @if (strlen($schoolVisit->purpose) > 15)
-                                    <a href="#" class="view-more-link">المزيد..</a>
-                                @endif
+{{--                                <div class="limited-content" data-content="{{ $schoolVisit->purpose }}">{{ Str::limit($schoolVisit->purpose, 15) }}</div>--}}
+{{--                                @if (strlen($schoolVisit->purpose) > 15)--}}
+{{--                                    <a href="#" class="view-more-link">المزيد..</a>--}}
+{{--                                @endif--}}
                             </td>
                             <td>
+                                {{ $schoolVisit->activities }}
                                 <!-- Display limited characters for "Activities" -->
-                                <div class="limited-content" data-content="{{ $schoolVisit->activities }}">{{ Str::limit($schoolVisit->activities, 15) }}</div>
-                                @if (strlen($schoolVisit->activities) > 15)
-                                    <a href="#" class="view-more-link">المزيد..</a>
-                                @endif
+{{--                                <div class="limited-content" data-content="{{ $schoolVisit->activities }}">{{ Str::limit($schoolVisit->activities, 15) }}</div>--}}
+{{--                                @if (strlen($schoolVisit->activities) > 15)--}}
+{{--                                    <a href="#" class="view-more-link">المزيد..</a>--}}
+{{--                                @endif--}}
                             </td>
 
 
