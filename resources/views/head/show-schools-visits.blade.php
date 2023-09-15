@@ -91,7 +91,7 @@
                                         <input type="hidden" name="day[]" value="{{ $start->translatedFormat('l') }}">
                                     </td>
                                     <td>
-                                        <h6>{{$schoolVisit->user->name}}</h6>
+                                        <h6><strong>{{$schoolVisit->user->name}}</strong></h6>
                                         <input type="hidden" name="user_name[]" class="form-control user-name-input" required>
                                         <input type="hidden" name="user_id[]" class="user-id-input">
                                     </td>
