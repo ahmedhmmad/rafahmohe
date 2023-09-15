@@ -192,7 +192,7 @@
                                                         }
 
                                                        $excludedSchoolIds = [34, 35, 3434343404, 3434343405, 34343406, 34343405];
-                                                        $disabled = $isRestricted && ($existingPlan && in_array($existingPlan->school_id, $excludedSchoolIds));
+                                              $disabled = $isRestricted && ($existingPlan && !in_array($existingPlan->school_id, $excludedSchoolIds));
 
                                                     @endphp
 
