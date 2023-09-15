@@ -25,18 +25,19 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
        $this->renderable(function (NotFoundHttpException $e) {
-            return response()->json([
-                'message' => 'Resource not found',
-            ], 404);
+           return response()->view('errors.404', [], 404);
             //
         });
 
        //QueryException
          $this->renderable(function (\Illuminate\Database\QueryException $e) {
-                return response()->json([
-                 'message' => 'لا يمكن اجراء العملية',
-                ], 404);
-                //
+                return response()->view('errors.404', [], 404);
           });
+
+         //TokenMismatchException
+            $this->renderable(function (\Illuminate\Session\TokenMismatchException $e) {
+                    return response()->view('errors.419', [], 419);
+
+            });
     }
 }
