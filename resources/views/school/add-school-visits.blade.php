@@ -89,11 +89,14 @@
                         <div class="col">
                             <label for="comingTime" class="form-label">وقت الحضور</label>
                             <input type="text" class="form-control" id="comingTime" required>
+                            <div id="timeValidationError" class="text-danger"></div>
                         </div>
 
                         <div class="col">
                             <label for="leavingTime" class="form-label">وقت الانصراف</label>
                             <input type="time" class="form-control" id="leavingTime" required>
+                            <div id="timeValidationError" class="text-danger"></div>
+
                         </div>
                     </div>
                     </div>
@@ -176,13 +179,25 @@
 
         }
 
+        // Function to display a time validation error message
+        function displayTimeValidationError(message) {
+            var timeValidationError = document.getElementById('timeValidationError');
+            timeValidationError.textContent = message;
+        }
+
+        // Function to clear the time validation error message
+        function clearTimeValidationError() {
+            var timeValidationError = document.getElementById('timeValidationError');
+            timeValidationError.textContent = '';
+        }
+
         // Event listener for form submission
         document.getElementById('schoolVisitForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent the default form submission
 
             // Get form field values
             var visitorName = document.getElementById('visitorName').value;
-            var userId=document.querySelector('.user-id-input').value;
+            var userId = document.querySelector('.user-id-input').value;
             var visitDate = document.getElementById('visitDate').value;
             var comingTime = document.getElementById('comingTime').value;
             var leavingTime = document.getElementById('leavingTime').value;
@@ -195,7 +210,20 @@
                 selectedCompanions.push(checkbox.value);
             });
 
-            // Perform any necessary validation or data processing here
+            // Perform time validation
+            var comingTimeParts = comingTime.split(':');
+            var leavingTimeParts = leavingTime.split(':');
+            var comingHour = parseInt(comingTimeParts[0]);
+            var leavingHour = parseInt(leavingTimeParts[0]);
+
+            if (comingHour < 6 || leavingHour > 15) {
+                // Display time validation error message
+                displayTimeValidationError('وقت الزيارة غير صحيح.');
+                return; // Stop form submission
+            } else {
+                // Clear any existing time validation error message
+                clearTimeValidationError();
+            }
 
             // Make an AJAX request to submit the form
             fetch('{{ route('school.store-visits') }}', {
@@ -245,11 +273,11 @@
                         // Optional: Clear the toast after a few seconds
 
                     } else {
-                       //print Body to console
+                        //print Body to console
                         response.json().then(function(data) {
                             console.log(data);
                         });
-                       // throw new Error('Something went wrong');
+                        // throw new Error('Something went wrong');
                     }
                 })
                 .catch(function(error) {
