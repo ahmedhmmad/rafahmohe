@@ -11,23 +11,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('personal_access_tokens', function (Blueprint $table) {
+        Schema::create('temp_employees', function (Blueprint $table) {
             $table->id();
-            $table->morphs('tokenable');
             $table->string('name');
-            $table->string('token', 64)->unique();
-            $table->text('abilities')->nullable();
-            $table->timestamp('last_used_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->string('contact_number')->nullable();
+            $table->string('email')->nullable();
+            $table->unsignedBigInteger('department_id'); // Add this line
             $table->timestamps();
+
+            // Foreign keys
+            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
         });
-    }
+
+
+}
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('personal_access_tokens');
+        Schema::dropIfExists('temp_employees');
     }
 };

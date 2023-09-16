@@ -6,6 +6,7 @@ use App\Events\TicketCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Mail\TicketCreated;
 use App\Models\Department;
+use App\Models\TempEmployee;
 use App\Models\Ticket;
 use App\Models\TicketAssignment;
 use App\Models\TicketComment;
@@ -632,6 +633,46 @@ class TicketController extends Controller
 
         return redirect()->back()->with('success', 'تم تعيين المهمة بنجاح');
     }
+
+    // TicketController.php
+
+    public function delegateTicket(Request $request)
+    {
+        // Validate the form data
+        $request->validate([
+            'ticket_id' => 'required|exists:tickets,id',
+            'temp_employee_id' => 'required|exists:temp_employees,id',
+        ]);
+
+        // Get the ticket and temp employee based on the IDs
+        $ticket = Ticket::findOrFail($request->input('ticket_id'));
+        $tempEmployee = TempEmployee::findOrFail($request->input('temp_employee_id'));
+
+        // Check if the temp employee belongs to the same department as the ticket
+        if ($tempEmployee->department_id !== $ticket->user->department_id) {
+            return redirect()->back()->with('error', 'يجب اختيار موظف مؤقت من نفس القسم.');
+        }
+
+        // Create a new ticket assignment for the temp employee
+        $assignment = new TicketAssignment();
+        $assignment->ticket_id = $ticket->id;
+        $assignment->user_id = auth()->user()->id; // The user delegating the task
+        $assignment->temp_employee_id = $tempEmployee->id;
+        $assignment->save();
+
+        return redirect()->back()->with('success', 'تم تخصيص التذكرة بنجاح.');
+    }
+
+    public function getTempEmployees()
+    {
+        $departmentId = Auth::user()->department_id;
+        $tempEmployees = TempEmployee::where('department_id', $departmentId)->get();
+
+        return response()->json(['tempEmployees' => $tempEmployees]);
+    }
+
+
+
 
 
 

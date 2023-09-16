@@ -43,6 +43,12 @@ Route::middleware(['auth'])->group(function()
     Route::post('/tickets/{ticket}/add-comment', [TicketController::class,'addComment'])
         ->name('employee.tickets.addComment');
 
+    Route::get('/employee/tickets/delegate', [TicketController::class,'delegateTicket'])
+        ->name('employee.delegate-ticket');
+
+    Route::get('/employee/get-temp-employees', [TicketController::class,'getTempEmployees'])
+        ->name('employee.get-temp-employees');
+
 
     Route::get('/employee/monthly-plan', [\App\Http\Controllers\Employee\MonthlyPlan::class,'monthlyPlan'])->name('employee.monthly-plan');
 

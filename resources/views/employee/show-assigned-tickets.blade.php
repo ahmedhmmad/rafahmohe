@@ -4,6 +4,7 @@
     <div class="p-2">
         <h2 class="p-4">عرض التذاكر</h2>
         <div class="container py-2">
+
             <div class="card px-2">
                 @if($tickets->isEmpty())
                     <div class="p-4">لا توجد تذاكر متاحة.</div>
@@ -48,6 +49,9 @@
                                         </form>
                                     @elseif($ticket->status === 'on-progress')
                                         <a href="{{ route('employee.view-ticket', $ticket->ticket?->id) }}" class="btn btn-primary">فتح التذكرة</a>
+                                            <button class="btn btn-warning delegate-ticket" data-bs-toggle="modal" data-bs-target="#delegateModal" data-ticket-id="{{ $ticket->ticket?->id }}">
+                                                تخصيص لموظف مؤقت
+                                            </button>
                                         <form action="{{ route('employee.tickets.changeStatus', $ticket->ticket?->id) }}" method="POST" style="display: inline-block;">
                                             @csrf
                                             <button type="submit" class="btn btn-danger" name="status" value="closed">تغيير الحالة إلى مغلقة</button>
@@ -65,11 +69,76 @@
             </div>
         </div>
     </div>
+    <!-- Delegate Modal -->
+    <div class="modal fade" id="delegateModal" tabindex="-1" role="dialog" aria-labelledby="delegateModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{{ route('employee.delegate-ticket') }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="delegateModalLabel">تخصيص التذكرة لموظف مؤقت</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="ticket_id" id="delegateTicketId">
+                        <div class="form-group">
+                            <label for="temp_employee">اختر موظف مؤقت من نفس القسم</label>
+                            <select class="form-control" name="temp_employee_id" id="tempEmployee">
+                                <!-- Populate this dropdown with temp employees from the same department -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                        <button type="submit" class="btn btn-primary">تخصيص</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 @endsection
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
+            // Add the following JavaScript to initialize Bootstrap modal
+            $(document).ready(function() {
+            // Initialize Bootstrap modal
+            var delegateModal = new bootstrap.Modal(document.getElementById('delegateModal'), {
+            backdrop: 'static', // Prevents closing on backdrop click
+            keyboard: false // Prevents closing when pressing Esc key
+        });
+
+            $('.delegate-ticket').click(function() {
+            var ticketId = $(this).data('ticket-id');
+            $('#delegateTicketId').val(ticketId);
+
+            $.ajax({
+            url: '{{ route('employee.get-temp-employees') }}',
+            method: 'GET',
+            data: {
+            ticket_id: ticketId
+        },
+            success: function(response) {
+            var tempEmployees = response.tempEmployees;
+            var tempEmployeeDropdown = $('#tempEmployee');
+
+            tempEmployeeDropdown.empty();
+
+            tempEmployees.forEach(function(tempEmployee) {
+            tempEmployeeDropdown.append('<option value="' + tempEmployee.id + '">' + tempEmployee.name + '</option>');
+        });
+
+            // Show the modal after loading content
+            delegateModal.show();
+        }
+        });
+        });
+
+
             $('.assign-select').change(function() {
                 var selectedValue = $(this).val();
                 var ticketId = $(this).data('ticket-id');
@@ -92,37 +161,8 @@
                 $(this).closest('.assign-modal').addClass('d-none');
             });
         });
+
+
+
     </script>
 @endpush
-
-{{--@php--}}
-{{--    function getStatusStyle($status) {--}}
-{{--        switch ($status) {--}}
-{{--            case 'open':--}}
-{{--                return 'bg-label-primary';--}}
-{{--            case 'assigned':--}}
-{{--                return 'bg-label-success';--}}
-{{--            case 'on-progress':--}}
-{{--                return 'bg-label-warning';--}}
-{{--            case 'closed':--}}
-{{--                return 'bg-label-danger';--}}
-{{--            default:--}}
-{{--                return '';--}}
-{{--        }--}}
-{{--    }--}}
-
-{{--    function getStatusName($status) {--}}
-{{--        switch ($status) {--}}
-{{--            case 'open':--}}
-{{--                return 'قيد الانتظار';--}}
-{{--            case 'assigned':--}}
-{{--                return 'تم التعيين';--}}
-{{--            case 'on-progress':--}}
-{{--                return 'قيد التنفيذ';--}}
-{{--            case 'closed':--}}
-{{--                return 'مغلقة';--}}
-{{--            default:--}}
-{{--                return '';--}}
-{{--        }--}}
-{{--    }--}}
-{{--@endphp--}}
