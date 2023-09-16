@@ -66,9 +66,6 @@ public function timeline()
         // Retrieve the data for the table (e.g., plan restrictions) with paginatiob
         $planRestrictions = PlanRestriction::paginate(10);
 
-        dd($planRestrictions);
-
-
         // Pass the data to the view
         return view('admin.table-override-data', compact('planRestrictions'));
     }
