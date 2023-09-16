@@ -24,7 +24,7 @@
                     @foreach ($planRestrictions as $planRestriction)
                         <tr>
                             <td>{{ $planRestriction->user->name }}</td>
-                            <td>{{ $planRestriction->user->department->name }}</td>
+                            <td>{{ optional($planRestriction->user)->department->name }}</td>
                             <td>{{ $planRestriction->can_override_last_week ? 'نعم' : 'لا' }}</td>
                             <td>{{ $planRestriction->can_override_department ? 'نعم' : 'لا' }}</td>
                             <td>{{ $planRestriction->override_start_date }}</td>
