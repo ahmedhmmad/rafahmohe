@@ -104,6 +104,7 @@ public function timeline()
 
     public function showOverridePlanRestrictionsForm(Request $request)
     {
+        dd($request->all());
         // Retrieve the list of users (you can customize this query as per your needs)
         $users = User::all();
         $departments = Department::all();
