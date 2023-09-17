@@ -65,6 +65,9 @@
                         @endforeach
                         </tbody>
                     </table>
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $tickets->links() }}
+                    </div>
                 @endif
             </div>
         </div>
