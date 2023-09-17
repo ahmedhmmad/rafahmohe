@@ -49,7 +49,7 @@
                                         </form>
                                     @elseif($ticket->status === 'on-progress')
                                         <a href="{{ route('employee.view-ticket', $ticket->ticket?->id) }}" class="btn btn-primary">فتح التذكرة</a>
-                                            <button class="btn btn-warning delegate-ticket" data-bs-toggle="modal" data-bs-target="#delegateModal" data-ticket-id="{{ $ticket->ticket?->id }}">
+                                            <button class="btn btn-info delegate-ticket" data-bs-toggle="modal" data-bs-target="#delegateModal" data-ticket-id="{{ $ticket->ticket?->id }}">
                                                 تخصيص لموظف مؤقت
                                             </button>
                                         <form action="{{ route('employee.tickets.changeStatus', $ticket->ticket?->id) }}" method="POST" style="display: inline-block;">

@@ -35,6 +35,11 @@ class Ticket extends Model
         return $this->hasManyThrough(TicketComment::class, TicketAssignment::class, 'ticket_id', 'ticket_assignment_id');
     }
 
+    public function tempEmployees()
+    {
+        return $this->belongsToMany(TempEmployee::class, 'delegated_assignments', 'ticket_assignment_id', 'assigned_to');
+    }
+
 
 
 

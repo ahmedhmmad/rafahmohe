@@ -168,6 +168,17 @@
                                                     @endif
                                                     <p><strong>منفذ الطلب:</strong> {{ $ticket->assignedUser->name ?? 'لم يتم التعيين بعد' }}</p>
 
+                                                    <!-- Display temp employee names if available -->
+                                                    @if ($ticket->tempEmployees->count() > 0)
+                                                        <p><strong>موظفين مؤقتين:</strong>
+                                                            @foreach ($ticket->tempEmployees as $tempEmployee)
+                                                                {{ $tempEmployee->name }}
+                                                                @if (!$loop->last), @endif
+                                                            @endforeach
+                                                        </p>
+                                                    @endif
+
+
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
