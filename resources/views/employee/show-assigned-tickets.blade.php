@@ -101,96 +101,93 @@
     <div class="modal fade" id="delegateModal" tabindex="-1" role="dialog" aria-labelledby="delegateModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <!-- Remove the form tag -->
-                <div class="modal-header">
-                    <h5 class="modal-title" id="delegateModalLabel">تخصيص التذكرة لموظف مؤقت</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="ticket_id" id="delegateTicketId">
-                    <div class="form-group">
-                        <label for="temp_employee">اختر موظف مؤقت من نفس القسم</label>
-                        <select class="form-control" name="temp_employee_id" id="tempEmployee">
-                            <!-- Populate this dropdown with temp employees from the same department -->
-                        </select>
+                <form id="delegateForm" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="delegateModalLabel">تخصيص التذكرة لموظف مؤقت</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
-                    <!-- Add an id attribute to the submit button -->
-                    <button type="button" class="btn btn-primary" id="submitDelegateForm">تخصيص</button>
-                </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="ticket_id" id="delegateTicketId">
+                        <div class="form-group">
+                            <label for="temp_employee">اختر موظف مؤقت من نفس القسم</label>
+                            <select class="form-control" name="temp_employee_id" id="tempEmployee">
+                                <!-- Populate this dropdown with temp employees from the same department -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                        <button type="submit" class="btn btn-primary">تخصيص</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
 
 
 @endsection
 
 @push('scripts')
     <script>
-            // Add the following JavaScript to initialize Bootstrap modal
-            $(document).ready(function() {
-            // Initialize Bootstrap modal
+        $(document).ready(function() {
             var delegateModal = new bootstrap.Modal(document.getElementById('delegateModal'), {
-            backdrop: 'static', // Prevents closing on backdrop click
-            keyboard: false // Prevents closing when pressing Esc key
-        });
+                backdrop: 'static',
+                keyboard: false
+            });
 
-                $('.delegate-ticket').click(function() {
-                    var ticketId = $(this).data('ticket-id');
-                    $('#delegateTicketId').val(ticketId);
+            $('.delegate-ticket').click(function() {
+                var ticketId = $(this).data('ticket-id');
+                $('#delegateTicketId').val(ticketId);
 
-                    $.ajax({
-                        url: '{{ route('employee.get-temp-employees') }}',
-                        method: 'GET',
-                        data: {
-                            ticket_id: ticketId
-                        },
-                        success: function(response) {
-                            var tempEmployees = response.tempEmployees;
-                            var tempEmployeeDropdown = $('#tempEmployee');
+                $.ajax({
+                    url: '{{ route('employee.get-temp-employees') }}',
+                    method: 'GET',
+                    data: {
+                        ticket_id: ticketId
+                    },
+                    success: function(response) {
+                        var tempEmployees = response.tempEmployees;
+                        var tempEmployeeDropdown = $('#tempEmployee');
+                        tempEmployeeDropdown.empty();
 
-                            tempEmployeeDropdown.empty();
-
-                            tempEmployees.forEach(function(tempEmployee) {
-                                tempEmployeeDropdown.append('<option value="' + tempEmployee.id + '">' + tempEmployee.name + '</option>');
-                            });
-
-                            // Show the modal after loading content
-                            delegateModal.show();
-                        }
-                    });
-                });
-
-                // Add a click event listener to the submit button
-                $('#submitDelegateForm').click(function() {
-                    // Get the form data
-                    var formData = {
-                        ticket_id: $('#delegateTicketId').val(),
-                        temp_employee_id: $('#tempEmployee').val(),
-                        _token: '{{ csrf_token() }}'
-                    };
-
-                    // Send an AJAX request to submit the form
-                    $.ajax({
-                        url: '{{ route('employee.delegate-ticket') }}',
-                        method: 'POST',
-                        data: formData,
-                        success: function(response) {
-                            console.log(response);
-                            // Handle the response here, for example, close the modal
-                            delegateModal.hide();
-
-                            // You can also handle other actions based on the response
-                        }
-                    });
+                        tempEmployees.forEach(function(tempEmployee) {
+                            tempEmployeeDropdown.append('<option value="' + tempEmployee.id + '">' + tempEmployee.name + '</option>');
+                        });
+                        $('#delegateModal').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching temp employees:", error);
+                    }
                 });
             });
 
+            $('#delegateForm').submit(function(e) {
+                e.preventDefault();
 
+                var formData = {
+                    ticket_id: $('#delegateTicketId').val(),
+                    temp_employee_id: $('#tempEmployee').val(),
+                    _token: '{{ csrf_token() }}'
+                };
+                console.log("Delegate Ticket Form Data:", formData);
 
+                $.ajax({
+                    url: '{{ route('employee.delegate-ticket') }}',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        console.log("Delegate Ticket Response:", response);
+                       $('#delegateModal').modal('hide');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error delegating ticket:", error);
+                    }
+                });
+            });
+        });
     </script>
 @endpush
