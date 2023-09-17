@@ -54,7 +54,7 @@
                     <tr>
                         <th>سبب الاغلاق:</th>
                         <td>
-                            <span class="badge bg-label-info">
+                                <span class="badge bg-label-info text-wrap" style="line-height: 1.5;">
                                {{ getCloseReason($ticket->close_reason) }}
                             </span>
                         </td>
@@ -133,13 +133,16 @@
                                 </select>
 
                                 <!-- Text input for custom reason -->
-
-                                <input class="input-group-text mt-2" type="text" name="custom_close_reason" id="custom_close_reason" style="display: none; width: 250px;" placeholder="أدخل السبب من فضلك...">
-
-
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary">حفظ</button>
+                            </div>
+                        </div>
+                        <div class="container py-2">
+                            <div class="row">
+
+                                <input class="input-group-text" type="text" name="custom_close_reason" id="custom_close_reason" style="display: none;" placeholder="أدخل السبب من فضلك...">
+
                             </div>
                         </div>
                     </form>
