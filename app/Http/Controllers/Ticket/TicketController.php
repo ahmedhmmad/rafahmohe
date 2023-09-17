@@ -244,9 +244,6 @@ class TicketController extends Controller
 
         return view('employee.show-assigned-tickets', ['tickets' => $assignedTickets]);
 
-
-
-
     }
     public function showDepTickets()
     {
