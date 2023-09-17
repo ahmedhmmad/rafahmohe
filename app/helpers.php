@@ -32,19 +32,24 @@ function getStatusName($status)
     }
 }
 
-    function getCloseReason($closeReason)
-    {
-        switch ($closeReason) {
-            case 'work_completed':
-                return 'تم انجاز العمل';
-            case 'transferred_to_general_management':
-                return 'تم تحويلها للادارة العامة';
-            case 'out_of_scope':
-                return 'خارج صلاحيات القسم';
-            case 'no_money':
-                return 'لا يوجد ميزانية';
-            default:
-                return 'غير محدد';
-        }
+function getCloseReason($closeReason)
+{
+    switch ($closeReason) {
+        case 'work_completed':
+            return 'تم انجاز العمل';
+        case 'transferred_to_general_management':
+            return 'تم تحويلها للادارة العامة';
+        case 'out_of_scope':
+            return 'خارج صلاحيات القسم';
+        case 'no_money':
+            return 'لا يوجد ميزانية';
+        case 'no_technician':
+            return 'لا يوجد فني';
+        default:
+            // If the reason doesn't match any of the predefined cases, return the input reason itself
+            return $closeReason ? $closeReason : 'غير محدد';
+    }
+
+
 
 }

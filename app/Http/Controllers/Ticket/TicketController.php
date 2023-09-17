@@ -524,20 +524,23 @@ class TicketController extends Controller
 
     public function changeStatus(Request $request, $ticketId)
     {
-
         $ticket = Ticket::findOrFail($ticketId);
         $ticket->status = $request->status;
 
         if ($request->status === 'closed') {
-            $ticket->close_reason = $request->close_reason;
+            // Check if the close reason is 'custom'
+            if ($request->close_reason === 'custom') {
+                $ticket->close_reason = $request->custom_close_reason;
+            } else {
+                $ticket->close_reason = $request->close_reason;
+            }
         }
 
         $ticket->save();
 
-
-        // Redirect back or to another route as needed
         return redirect()->back()->with('success', 'تم تغيير حالة التذكرة بنجاح.');
     }
+
 
     public function addComment(Request $request, Ticket $ticket)
     {

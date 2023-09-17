@@ -123,12 +123,20 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-4 close-reason" style="display: none;">
-                                <select class="form-select" name="close_reason" id="close_reason">
+                                <select class="form-select" name="close_reason" id="close_reason" onchange="checkForCustomReason(this)">
                                     <option value="work_completed">تم انجاز العمل</option>
                                     <option value="transferred_to_general_management">تم التحويل للادارة العامة</option>
                                     <option value="out_of_scope">خارج صلاحيات القسم</option>
                                     <option value="no_money">لا يوجد ميزانية</option>
+                                    <option value="no_technician">لا يوجد فني مختص في القسم</option>
+                                    <option value="custom">أخرى (أدخل السبب)</option>
                                 </select>
+
+                                <!-- Text input for custom reason -->
+
+                                <input class="input-group-text mt-2" type="text" name="custom_close_reason" id="custom_close_reason" style="display: none; width: 250px;" placeholder="أدخل السبب من فضلك...">
+
+
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary">حفظ</button>
@@ -175,6 +183,16 @@
                     $(this).closest('.assign-modal').addClass('d-none');
                 });
             });
+
+            function checkForCustomReason(selectElement) {
+                const customInput = document.getElementById('custom_close_reason');
+
+                if (selectElement.value === 'custom') {
+                    customInput.style.display = 'block';
+                } else {
+                    customInput.style.display = 'none';
+                }
+            }
         </script>
     @endpush
 
