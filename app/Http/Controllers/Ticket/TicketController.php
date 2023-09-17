@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ticket;
 use App\Events\TicketCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Mail\TicketCreated;
+use App\Models\DelgatedAssignment;
 use App\Models\Department;
 use App\Models\TempEmployee;
 use App\Models\Ticket;
@@ -648,17 +649,13 @@ class TicketController extends Controller
         $ticket = Ticket::findOrFail($request->input('ticket_id'));
         $tempEmployee = TempEmployee::findOrFail($request->input('temp_employee_id'));
 
-        // Check if the temp employee belongs to the same department as the ticket
-        if ($tempEmployee->department_id !== $ticket->user->department_id) {
-            return redirect()->back()->with('error', 'يجب اختيار موظف مؤقت من نفس القسم.');
-        }
+        // Create a new delegated assignment for the temp employee
+        $delgatedassignment = new DelgatedAssignment();
+        $delgatedassignment->ticket_assignment_id = $ticket->id;
+        $delgatedassignment->assigned_by = auth()->user()->id; // The user delegating the task
+        $delgatedassignment->assigned_to = $tempEmployee->id;
+        $delgatedassignment->save();
 
-        // Create a new ticket assignment for the temp employee
-        $assignment = new TicketAssignment();
-        $assignment->ticket_id = $ticket->id;
-        $assignment->user_id = auth()->user()->id; // The user delegating the task
-        $assignment->temp_employee_id = $tempEmployee->id;
-        $assignment->save();
 
         return redirect()->back()->with('success', 'تم تخصيص التذكرة بنجاح.');
     }
