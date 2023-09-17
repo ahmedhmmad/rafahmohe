@@ -523,7 +523,9 @@ class TicketController extends Controller
 
     public function changeStatus(Request $request, $ticketId)
     {
-        Log::info($request->all());
+//        Log::info($request->all());
+
+//        dd($request->all());
 
         $ticket = Ticket::findOrFail($ticketId);
         $ticket->status = $request->status;
@@ -532,17 +534,13 @@ class TicketController extends Controller
             // Check if the close reason is 'custom'
             if ($request->close_reason === 'custom') {
                 $ticket->close_reason = $request->custom_close_reason;
-            } else {
+            } else if ($request->close_reason=='partially-closed') {
                 $ticket->close_reason = $request->close_reason;
-            }
-        } elseif ($request->status === 'partially-closed') {
+                $ticket->partially_close_reason = $request->partially_close_reason;
+            }else
+                $ticket->close_reason = $request->close_reason;
 
-            // Capture the reason for 'partially-closed'
-            $ticket->partially_close_reason = $request->partially_close_reason;
-        } else {
-            // Clear close reasons if the status is not closed or partially closed
-            $ticket->close_reason = null;
-            $ticket->partially_close_reason = null;
+
         }
 
 
