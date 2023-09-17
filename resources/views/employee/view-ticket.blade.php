@@ -60,7 +60,7 @@
                         </td>
                     </tr>
                     @endif
-                    @if ($ticket->status === 'partially-closed')
+                    @if ($ticket->partially_close_reason != null)
                         <tr>
                             <th>سبب الاغلاق الجزئي:</th>
                             <td>
@@ -127,15 +127,16 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-4 mb-4">
-                                <select class="form-select status-select" name="status" id="status" onchange="checkForPartialyCustomReason(this)">
+                                <select class="form-select status-select" name="status" id="status" >
                                     <option value="on-progress">بدء التنفيذ</option>
                                     <option value="closed">إغلاق</option>
-                                    <option value="partially-closed">إغلاق جزئي</option>
+
                                 </select>
                             </div>
                             <div class="col-md-4 mb-4 close-reason" style="display: none;">
                                 <select class="form-select" name="close_reason" id="close_reason" onchange="checkForCustomReason(this)">
                                     <option value="work_completed">تم انجاز العمل</option>
+                                    <option value="partially-closed">تم الانجاز جزئياً</option>
                                     <option value="transferred_to_general_management">تم التحويل للادارة العامة</option>
                                     <option value="out_of_scope">خارج صلاحيات القسم</option>
                                     <option value="no_money">لا يوجد ميزانية</option>
@@ -216,9 +217,7 @@
                 } else {
                     customInput.style.display = 'none';
                 }
-            }
 
-            function checkForPartialyCustomReason(selectElement) {
                 const partialCloseInput = document.getElementById('partially_close_reason');
 
                 if (selectElement.value === 'partially-closed') {
@@ -227,6 +226,16 @@
                     partialCloseInput.style.display = 'none';
                 }
             }
+
+            // function checkForPartialyCustomReason(selectElement) {
+            //     const partialCloseInput = document.getElementById('partially_close_reason');
+            //
+            //     if (selectElement.value === 'partially-closed') {
+            //         partialCloseInput.style.display = 'block';
+            //     } else {
+            //         partialCloseInput.style.display = 'none';
+            //     }
+            // }
         </script>
     @endpush
 

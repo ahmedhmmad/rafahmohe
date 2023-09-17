@@ -41,6 +41,8 @@ function getCloseReason($closeReason)
     switch ($closeReason) {
         case 'work_completed':
             return 'تم انجاز العمل';
+        case 'partially-closed':
+            return 'تم انجاز العمل جزئياً';
         case 'transferred_to_general_management':
             return 'تم تحويلها للادارة العامة';
         case 'out_of_scope':
