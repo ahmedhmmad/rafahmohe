@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Ticket;
 use App\Events\TicketCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Mail\TicketCreated;
-use App\Models\DelgatedAssignment;
+use App\Models\DelegatedAssignment;
 use App\Models\Department;
 use App\Models\TempEmployee;
 use App\Models\Ticket;
@@ -16,6 +16,8 @@ use App\Notifications\CreateNewTicket;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Twilio\Rest\Client;
@@ -639,25 +641,33 @@ class TicketController extends Controller
 
     public function delegateTicket(Request $request)
     {
+        Log::info($request->all());
+
         // Validate the form data
         $request->validate([
             'ticket_id' => 'required|exists:tickets,id',
-            'temp_employee_id' => 'required|exists:temp_employees,id',
+            'temp_employee_ids' => 'required|array', // Change to array
+            'temp_employee_ids.*' => 'exists:temp_employees,id', // Validate each ID in the array
         ]);
 
-        // Get the ticket and temp employee based on the IDs
-        $ticket = Ticket::findOrFail($request->input('ticket_id'));
-        $tempEmployee = TempEmployee::findOrFail($request->input('temp_employee_id'));
+        DB::transaction(function () use ($request)
+        {
+            $ticket = Ticket::findOrFail($request->input('ticket_id'));
+            $tempEmployeeIds = $request->input('temp_employee_ids');
 
-        // Create a new delegated assignment for the temp employee
-        $delgatedassignment = new DelgatedAssignment();
-        $delgatedassignment->ticket_assignment_id = $ticket->id;
-        $delgatedassignment->assigned_by = auth()->user()->id; // The user delegating the task
-        $delgatedassignment->assigned_to = $tempEmployee->id;
-        $delgatedassignment->save();
+            foreach ($tempEmployeeIds as $tempEmployeeId) {
+                $tempEmployee = TempEmployee::findOrFail($tempEmployeeId);
 
+                // Create a new delegated assignment for each temp employee
+                $delgatedassignment = new DelegatedAssignment();
+                $delgatedassignment->ticket_assignment_id = $ticket->id;
+                $delgatedassignment->assigned_by = auth()->user()->id; // The user delegating the task
+                $delgatedassignment->assigned_to = $tempEmployee->id;
+                $delgatedassignment->save();
+            }
+        });
 
-        return redirect()->back()->with('success', 'تم تخصيص التذكرة بنجاح.');
+        return response()->json(['message' => 'تم تخصيص التذكرة بنجاح.'], 200);
     }
 
     public function getTempEmployees()
