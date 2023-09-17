@@ -523,6 +523,8 @@ class TicketController extends Controller
 
     public function changeStatus(Request $request, $ticketId)
     {
+        Log::info($request->all());
+
         $ticket = Ticket::findOrFail($ticketId);
         $ticket->status = $request->status;
 
@@ -533,13 +535,21 @@ class TicketController extends Controller
             } else {
                 $ticket->close_reason = $request->close_reason;
             }
+        } elseif ($request->status === 'partially-closed') {
+
+            // Capture the reason for 'partially-closed'
+            $ticket->partially_close_reason = $request->partially_close_reason;
+        } else {
+            // Clear close reasons if the status is not closed or partially closed
+            $ticket->close_reason = null;
+            $ticket->partially_close_reason = null;
         }
+
 
         $ticket->save();
 
         return redirect()->back()->with('success', 'تم تغيير حالة التذكرة بنجاح.');
     }
-
 
     public function addComment(Request $request, Ticket $ticket)
     {

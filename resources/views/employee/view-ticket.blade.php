@@ -60,6 +60,16 @@
                         </td>
                     </tr>
                     @endif
+                    @if ($ticket->status === 'partially-closed')
+                        <tr>
+                            <th>سبب الاغلاق الجزئي:</th>
+                            <td>
+                                <span class="badge bg-label-warning text-wrap" style="line-height: 1.5;">
+                               {{ getCloseReason($ticket->partially_close_reason) }}
+                            </span>
+                            </td>
+                        </tr>
+                    @endif
                 </table>
             </div>
         </div>
@@ -117,9 +127,10 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-4 mb-4">
-                                <select class="form-select status-select" name="status" id="status">
+                                <select class="form-select status-select" name="status" id="status" onchange="checkForPartialyCustomReason(this)">
                                     <option value="on-progress">بدء التنفيذ</option>
                                     <option value="closed">إغلاق</option>
+                                    <option value="partially-closed">إغلاق جزئي</option>
                                 </select>
                             </div>
                             <div class="col-md-4 mb-4 close-reason" style="display: none;">
@@ -138,10 +149,20 @@
                                 <button type="submit" class="btn btn-primary">حفظ</button>
                             </div>
                         </div>
+                        {{--Close Reason--}}
                         <div class="container py-2">
                             <div class="row">
 
                                 <input class="input-group-text" type="text" name="custom_close_reason" id="custom_close_reason" style="display: none;" placeholder="أدخل السبب من فضلك...">
+
+                            </div>
+                        </div>
+                        {{--Partial Close Reason--}}
+                        <div class="container py-2">
+                            <div class="row">
+
+                                <input class="input-group-text shadow p-3 mb-5 bg-blue rounded" type="text" name="partially_close_reason" id="partially_close_reason" style="display: none;" placeholder="أدخل السبب من فضلك...">
+
 
                             </div>
                         </div>
@@ -194,6 +215,16 @@
                     customInput.style.display = 'block';
                 } else {
                     customInput.style.display = 'none';
+                }
+            }
+
+            function checkForPartialyCustomReason(selectElement) {
+                const partialCloseInput = document.getElementById('partially_close_reason');
+
+                if (selectElement.value === 'partially-closed') {
+                    partialCloseInput.style.display = 'block';
+                } else {
+                    partialCloseInput.style.display = 'none';
                 }
             }
         </script>

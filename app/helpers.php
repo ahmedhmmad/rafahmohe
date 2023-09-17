@@ -11,6 +11,8 @@ function getStatusStyle($status)
             return 'bg-label-warning';
         case 'closed':
             return 'bg-label-danger';
+        case 'partially-closed':
+            return 'bg-label-secondary';
         default:
             return '';
     }
@@ -27,6 +29,8 @@ function getStatusName($status)
             return 'قيد التنفيذ';
         case 'closed':
             return 'مغلقة';
+        case 'partially-closed':
+            return 'مغلقة جزئيا';
         default:
             return '';
     }
