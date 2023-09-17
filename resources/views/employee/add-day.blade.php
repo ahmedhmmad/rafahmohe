@@ -137,8 +137,18 @@
                                         @php
                                             $schoolId = $school->id;
                                             $dateKey = $date->format('Y-m-d');
-                                            $existingPlan = $existingPlans->where('start', $dateKey)->where('school_id', $schoolId)->first();
-                                            $isRestricted = false;
+                                            if($departmentId != 19) {
+                                                            $existingPlan = $existingPlans->where('start', $dateKey)
+                                                                                          ->where('school_id', $schoolId)
+                                                                                          ->where('department_id', '!=', 19)
+                                                                                          ->first();
+                                                        } else {
+                                                            $existingPlan = $existingPlans->where('start', $dateKey)
+                                                                                          ->where('school_id', $schoolId)
+                                                                                          ->first();
+                                                        }
+
+                                                        $isRestricted = false;
 
                                             if ($existingPlan) {
                                                 $existingPlanDepartmentId = $existingPlan->department_id ?? null;
