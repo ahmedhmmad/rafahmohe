@@ -44,6 +44,13 @@ Route::middleware(['auth'])->group(function()
         ->name('employee.tickets.addComment');
 
 
+
+    Route::get('/employee/get-temp-employees', [TicketController::class,'getTempEmployees'])
+        ->name('employee.get-temp-employees');
+
+    Route::post('/employee/tickets/delegate', [TicketController::class, 'delegateTicket'])
+        ->name('employee.delegate-ticket');
+
     Route::get('/employee/monthly-plan', [\App\Http\Controllers\Employee\MonthlyPlan::class,'monthlyPlan'])->name('employee.monthly-plan');
 
     Route::get('/employee/enterplan',[App\Http\Controllers\Employee\MonthlyPlan::class,'index'])

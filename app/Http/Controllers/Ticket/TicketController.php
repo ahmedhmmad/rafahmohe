@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Ticket;
 use App\Events\TicketCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Mail\TicketCreated;
+use App\Models\DelgatedAssignment;
 use App\Models\Department;
+use App\Models\TempEmployee;
 use App\Models\Ticket;
 use App\Models\TicketAssignment;
 use App\Models\TicketComment;
@@ -522,20 +524,23 @@ class TicketController extends Controller
 
     public function changeStatus(Request $request, $ticketId)
     {
-
         $ticket = Ticket::findOrFail($ticketId);
         $ticket->status = $request->status;
 
         if ($request->status === 'closed') {
-            $ticket->close_reason = $request->close_reason;
+            // Check if the close reason is 'custom'
+            if ($request->close_reason === 'custom') {
+                $ticket->close_reason = $request->custom_close_reason;
+            } else {
+                $ticket->close_reason = $request->close_reason;
+            }
         }
 
         $ticket->save();
 
-
-        // Redirect back or to another route as needed
         return redirect()->back()->with('success', 'تم تغيير حالة التذكرة بنجاح.');
     }
+
 
     public function addComment(Request $request, Ticket $ticket)
     {
@@ -632,6 +637,42 @@ class TicketController extends Controller
 
         return redirect()->back()->with('success', 'تم تعيين المهمة بنجاح');
     }
+
+    // TicketController.php
+
+    public function delegateTicket(Request $request)
+    {
+        // Validate the form data
+        $request->validate([
+            'ticket_id' => 'required|exists:tickets,id',
+            'temp_employee_id' => 'required|exists:temp_employees,id',
+        ]);
+
+        // Get the ticket and temp employee based on the IDs
+        $ticket = Ticket::findOrFail($request->input('ticket_id'));
+        $tempEmployee = TempEmployee::findOrFail($request->input('temp_employee_id'));
+
+        // Create a new delegated assignment for the temp employee
+        $delgatedassignment = new DelgatedAssignment();
+        $delgatedassignment->ticket_assignment_id = $ticket->id;
+        $delgatedassignment->assigned_by = auth()->user()->id; // The user delegating the task
+        $delgatedassignment->assigned_to = $tempEmployee->id;
+        $delgatedassignment->save();
+
+
+        return redirect()->back()->with('success', 'تم تخصيص التذكرة بنجاح.');
+    }
+
+    public function getTempEmployees()
+    {
+        $departmentId = Auth::user()->department_id;
+        $tempEmployees = TempEmployee::where('department_id', $departmentId)->get();
+
+        return response()->json(['tempEmployees' => $tempEmployees]);
+    }
+
+
+
 
 
 

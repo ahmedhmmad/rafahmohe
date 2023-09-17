@@ -9,10 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::table('ticket_assignments', function (Blueprint $table) {
-            $table->dropColumn('comments');
+            $table->unsignedBigInteger('delegated_assignment_id')->nullable();
+
+            // Define foreign key constraint
+            $table->foreign('delegated_assignment_id')->references('id')->on('delegated_assignments')->onDelete('cascade');
         });
     }
 
@@ -22,7 +25,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('ticket_assignments', function (Blueprint $table) {
-            //
+            $table->dropForeign(['delegated_to']);
+            $table->dropColumn('delegated_to');
         });
     }
 };

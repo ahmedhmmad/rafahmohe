@@ -41,7 +41,7 @@
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 
 
-<script type="module" src="{{url('/js/notifications.js')}}"></script>
+{{--<script type="module" src="{{url('/js/notifications.js')}}"></script>--}}
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
