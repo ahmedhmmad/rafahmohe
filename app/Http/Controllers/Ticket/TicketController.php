@@ -646,29 +646,28 @@ class TicketController extends Controller
         // Validate the form data
         $request->validate([
             'ticket_id' => 'required|exists:tickets,id',
-            'temp_employee_id' => 'required|exists:temp_employees,id',
+            'temp_employee_ids' => 'required|array', // Change to array
+            'temp_employee_ids.*' => 'exists:temp_employees,id', // Validate each ID in the array
         ]);
 
         DB::transaction(function () use ($request)
         {
             $ticket = Ticket::findOrFail($request->input('ticket_id'));
-            $tempEmployee = TempEmployee::findOrFail($request->input('temp_employee_id'));
+            $tempEmployeeIds = $request->input('temp_employee_ids');
 
-            // Create a new delegated assignment for the temp employee
-            $delgatedassignment = new DelegatedAssignment();
-            $delgatedassignment->ticket_assignment_id = $ticket->id;
-            $delgatedassignment->assigned_by = auth()->user()->id; // The user delegating the task
-            $delgatedassignment->assigned_to = $tempEmployee->id;
-            $delgatedassignment->save();
+            foreach ($tempEmployeeIds as $tempEmployeeId) {
+                $tempEmployee = TempEmployee::findOrFail($tempEmployeeId);
 
-        }
-
-        );
-
-        // Get the ticket and temp employee based on the IDs
+                // Create a new delegated assignment for each temp employee
+                $delgatedassignment = new DelegatedAssignment();
+                $delgatedassignment->ticket_assignment_id = $ticket->id;
+                $delgatedassignment->assigned_by = auth()->user()->id; // The user delegating the task
+                $delgatedassignment->assigned_to = $tempEmployee->id;
+                $delgatedassignment->save();
+            }
+        });
 
         return response()->json(['message' => 'تم تخصيص التذكرة بنجاح.'], 200);
-
     }
 
     public function getTempEmployees()

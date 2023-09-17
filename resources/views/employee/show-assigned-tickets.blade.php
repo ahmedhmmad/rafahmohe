@@ -105,21 +105,19 @@
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="delegateModalLabel">تخصيص التذكرة لموظف مؤقت</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="ticket_id" id="delegateTicketId">
                         <div class="form-group">
-                            <label for="temp_employee">اختر موظف مؤقت من نفس القسم</label>
-                            <select class="form-control" name="temp_employee_id" id="tempEmployee">
+                            <label for="temp_employee">اختر موظف للقيام بمهمة</label>
+                            <div id="tempEmployeeCheckboxes">
                                 <!-- Populate this dropdown with temp employees from the same department -->
-                            </select>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
                         <button type="submit" class="btn btn-primary">تخصيص</button>
                     </div>
                 </form>
@@ -130,7 +128,6 @@
 
 
 @endsection
-
 @push('scripts')
     <script>
         $(document).ready(function() {
@@ -151,26 +148,40 @@
                     },
                     success: function(response) {
                         var tempEmployees = response.tempEmployees;
-                        var tempEmployeeDropdown = $('#tempEmployee');
-                        tempEmployeeDropdown.empty();
+                        var checkboxesContainer = $('#tempEmployeeCheckboxes');
+                        checkboxesContainer.empty();
 
                         tempEmployees.forEach(function(tempEmployee) {
-                            tempEmployeeDropdown.append('<option value="' + tempEmployee.id + '">' + tempEmployee.name + '</option>');
+                            var checkboxHtml = `
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="temp_employee_ids[]" value="${tempEmployee.id}" id="tempEmployee${tempEmployee.id}">
+            <label class="form-check-label" for="tempEmployee${tempEmployee.id}">
+                ${tempEmployee.name}
+            </label>
+        </div>`;
+                            checkboxesContainer.append(checkboxHtml);
                         });
                         $('#delegateModal').modal('show');
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error fetching temp employees:", error);
                     }
                 });
+            });
+            $('#delegateModal').on('hidden.bs.modal', function (e) {
+                console.log('Modal hidden event triggered.');
+                $('#delegateModal').modal('hide');
             });
 
             $('#delegateForm').submit(function(e) {
                 e.preventDefault();
 
+                var ticketId = $('#delegateTicketId').val();
+                var selectedTempEmployees = [];
+                $("input[name='temp_employee_ids[]']:checked").each(function() {
+                    selectedTempEmployees.push($(this).val());
+                });
+
                 var formData = {
-                    ticket_id: $('#delegateTicketId').val(),
-                    temp_employee_id: $('#tempEmployee').val(),
+                    ticket_id: ticketId,
+                    temp_employee_ids: selectedTempEmployees,
                     _token: '{{ csrf_token() }}'
                 };
                 console.log("Delegate Ticket Form Data:", formData);
@@ -181,7 +192,7 @@
                     data: formData,
                     success: function(response) {
                         console.log("Delegate Ticket Response:", response);
-                       $('#delegateModal').modal('hide');
+                        $('#delegateModal').modal('hide');
                     },
                     error: function(xhr, status, error) {
                         console.error("Error delegating ticket:", error);
