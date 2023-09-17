@@ -54,7 +54,7 @@
                     <tr>
                         <th>سبب الاغلاق:</th>
                         <td>
-                            <span class="badge bg-label-info">
+                                <span class="badge bg-label-info text-wrap" style="line-height: 1.5;">
                                {{ getCloseReason($ticket->close_reason) }}
                             </span>
                         </td>
