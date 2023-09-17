@@ -162,9 +162,18 @@
                                                         $schoolId = $school->id;
                                                         $dateKey = $startOfMonth->format('Y-m-d');
                                                         // Filter existing plans for the current school
-                                                        $existingPlan = $existingPlans->where('start', $dateKey)
-                                                            ->where('school_id', $schoolId)
-                                                            ->first();
+                                                       // If department is NOT 19, exclude plans from department 19
+                                                        if($departmentId != 19) {
+                                                            $existingPlan = $existingPlans->where('start', $dateKey)
+                                                                                          ->where('school_id', $schoolId)
+                                                                                          ->where('department_id', '!=', 19)
+                                                                                          ->first();
+                                                        } else {
+                                                            $existingPlan = $existingPlans->where('start', $dateKey)
+                                                                                          ->where('school_id', $schoolId)
+                                                                                          ->first();
+                                                        }
+
                                                         $isRestricted = false;
 
                                                         if ($existingPlan) {
