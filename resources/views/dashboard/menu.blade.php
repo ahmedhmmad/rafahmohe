@@ -148,6 +148,37 @@
 
         @endif
 
+        @if(\Illuminate\Support\Facades\Auth::user()->hasRole('CarOfficial'))
+
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <div data-i18n="Layouts">الخطة الشهرية للسيارات</div>
+                </a>
+
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{route('car.index')}}" class="menu-link">
+                            <div data-i18n="Without menu">ادخال الخطة الشهرية</div>
+                        </a>
+                    </li>
+{{--                    <li class="menu-item">--}}
+{{--                        <a href="{{route('car.show-plan')}}" class="menu-link">--}}
+{{--                            <div data-i18n="Without navbar">تعديل الخطة الشهرية</div>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    <li class="menu-item">--}}
+{{--                        <a href="{{route('car.showonly-plan')}}" class="menu-link">--}}
+{{--                            <div data-i18n="Without footer">عرض الخطة الشهرية</div>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+
+
+                </ul>
+            </li>
+
+        @endif
+
         @if (\Illuminate\Support\Facades\Auth::user()->hasRole('Employee'))
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
