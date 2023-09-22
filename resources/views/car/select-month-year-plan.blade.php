@@ -44,7 +44,7 @@
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <form action="{{ route('employee.create-plan', ['month' => ':selectedMonth', 'year' => ':selectedYear']) }}" method="get" id="createPlanForm">
+                    <form action="{{ route('car.create-plan', ['month' => ':selectedMonth', 'year' => ':selectedYear']) }}" method="get" id="createPlanForm">
                         <button type="submit" class="btn btn-primary mt-4" style="transform:translatex(0px) translatey(5px);" onclick="setSelectedValues()">التالي</button>
                     </form>
                 </div>
