@@ -5,6 +5,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{url('/js/select2.full.min.js')}}"></script>
 
+
+
 <!-- Bootstrap Bundle with Popper -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
@@ -66,29 +68,31 @@
 
 <script>
     $(document).ready(function() {
-        $('.js-example-basic-multiple').select2(
-            {
-                theme: "classic",
-                width: 'resolve',
-                dir: "rtl",
-                placeholder: "اختر",
-                allowClear: true,
-
+        function formatState(state) {
+            if (!state.id) {
+                return state.text;
             }
-        );
-    });
-    $(document).ready(function() {
-        $('.js-example-basic-single').select2(
-            {
-                theme: "classic",
+            var $state = $('<span class="' + state.element.className + '">' + state.text + '</span>');
+            return $state;
+        }
 
-                dir: "rtl",
-                placeholder: "اختر",
-                allowClear: true,
+        $('.js-example-basic-multiple').select2({
+            templateResult: formatState,
+            theme: "classic",
+            width: 'resolve',
+            dir: "rtl",
+            placeholder: "اختر",
+            allowClear: true
+        });
 
-            }
-        );
+        $('.js-example-basic-single').select2({
+            theme: "classic",
+            dir: "rtl",
+            placeholder: "اختر",
+            allowClear: true
+        });
     });
+
 </script>
 
 
