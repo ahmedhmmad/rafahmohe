@@ -33,7 +33,8 @@
 
     <div class="p-4">
         <h2 class="p-4">إدخال الخطة الشهرية<span style="color:#167ce8;padding-right: 1em;">{{ $year }}/{{ $month }}</span></h2>
-        <div class="container">
+        <h5 class="p-4 highlight-school">ملاحظة: المدارس المظللة تكون حسب حركة السيارات في هذا اليوم</h5>
+        <div class="container mt-1">
             <div class="row">
                 <form method="POST" action="{{ route('employee.store-plan') }}" onsubmit="return validateForm()">
                     @csrf
