@@ -18,6 +18,8 @@ Route::middleware(['auth'])->group(function()
         return view('welcome');
     })->name('home');
 
+
+
     //Change Password
     Route::get('/change-password', [App\Http\Controllers\Auth\ChangePasswordController::class,'showChangePasswordForm'])
         ->name('auth.change-password');
@@ -87,9 +89,14 @@ Route::middleware(['auth'])->group(function()
 });
 
 //Employee Routes
-Route::middleware(['auth', 'role:Employee'])->group(function ()
+Route::middleware(['auth', 'role:CarOfficial'])->group(function ()
 
 {
+    Route::get('/car/index', [App\Http\Controllers\Car\CarMovementController::class, 'index'])->name('car.index');
+    Route::get('/car/createplan/{month}/{year}',[App\Http\Controllers\Car\CarMovementController::class,'create'])
+        ->name('car.create-plan');
+    Route::post('/car/storeplan',[App\Http\Controllers\Car\CarMovementController::class,'store'])
+        ->name('car.store-plan');
 
 });
 
