@@ -13,18 +13,52 @@
                 </ul>
             </div>
         @endif
+
         <div class="row">
             <div class="col-md-12">
                 <div class="card px-4">
                     <div class="card-body">
-                        <h3>تعديل الخطة الشهرية</h3>
+                        <h3>عرض حركات السيارات</h3>
                     </div>
-
                 </div>
 
                 <div class="card mt-2">
                     <div class="card-body">
 
+                        <form method="GET" action="{{ route('car.show-plan') }}">
+                            @csrf
+
+                            <div class="row py-4">
+                                <div class="col-md-4">
+                                    <label for="month" class="form-label"><strong>الشهر</strong></label>
+                                    <select class="form-select" name="month" id="month" aria-label="Default select example">
+                                        @php
+                                            $arabicMonths = [
+                                                'يناير', 'فبراير', 'مارس', 'إبريل', 'مايو', 'يونيو',
+                                                'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+                                            ];
+                                        @endphp
+
+                                        @foreach (range(1, 12) as $monthNumber)
+                                            <option value="{{ $monthNumber }}" @if ($selectedMonth == $monthNumber) selected @endif>
+                                                {{ $arabicMonths[$monthNumber - 1] }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="year" class="form-label"><strong>السنة</strong></label>
+                                    <select class="form-select" name="year" id="year" aria-label="Default select example">
+                                        @foreach (range(now()->year - 3, now()->year + 3) as $year)
+                                            <option value="{{ $year }}" @if ($selectedYear == $year) selected @endif>{{ $year }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary mt-4 px-lg-4">عرض</button>
+                                </div>
+                            </div>
+                        </form>
 
                         <table class="table table-hover">
                             <thead>
@@ -43,11 +77,11 @@
                                 $dayNames = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
                                 $currentDayName = null;
                             @endphp
-                            @foreach ($carMovements as $index=> $carMovement)
+                            @foreach ($carMovements as $index => $carMovement)
                                 @php
                                     $currentDate = $carMovement->date;
                                     $currentDayName = $dayNames[date('N', strtotime($carMovement->date)) - 1];
-                                     $directionsTranslations = [
+                                    $directionsTranslations = [
                                         'east' => 'شرق رفح',
                                         'west' => 'غرب رفح',
                                         'home' => 'البلد',
@@ -78,7 +112,6 @@
                                     </td>
                                     <td>{{ $directionsTranslations[$carMovement->direction] }}</td> <!-- Display car direction -->
                                     <td>
-
                                         <a href="{{ route('car.edit-car-movement', $carMovement->id) }}" class="btn btn-outline-primary">تعديل</a>
                                         <a href="{{ route('car.delete-car-movement', $carMovement->id) }}" class="btn btn-outline-danger">حذف</a>
                                         <a href="{{ route('car.add-car-movement', $carMovement->id) }}" class="btn btn-outline-info">اضافة</a>
@@ -94,10 +127,9 @@
                         </table>
 
                     </div>
+                </div>
+            </div>
         </div>
-    </div>
-        </div>
-    </div>
     </div>
 
 @endsection

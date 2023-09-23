@@ -49,8 +49,49 @@ class CarMovementController extends Controller
 
         return redirect()->route('home')->with('success', 'Car movement plan saved successfully!');
     }
+    public function show(Request $request)
+    {
+        // Replace '2023-09-26' with the specific date for testing
+        $testDate = now();
 
-    public function show()
+        // Get the selected month and year from the request
+        $selectedMonth = $request->input('month');
+        $selectedYear = $request->input('year');
+
+        // Use the current month and year if not provided
+        if (!$selectedMonth || !$selectedYear) {
+            $selectedMonth = now()->month;
+            $selectedYear = now()->year;
+        }
+
+        // Create a Carbon date object for the selected month and year
+        $selectedDate = Carbon::createFromDate($selectedYear, $selectedMonth, 1)->timezone('Asia/Gaza');
+
+        // Get the first day of the selected month
+        $firstDayOfMonth = $selectedDate->startOfMonth();
+
+        // Calculate the last week's start date (7 days before the last day of the selected month)
+        $lastWeekStart = $firstDayOfMonth->copy()->endOfMonth()->subDays(6);
+
+        if ($selectedDate >= $lastWeekStart) {
+            // Get the start and end dates of the recent month
+            $startOfMonth = $selectedDate->addMonthNoOverflow()->startOfMonth();
+            $endOfMonth = $selectedDate->endOfMonth();
+        } else {
+            // Use the selected month
+            $startOfMonth = $firstDayOfMonth;
+            $endOfMonth = $firstDayOfMonth->copy()->endOfMonth();
+        }
+
+        // Retrieve all car movements for the specified month and order them by date
+        $carMovements = CarMovement::whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->orderBy('date')
+            ->get();
+
+        return view('car.show-plan', compact('carMovements', 'selectedMonth', 'selectedYear'));
+    }
+
+    public function show2()
     {
         // Replace '2023-09-26' with the specific date for testing
         $testDate = now();
