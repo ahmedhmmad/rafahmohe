@@ -138,6 +138,52 @@ class CarMovementController extends Controller
         return redirect()->route('car.show-plan')->with('success', 'Car movement deleted successfully!');
     }
 
+    public function deleteAllCarMovements()
+    {
+        // Delete all car movements
+        CarMovement::truncate();
+
+        // Redirect to the show plan page with a success message
+        return redirect()->route('car.show-plan')->with('success', 'All car movements deleted successfully!');
+    }
+
+    public function addCarMovement($id)
+    {
+        // Retrieve the car movement you want to add
+        $carMovement = CarMovement::findOrFail($id);
+
+        // Define your directionsTranslations array (same as in your show method)
+        $directionsTranslations = [
+            'east' => 'شرق رفح',
+            'west' => 'غرب رفح',
+            'home' => 'البلد',
+            'far' => 'أسرار - المسمية - غسان - مرمرة',
+            'special' => 'الشوكة',
+            'free' => 'بدون',
+        ];
+
+        // Pass the directionsTranslations and carMovement to the add-car-movement blade
+        return view('car.add-car-movement', compact('directionsTranslations', 'carMovement'));
+    }
+
+
+    public function storeCarMovement(Request $request)
+    {
+        // Data validation
+        $data = $request->validate([
+            'date' => 'required|date',
+            'direction' => 'required|in:east,west,home,far,special,free',
+        ]);
+
+        // Create the car movement
+        CarMovement::create($data);
+
+        // Redirect to the show plan page with a success message
+        return redirect()->route('car.show-plan')->with('success', 'Car movement added successfully!');
+    }
+
+
+
 
 
 

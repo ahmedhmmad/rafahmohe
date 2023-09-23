@@ -109,6 +109,12 @@ Route::middleware(['auth', 'role:CarOfficial'])->group(function ()
     Route::get('/car/delete-car-movement/{id}', [\App\Http\Controllers\Car\CarMovementController::class,'deleteCarMovement'])
         ->name('car.delete-car-movement');
 
+    Route::get('/car/addCarMovement/{id}',[App\Http\Controllers\Car\CarMovementController::class,'addCarMovement'])
+        ->name('car.add-car-movement');
+
+    Route::post('/car/storeCarMovement',[App\Http\Controllers\Car\CarMovementController::class,'storeCarMovement'])
+        ->name('car.store-day-car-movement');
+
 
 });
 
