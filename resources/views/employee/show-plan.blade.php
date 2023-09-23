@@ -126,7 +126,16 @@
 @extends('layouts.master')
 
 @section('content')
-
+<style>
+    .note{
+        background-color: #eccbc8;
+        border: 1px solid #eccbc8;
+        border-radius: 5px;
+        font-size: 18px;
+        padding: 18px;
+        margin-bottom: 10px;
+    }
+</style>
     <div class="container py-4">
         {{-- Show errors --}}
         @if ($errors->any())
@@ -149,6 +158,7 @@
 
                 <div class="card mt-2">
                     <div class="card-body">
+                        <h3 class="note invert-text-white">ملاحظة : تأكد من الشهر المطلوب للتعديل</h3>
 
                         <form method="GET" action="{{ route('employee.show-plan') }}">
                             @csrf
