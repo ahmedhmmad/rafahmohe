@@ -15,6 +15,9 @@
                             <th scope="col">رقم التذكرة</th>
                             <th scope="col">تاريخ الإنشاء</th>
                             <th scope="col">المدرسة</th>
+                            @if (auth()->user()->department_id == 16)
+                                <th scope="col">النوع</th>
+                            @endif
                             <th scope="col">الموضوع</th>
                             <th scope="col">الحالة</th>
                             <th scope="col">الإجراء</th>
@@ -26,6 +29,9 @@
                                 <td>{{ $ticket->ticket?->id }}</td>
                                 <td>{{ $ticket->created_at->format('Y-m-d') }}</td>
                                 <td>{{ $ticket->ticket?->user?->name }}</td>
+                                @if (auth()->user()->department_id == 16)
+                                    <td>{{ $ticket->ticket?->work_type ?? 'غير محدد' }}</td>
+                                @endif
                                 <td>{{ $ticket->ticket?->subject }}</td>
                                 <td>
                                         <span class="badge {{ getStatusStyle($ticket->ticket?->status) }}">
