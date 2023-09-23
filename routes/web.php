@@ -97,6 +97,8 @@ Route::middleware(['auth', 'role:CarOfficial'])->group(function ()
         ->name('car.create-plan');
     Route::post('/car/storeplan',[App\Http\Controllers\Car\CarMovementController::class,'store'])
         ->name('car.store-plan');
+    Route::get('/car/showplan',[App\Http\Controllers\Car\CarMovementController::class,'show'])
+        ->name('car.show-plan');
 
 });
 

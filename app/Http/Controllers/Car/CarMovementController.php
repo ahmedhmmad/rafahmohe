@@ -50,6 +50,47 @@ class CarMovementController extends Controller
         return redirect()->route('home')->with('success', 'Car movement plan saved successfully!');
     }
 
+    public function show()
+    {
+        // Replace '2023-09-26' with the specific date for testing
+        $testDate = now();
+
+        // Get the first day of the current month
+        $firstDayOfMonth = Carbon::parse($testDate)->timezone('Asia/Gaza')->startOfMonth();
+
+        // Calculate the last week's start date (7 days before the last day of the current month)
+        $lastWeekStart = $firstDayOfMonth->copy()->endOfMonth()->subDays(6);
+
+        if (Carbon::parse($testDate) >= $lastWeekStart) {
+            // Get the start and end dates of the recent month
+            $startOfMonth = Carbon::parse($testDate)->timezone('Asia/Gaza')->addMonthNoOverflow()->startOfMonth();
+            $endOfMonth = Carbon::parse($testDate)->timezone('Asia/Gaza')->addMonthNoOverflow()->endOfMonth();
+        } else {
+            // Use the current month
+            $startOfMonth = Carbon::parse($testDate)->timezone('Asia/Gaza')->startOfMonth();
+            $endOfMonth = Carbon::parse($testDate)->timezone('Asia/Gaza')->endOfMonth();
+        }
+
+        // Retrieve all car movements for the specified month and order them by date
+        $carMovements = CarMovement::whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->orderBy('date')
+            ->get();
+
+        // Generate working days array (if needed)
+        $workingDays = [];
+        $currentDay = $startOfMonth->copy();
+
+        while ($currentDay <= $endOfMonth) {
+            if (!$currentDay->isFriday() && !$currentDay->isSaturday()) {
+                $workingDays[] = $currentDay->format('Y-m-d');
+            }
+            $currentDay->addDay();
+        }
+
+        return view('car.show-plan', compact('carMovements', 'workingDays'));
+    }
+
+
 
 
 }
