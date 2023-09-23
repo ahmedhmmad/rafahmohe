@@ -80,7 +80,7 @@
                                     <td>
 
                                         <a href="{{ route('car.edit-car-movement', $carMovement->id) }}" class="btn btn-outline-primary">تعديل</a>
-{{--                                        <a href="{{ route('car.delete-car-movement', $carMovement->id) }}" class="btn btn-outline-danger">حذف</a>--}}
+                                        <a href="{{ route('car.delete-car-movement', $carMovement->id) }}" class="btn btn-outline-danger">حذف</a>
                                     </td>
                                 </tr>
 

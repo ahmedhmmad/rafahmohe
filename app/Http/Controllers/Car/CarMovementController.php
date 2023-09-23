@@ -126,6 +126,18 @@ class CarMovementController extends Controller
         return redirect()->route('car.show-plan')->with('success', 'Car movement updated successfully!');
     }
 
+    public function deleteCarMovement($id)
+    {
+        // Retrieve the car movement you want to delete
+        $carMovement = CarMovement::findOrFail($id);
+
+        // Delete the car movement
+        $carMovement->delete();
+
+        // Redirect to the show plan page with a success message
+        return redirect()->route('car.show-plan')->with('success', 'Car movement deleted successfully!');
+    }
+
 
 
 
