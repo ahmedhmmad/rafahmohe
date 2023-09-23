@@ -115,6 +115,9 @@ Route::middleware(['auth', 'role:CarOfficial'])->group(function ()
     Route::post('/car/storeCarMovement',[App\Http\Controllers\Car\CarMovementController::class,'storeCarMovement'])
         ->name('car.store-day-car-movement');
 
+    Route::get('/car/show-car-movements', [\App\Http\Controllers\Car\CarMovementController::class,'showCarMovements'])
+        ->name('car.show-car-movements');
+
 
 });
 

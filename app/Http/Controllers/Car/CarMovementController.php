@@ -181,7 +181,29 @@ class CarMovementController extends Controller
         // Redirect to the show plan page with a success message
         return redirect()->route('car.show-plan')->with('success', 'Car movement added successfully!');
     }
+    public function showCarMovements(Request $request)
+    {
+        // Retrieve the selected month and year from the request
+        $selectedMonth = $request->input('month');
+        $selectedYear = $request->input('year');
 
+        // If the month and year are not provided, use the current month and year
+        if (!$selectedMonth || !$selectedYear) {
+            $selectedMonth = now()->month;
+            $selectedYear = now()->year;
+        }
+
+        // Get the first and last day of the selected month and year
+        $firstDayOfMonth = now()->setYear($selectedYear)->setMonth($selectedMonth)->startOfMonth();
+        $lastDayOfMonth = now()->setYear($selectedYear)->setMonth($selectedMonth)->endOfMonth();
+
+        // Retrieve car movements for the selected month and year
+        $carMovements = CarMovement::whereBetween('date', [$firstDayOfMonth, $lastDayOfMonth])->get();
+
+        // You may want to modify the data to match your view requirements if necessary
+
+        return view('car.show-car-movements', compact('carMovements'));
+    }
 
 
 
