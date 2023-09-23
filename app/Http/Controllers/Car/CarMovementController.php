@@ -89,6 +89,42 @@ class CarMovementController extends Controller
 
         return view('car.show-plan', compact('carMovements', 'workingDays'));
     }
+    public function editCarMovement($id)
+    {
+        // Retrieve the car movement you want to edit
+        $carMovement = CarMovement::findOrFail($id);
+
+        // Define your directionsTranslations array (same as in your show method)
+        $directionsTranslations = [
+            'east' => 'شرق رفح',
+            'west' => 'غرب رفح',
+            'home' => 'البلد',
+            'far' => 'أسرار - المسمية - غسان - مرمرة',
+            'special' => 'الشوكة',
+            'free' => 'بدون',
+        ];
+
+        // Pass the car movement and directionsTranslations to the edit-car-movement blade
+        return view('car.edit-car-movement', compact('carMovement', 'directionsTranslations'));
+    }
+
+    public function updateCarMovement(Request $request, $id)
+    {
+        // Data validation
+        $data = $request->validate([
+            'date' => 'required|date',
+            'direction' => 'required|in:east,west,home,far,special,free',
+        ]);
+
+        // Retrieve the car movement you want to update
+        $carMovement = CarMovement::findOrFail($id);
+
+        // Update the car movement
+        $carMovement->update($data);
+
+        // Redirect to the show plan page with a success message
+        return redirect()->route('car.show-plan')->with('success', 'Car movement updated successfully!');
+    }
 
 
 

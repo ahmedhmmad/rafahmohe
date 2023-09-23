@@ -100,6 +100,13 @@ Route::middleware(['auth', 'role:CarOfficial'])->group(function ()
     Route::get('/car/showplan',[App\Http\Controllers\Car\CarMovementController::class,'show'])
         ->name('car.show-plan');
 
+    Route::get('/car/edit-car-movement/{id}', [\App\Http\Controllers\Car\CarMovementController::class,'editCarMovement'])
+        ->name('car.edit-car-movement');
+
+    Route::put('/car/update-car-movement/{id}', [\App\Http\Controllers\Car\CarMovementController::class,'updateCarMovement'])
+        ->name('car.update-car-movement');
+
+
 });
 
 //Department Head Routes
