@@ -97,6 +97,27 @@ Route::middleware(['auth', 'role:CarOfficial'])->group(function ()
         ->name('car.create-plan');
     Route::post('/car/storeplan',[App\Http\Controllers\Car\CarMovementController::class,'store'])
         ->name('car.store-plan');
+    Route::get('/car/showplan',[App\Http\Controllers\Car\CarMovementController::class,'show'])
+        ->name('car.show-plan');
+
+    Route::get('/car/edit-car-movement/{id}', [\App\Http\Controllers\Car\CarMovementController::class,'editCarMovement'])
+        ->name('car.edit-car-movement');
+
+    Route::put('/car/update-car-movement/{id}', [\App\Http\Controllers\Car\CarMovementController::class,'updateCarMovement'])
+        ->name('car.update-car-movement');
+
+    Route::get('/car/delete-car-movement/{id}', [\App\Http\Controllers\Car\CarMovementController::class,'deleteCarMovement'])
+        ->name('car.delete-car-movement');
+
+    Route::get('/car/addCarMovement/{id}',[App\Http\Controllers\Car\CarMovementController::class,'addCarMovement'])
+        ->name('car.add-car-movement');
+
+    Route::post('/car/storeCarMovement',[App\Http\Controllers\Car\CarMovementController::class,'storeCarMovement'])
+        ->name('car.store-day-car-movement');
+
+    Route::get('/car/show-car-movements', [\App\Http\Controllers\Car\CarMovementController::class,'showCarMovements'])
+        ->name('car.show-car-movements');
+
 
 });
 

@@ -162,16 +162,16 @@
                             <div data-i18n="Without menu">ادخال الخطة الشهرية</div>
                         </a>
                     </li>
-{{--                    <li class="menu-item">--}}
-{{--                        <a href="{{route('car.show-plan')}}" class="menu-link">--}}
-{{--                            <div data-i18n="Without navbar">تعديل الخطة الشهرية</div>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                    <li class="menu-item">--}}
-{{--                        <a href="{{route('car.showonly-plan')}}" class="menu-link">--}}
-{{--                            <div data-i18n="Without footer">عرض الخطة الشهرية</div>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
+                    <li class="menu-item">
+                        <a href="{{route('car.show-plan')}}" class="menu-link">
+                            <div data-i18n="Without navbar">تعديل الخطة الشهرية</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{route('car.show-car-movements')}}" class="menu-link">
+                            <div data-i18n="Without footer">عرض الخطة الشهرية</div>
+                        </a>
+                    </li>
 
 
                 </ul>
