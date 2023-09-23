@@ -327,8 +327,55 @@ class MonthlyPlan extends Controller
 //        return view('employee.show-plan', compact('plans', 'workingDays'));
 //
 //    }
+    public function show(Request $request)
+    {
+        $errors = collect([]);
+        $user = Auth::user();
+        $departmentId = $user->department->id;
+        $allowedDepartmentIds = [21, 10, 19, 17, 6, 20, 12];
 
-    public function show()
+        if (!in_array($departmentId, $allowedDepartmentIds)) {
+            $errors->push('لا يمكنك إدخال/ تعديل الخطة لأنه ليس لقسمك خطة شهرية');
+            return redirect()->back()->withErrors($errors);
+        }
+
+        // Get the selected month and year from the request
+        $selectedMonth = $request->input('month');
+        $selectedYear = $request->input('year');
+
+        // Use the current month and year if not provided
+        if (!$selectedMonth || !$selectedYear) {
+            $selectedMonth = now()->month;
+            $selectedYear = now()->year;
+        }
+
+        // Calculate the start and end dates based on the selected month and year
+        $startOfMonth = Carbon::createFromDate($selectedYear, $selectedMonth, 1)
+            ->timezone('Asia/Gaza')
+            ->startOfMonth();
+        $endOfMonth = $startOfMonth->copy()->endOfMonth();
+
+        // Retrieve the plans for the selected month and order them by date
+        $plans = Plan::where('user_id', $user->id)
+            ->whereBetween('start', [$startOfMonth, $endOfMonth])
+            ->orderBy('start')
+            ->get();
+
+        // Generate working days array
+        $workingDays = [];
+        $currentDay = $startOfMonth->copy();
+
+        while ($currentDay <= $endOfMonth) {
+            if (!$currentDay->isFriday() && !$currentDay->isSaturday()) {
+                $workingDays[] = $currentDay->format('Y-m-d');
+            }
+            $currentDay->addDay();
+        }
+
+        return view('employee.show-plan', compact('plans', 'workingDays', 'selectedMonth', 'selectedYear'));
+    }
+
+    public function show2()
     {
         $errors = collect([]);
         $user = Auth::user();
