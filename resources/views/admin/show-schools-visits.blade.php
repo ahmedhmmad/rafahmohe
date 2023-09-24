@@ -244,7 +244,7 @@
             <div class="demo-inline-spacing">
                 <!-- Basic Pagination -->
                 <nav aria-label="Page navigation">
-                    {{ $schoolVisits->onEachSide(3)->links('vendor.pagination.custom') }}
+                    {{ $schoolVisits->appends(request()->query())->onEachSide(3)->links('vendor.pagination.custom') }}
 
                 </nav>
                 <!--/ Basic Pagination -->
