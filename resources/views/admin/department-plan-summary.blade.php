@@ -11,7 +11,7 @@
                     <div class="card-body">
                         <ul>
                             @foreach ($departmentsWithPlans as $department)
-                                <li>{{ $department->name }}</li>
+                                <strong><li>{{ $department->name }}</li></strong>
                                 <ul>
                                     @foreach ($usersWithPlans[$department->id] as $user)
                                         <li>{{ $user->user->name }}</li>
@@ -30,7 +30,7 @@
                     <div class="card-body">
                         <ul>
                             @foreach ($departmentsWithoutPlans as $department)
-                                <li>{{ $department->name }}</li>
+                            <li>{{ $department->name }}</li>
                             @endforeach
                         </ul>
                     </div>
