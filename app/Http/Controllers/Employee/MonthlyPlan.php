@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
+use App\Models\UserActivity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\School;
@@ -30,92 +31,102 @@ class MonthlyPlan extends Controller
      */
     public function create($month, $year)
     {
-
-        $errors = collect([]);
-        $departmentId = Auth::user()->department->id;
-
-        $allowedDepartmentIds = [21, 10, 19, 17, 6, 20, 12];
-
-        if (!in_array($departmentId, $allowedDepartmentIds)) {
-
-            $errors->push('لا يمكنك إدخال الخطة لأنه ليس لقسمك خطة شهرية');
-            return redirect()->back()->withErrors($errors);
-        }
+        $user = Auth::user();
+        $userActivity = UserActivity::where('user_id', $user->id)
+            ->where('month', $month)
+            ->where('year', $year)
+            ->value('plan_input');
+        if ($userActivity) {
+            session()->flash('success', 'لقد قمت بإدخال الخطة الشهرية لهذا الشهر مسبقاً، يمكنك التعديل الآن');
+            return redirect()->route('employee.show-plan', ['month' => $month, 'year' => $year]);
+        } else {
 
 
+            $errors = collect([]);
+            $departmentId = Auth::user()->department->id;
 
-        $planRestriction = Auth::user()->planRestrictions->first();
-       //$canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
-        $canOverrideDepartment = !$planRestriction || ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now());
-        $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
+            $allowedDepartmentIds = [21, 10, 19, 17, 6, 20, 12];
 
-        // Check if the month is a valid value
-        if (!is_numeric($month) || $month < 1 || $month > 12) {
-            $errors->push('اختر الشهر المطلوب.');
-        }
+            if (!in_array($departmentId, $allowedDepartmentIds)) {
 
-        // Check if the year is a valid value
-        if (!is_numeric($year) || $year < 2020 || $year > 2099) {
-            $errors->push('اختر السنة المطلوبة.');
-        }
+                $errors->push('لا يمكنك إدخال الخطة لأنه ليس لقسمك خطة شهرية');
+                return redirect()->back()->withErrors($errors);
+            }
 
-        $currentMonth = null; // Initialize the variable outside the try-catch block
-        $currentYear = null;
-        $canOverrideLastWeek = false; // Initialize the variable outside the try-catch block
-        $lastDayOfMonth = null; // Initialize the variable outside the try-catch block
-
-        try {
-            // Check if the specified month and year create a valid date
-            $currentMonth = Carbon::create($year, $month)->month;
-            $currentYear = Carbon::create($year, $month)->year;
-
-
-            $existingPlans = Plan::whereMonth('start', $currentMonth)
-                ->whereYear('start', $currentYear)
-                ->get();
-
-            $existingPlanDates = $existingPlans->pluck('start')->toArray();
 
             $planRestriction = Auth::user()->planRestrictions->first();
-            $canOverrideLastWeek = $planRestriction ? ($planRestriction->can_override_last_week && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
+            //$canOverrideDepartment = $planRestriction ? ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : true;
+            $canOverrideDepartment = !$planRestriction || ($planRestriction->can_override_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now());
+            $canOverrideMultiDepartment = $planRestriction ? ($planRestriction->can_override_multi_department && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
 
-        } catch (\Exception $e) {
-            $errors->push('اختر الشهر والسنة المطلوبة.');
-        }
+            // Check if the month is a valid value
+            if (!is_numeric($month) || $month < 1 || $month > 12) {
+                $errors->push('اختر الشهر المطلوب.');
+            }
 
-        // Calculate the last day of the month outside the try-catch block
-        //$lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
-        $lastDayOfMonth= Carbon::create($currentYear, $currentMonth)->subMonth()->endOfMonth();
+            // Check if the year is a valid value
+            if (!is_numeric($year) || $year < 2020 || $year > 2099) {
+                $errors->push('اختر السنة المطلوبة.');
+            }
 
-        // Check if the current date is within the allowed range for entering the plan
-        $currentDate = now();
-        $lastWeekOfMonth = $lastDayOfMonth->copy()->subWeek();
-        //dd($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth);
+            $currentMonth = null; // Initialize the variable outside the try-catch block
+            $currentYear = null;
+            $canOverrideLastWeek = false; // Initialize the variable outside the try-catch block
+            $lastDayOfMonth = null; // Initialize the variable outside the try-catch block
+
+            try {
+                // Check if the specified month and year create a valid date
+                $currentMonth = Carbon::create($year, $month)->month;
+                $currentYear = Carbon::create($year, $month)->year;
 
 
-        if ($currentDate->month == $month || $currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+                $existingPlans = Plan::whereMonth('start', $currentMonth)
+                    ->whereYear('start', $currentYear)
+                    ->get();
+
+                $existingPlanDates = $existingPlans->pluck('start')->toArray();
+
+                $planRestriction = Auth::user()->planRestrictions->first();
+                $canOverrideLastWeek = $planRestriction ? ($planRestriction->can_override_last_week && $planRestriction->override_start_date <= now() && $planRestriction->override_end_date >= now()) : false;
+
+            } catch (\Exception $e) {
+                $errors->push('اختر الشهر والسنة المطلوبة.');
+            }
+
+            // Calculate the last day of the month outside the try-catch block
+            //$lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
+            $lastDayOfMonth = Carbon::create($currentYear, $currentMonth)->subMonth()->endOfMonth();
+
+            // Check if the current date is within the allowed range for entering the plan
+            $currentDate = now();
+            $lastWeekOfMonth = $lastDayOfMonth->copy()->subWeek();
+            //dd($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth);
+
+
+            if ($currentDate->month == $month || $currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
 
                 if (!$canOverrideLastWeek) {
                     $lastWeekOfMonth->modify('+1 day');
-                $validDates = $lastWeekOfMonth->format('d/m/Y') . ' - ' . $lastDayOfMonth->format('d/m/Y');
-                $errorMessage = 'لا يمكن إدخال الخطة إلا خلال الأسبوع الأخير من الشهر الحالي:: الفترة المسموحة: ' . $validDates;
-                $errors->push($errorMessage);
+                    $validDates = $lastWeekOfMonth->format('d/m/Y') . ' - ' . $lastDayOfMonth->format('d/m/Y');
+                    $errorMessage = 'لا يمكن إدخال الخطة إلا خلال الأسبوع الأخير من الشهر الحالي:: الفترة المسموحة: ' . $validDates;
+                    $errors->push($errorMessage);
+                }
             }
-        }
 
-        if ($errors->isNotEmpty()) {
-            return redirect()->back()->withErrors($errors);
-        }
+            if ($errors->isNotEmpty()) {
+                return redirect()->back()->withErrors($errors);
+            }
 
-        //$schools = School::all();
+            //$schools = School::all();
 //        $schools = School::orderBy('name')->get();
 //        $schools = School::orderByRaw("id = 34 DESC, name ASC")->get();
-        $schools = School::orderByRaw("FIELD(id, 34, 35, 3434343404, 3434343405, 34343406, 34343405) DESC, name ASC")->get();
+            $schools = School::orderByRaw("FIELD(id, 34, 35, 3434343404, 3434343405, 34343406, 34343405) DESC, name ASC")->get();
 
 
-        //dd($existingPlans, $existingPlanDates, $canOverrideDepartment, $canOverrideMultiDepartment, $departmentId);
+            //dd($existingPlans, $existingPlanDates, $canOverrideDepartment, $canOverrideMultiDepartment, $departmentId);
 
-        return view('employee.create-plan', compact('schools', 'month', 'year', 'existingPlanDates', 'existingPlans', 'canOverrideDepartment', 'canOverrideMultiDepartment', 'departmentId'));
+            return view('employee.create-plan', compact('schools', 'month', 'year', 'existingPlanDates', 'existingPlans', 'canOverrideDepartment', 'canOverrideMultiDepartment', 'departmentId'));
+        }
     }
 
     public function create2($month, $year)
@@ -205,6 +216,7 @@ class MonthlyPlan extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
 
         $days = $request->input('days');
         $user = Auth::user();
@@ -224,6 +236,21 @@ class MonthlyPlan extends Controller
                 $plan->save();
             }
         }
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        // Create a new UserActivity record or update an existing one
+        UserActivity::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'month' => $month,
+                'year' => $year,
+            ],
+            [
+                'plan_input' => true, // Set this to true to indicate plan input
+                // 'ticket_closed' => false, // You can set ticket_closed status here if needed
+            ]
+        );
         session()->flash('success', 'تم الحفظ بنجاح');
 
         return redirect()->route('home');

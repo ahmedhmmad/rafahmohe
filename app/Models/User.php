@@ -64,5 +64,10 @@ class User extends Authenticatable
         return $this->hasMany(PlanRestriction::class);
     }
 
+    public function userActivities()
+    {
+        return $this->hasMany(UserActivity::class, 'user_id');
+    }
+
 
 }
