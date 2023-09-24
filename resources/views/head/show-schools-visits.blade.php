@@ -173,23 +173,7 @@
                     <div class="demo-inline-spacing">
                         <!-- Basic Pagination -->
                         <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <li class="page-item {{ $schoolVisits->onFirstPage() ? 'disabled' : '' }}">
-                                    <a class="page-link" href="{{ $schoolVisits->appends($queryParams)->previousPageUrl() }}" aria-label="Previous">
-                                    <i class="tf-icon bx bx-chevrons-right">السابق</i>
-                                    </a>
-                                </li>
-                                @for($i = 1; $i <= $schoolVisits->lastPage(); $i++)
-                                    <li class="page-item {{ $schoolVisits->currentPage() == $i ? 'active' : '' }}">
-                                        <a class="page-link" href="{{ $schoolVisits->appends($queryParams)->url($i) }}">{{ $i }}</a>
-                                    </li>
-                                @endfor
-                                <li class="page-item {{ $schoolVisits->hasMorePages() ? '' : 'disabled' }}">
-                                    <a class="page-link" href="{{ $schoolVisits->appends($queryParams)->nextPageUrl() }}" aria-label="Next">
-                                    <i class="tf-icon bx bx-chevron-left">التالي</i>
-                                    </a>
-                                </li>
-                            </ul>
+                            {{ $schoolVisits->appends(request()->query())->onEachSide(3)->links('vendor.pagination.custom') }}
                         </nav>
                         <!--/ Basic Pagination -->
                     </div>
