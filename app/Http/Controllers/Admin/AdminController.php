@@ -9,17 +9,19 @@ use App\Models\PlanRestriction;
 use App\Models\School;
 use App\Models\SchoolVisit;
 use App\Models\User;
+use App\Models\UserActivity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
 class AdminController extends Controller
 {
-public function timeline()
-{
+    public function timeline()
+    {
 
-    return view('admin.timeline');
-}
+        return view('admin.timeline');
+    }
+
     public function getUserTimeline(Request $request)
     {
         $date = $request->input('date');
@@ -34,6 +36,7 @@ public function timeline()
             'timeline_content' => $timelineContent,
         ]);
     }
+
     public function fetchUserTimeline($date, $user_id)
     {
         // Assuming you have a 'schoolvisits' table and a 'SchoolVisit' model defined
@@ -61,6 +64,7 @@ public function timeline()
 
         return response()->json(['users' => $users]);
     }
+
     public function getTableOverrideData(Request $request)
     {
         // Retrieve the data for the table (e.g., plan restrictions) with paginatiob
@@ -129,12 +133,11 @@ public function timeline()
     }
 
 
-
     public function overridePlanRestrictions(Request $request)
     {
         //dd($request->all());
         $selectedUserOrDepartment = $request->selected_user_or_department;
-       // dd($selectedUserOrDepartment);
+        // dd($selectedUserOrDepartment);
 
 //        $request->validate([
 //            'can_override_last_week' => 'nullable|boolean',
@@ -171,13 +174,13 @@ public function timeline()
         $validatedData['can_override_department'] = $validatedData['can_override_department'] ?? false;
 
         if ($selectedUserOrDepartment === 'user') {
-           $userId= json_decode($request->input('selected_user_id'))->id;
+            $userId = json_decode($request->input('selected_user_id'))->id;
 
             $user = User::findOrFail($userId);
-           PlanRestriction::updateOrCreate(['user_id' => $user->id], $validatedData);
+            PlanRestriction::updateOrCreate(['user_id' => $user->id], $validatedData);
 
 
-           // PlanRestriction::updateOrCreate(['user_id' => $userId], $validatedData);
+            // PlanRestriction::updateOrCreate(['user_id' => $userId], $validatedData);
         } elseif ($selectedUserOrDepartment === 'department') {
             $departmentId = json_decode($request->input('selected_department_id'))->id;
             $users = User::where('department_id', $departmentId)->get();
@@ -342,8 +345,7 @@ public function timeline()
 
         return view('admin.search-all-schools', compact('schools', 'groupedPlans', 'month', 'unvisitedSchools'));
     }
-
-    public function summaryDepartmentsWithPlans()
+    public function summaryDepartmentsWithPlans(Request $request)
     {
         // Define the allowed department IDs
         $allowedDepartmentIds = [21, 10, 19, 17, 6, 20, 12];
@@ -354,20 +356,62 @@ public function timeline()
         // Initialize arrays to store departments with plans and without plans
         $departmentsWithPlans = [];
         $departmentsWithoutPlans = [];
+        $usersWithPlans = [];
 
         // Loop through each department in the allowed list
         foreach ($departments as $department) {
             $usersInDepartment = User::where('department_id', $department->id)->pluck('id')->toArray();
-            $hasPlans = Plan::whereIn('user_id', $usersInDepartment)->exists();
 
-            if ($hasPlans) {
+            // Fetch users who have entered the plan for this department
+            $users = UserActivity::whereIn('user_id', $usersInDepartment)
+                ->where('month', $request->input('month'))
+                ->where('year', $request->input('year'))
+                ->where('plan_input', true)
+                ->get();
+
+            if ($users->isNotEmpty()) {
                 $departmentsWithPlans[] = $department;
+                $usersWithPlans[$department->id] = $users;
+
+                // Fetch user names for the users with plans
+                $userIds = $users->pluck('user_id')->toArray();
+                $userNames = User::whereIn('id', $userIds)->pluck('name', 'id')->toArray();
+                foreach ($usersWithPlans[$department->id] as $user) {
+                    if (isset($userNames[$user->user_id])) {
+                        $user->user_name = $userNames[$user->user_id];
+                    }
+                }
             } else {
                 $departmentsWithoutPlans[] = $department;
             }
         }
 
-        // Return the departments with plans and departments without plans to a view
-        return view('admin.department-plan-summary', compact('departmentsWithPlans', 'departmentsWithoutPlans'));
+        // Retrieve the list of months
+        $months = [
+            1 => 'يناير',
+            2 => 'فبراير',
+            3 => 'مارس',
+            4 => 'أبريل',
+            5 => 'مايو',
+            6 => 'يونيو',
+            7 => 'يوليو',
+            8 => 'أغسطس',
+            9 => 'سبتمبر',
+            10 => 'أكتوبر',
+            11 => 'نوفمبر',
+            12 => 'ديسمبر',
+        ];
+
+        // Get the selected month and year from the request
+        $selectedMonth = $request->input('month', now()->month);
+        $selectedYear = $request->input('year', now()->year);
+        //dd($usersWithPlans);
+
+        // Return the departments with plans, departments without plans,
+        // users with plans, months, and selected month and year to a view
+        return view('admin.department-plan-summary', compact('departmentsWithPlans', 'departmentsWithoutPlans', 'usersWithPlans', 'months', 'selectedMonth', 'selectedYear'));
     }
+
+
+
 }

@@ -163,6 +163,7 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
     Route::get('/admin/summary', [App\Http\Controllers\Admin\AdminController::class, 'summaryDepartmentsWithPlans'])
         ->name('admin.summary');
 
+
     Route::get('/admin/showschoolsvisits', [App\Http\Controllers\School\SchoolController::class, 'showSchoolsVisits'])
         ->name('admin.show-schools-visits');
 
