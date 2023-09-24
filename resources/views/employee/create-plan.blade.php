@@ -70,9 +70,11 @@
                                                         $schoolId = $school->id;
                                                         $dateKey = $startOfMonth->format('Y-m-d');
                                                         $carDirection = DB::table('car_movements')
-                                        ->where('date', '=', $dateKey)
-                                        ->value('direction');
-                                                        $isMatch = $school->location === $carDirection;
+                                                        ->where('date', '=', $dateKey)
+                                                        ->pluck('direction')
+                                                        ->toArray(); // Convert the result to an array
+
+                                                    $isMatch = in_array($school->location, $carDirection);
                                     // Add CSS class based on whether there is a match
                                     $highlightClass = $isMatch ? 'highlight-school' : '';
                                                         // Filter existing plans for the current school
