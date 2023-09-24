@@ -58,10 +58,10 @@
                                             <button class="btn btn-info delegate-ticket" data-bs-toggle="modal" data-bs-target="#delegateModal" data-ticket-id="{{ $ticket->ticket?->id }}">
                                                 تخصيص لموظف مؤقت
                                             </button>
-                                        <form action="{{ route('employee.tickets.changeStatus', $ticket->ticket?->id) }}" method="POST" style="display: inline-block;">
-                                            @csrf
-                                            <button type="submit" class="btn btn-danger" name="status" value="closed">تغيير الحالة إلى مغلقة</button>
-                                        </form>
+{{--                                        <form action="{{ route('employee.tickets.changeStatus', $ticket->ticket?->id) }}" method="POST" style="display: inline-block;">--}}
+{{--                                            @csrf--}}
+{{--                                            <button type="submit" class="btn btn-danger" name="status" value="closed">تغيير الحالة إلى مغلقة</button>--}}
+{{--                                        </form>--}}
                                     @endif
 
 
