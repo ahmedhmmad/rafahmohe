@@ -39,6 +39,9 @@
                 <form method="POST" action="{{ route('employee.store-plan') }}" onsubmit="return validateForm()">
                     @csrf
 
+                    <input type="hidden" name="month" value="{{ $month }}">
+                    <input type="hidden" name="year" value="{{ $year }}">
+
                     @php
                         $startOfMonth = Carbon\Carbon::createFromDate($year, $month, 1);
                         $daysInMonth = $startOfMonth->daysInMonth;
