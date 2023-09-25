@@ -1,3 +1,4 @@
+
 @extends('layouts.master')
 
 @section('content')
@@ -23,7 +24,6 @@
                                         <option value="3">مارس</option>
                                         <option value="4">ابريل</option>
                                         <option value="5">مايو</option>
-
                                         <option value="6">يونيو</option>
                                         <option value="7">يوليو</option>
                                         <option value="8">اغسطس</option>
@@ -71,8 +71,17 @@
                             </thead>
                             <tbody>
                             @php
-                                $previousDate = null;
-                                $dayNames = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
+                                use Carbon\Carbon;
+
+                                $dayNameTranslations = [
+                                    'Saturday' => 'السبت',
+                                    'Sunday' => 'الأحد',
+                                    'Monday' => 'الاثنين',
+                                    'Tuesday' => 'الثلاثاء',
+                                    'Wednesday' => 'الأربعاء',
+                                    'Thursday' => 'الخميس',
+                                    'Friday' => 'الجمعة',
+                                ];
                                 $directionsTranslations = [
                                     'east' => 'شرق رفح',
                                     'west' => 'غرب رفح',
@@ -81,45 +90,43 @@
                                     'special' => 'الشوكة',
                                     'free' => 'بدون',
                                 ];
+
+                                $previousDate = null;
+                                $schoolsString = '';
                             @endphp
 
-                            @foreach ($carMovements as $carMovement)
+                            @foreach ($carMovements as $index => $carMovement)
                                 @php
+                                    $englishDayName = Carbon::parse($carMovement->date)->format('l');
                                     $currentDate = $carMovement->date;
-                                    $currentDayName = $dayNames[date('N', strtotime($carMovement->date)) - 1];
+                                    $currentDayName = $dayNameTranslations[$englishDayName];
                                 @endphp
 
-                                @if ($currentDate === $previousDate)
-                                    @php
-                                        $schoolsString .= ', ' . $directionsTranslations[$carMovement->direction];
-                                    @endphp
-                                @else
-                                    @if ($previousDate !== null)
-                                        <tr>
-                                            <td>{{ $currentDayName }}</td>
-                                            <td><strong>{{ $previousDate }}</strong></td>
-                                            <td>{{ $schoolsString }}</td>
-                                        </tr>
-                                    @endif
-
-                                    @php
-                                        $schoolsString = $directionsTranslations[$carMovement->direction];
-                                    @endphp
+                                @if ($currentDate !== $previousDate && $previousDate !== null)
+                                    <tr>
+                                        <td>{{ $dayNameTranslations[Carbon::parse($previousDate)->format('l')] }}</td>
+                                        <td><strong>{{ $previousDate }}</strong></td>
+                                        <td>{{ $schoolsString }}</td>
+                                    </tr>
+                                    @php $schoolsString = ''; @endphp
                                 @endif
 
                                 @php
+                                    $schoolsString .= ($schoolsString ? ', ' : '') . $directionsTranslations[$carMovement->direction];
                                     $previousDate = $currentDate;
                                 @endphp
 
+                                @if ($index === count($carMovements) - 1)
+                                    <tr>
+                                        <td>{{ $currentDayName }}</td>
+                                        <td><strong>{{ $currentDate }}</strong></td>
+                                        <td>{{ $schoolsString }}</td>
+                                    </tr>
+                                @endif
                             @endforeach
 
-                            @if ($previousDate !== null)
-                                <tr>
-                                    <td>{{ $currentDayName }}</td>
-                                    <td><strong>{{ $previousDate }}</strong></td>
-                                    <td>{{ $schoolsString }}</td>
-                                </tr>
-                            @endif
+
+
                             </tbody>
                         </table>
                     </div>

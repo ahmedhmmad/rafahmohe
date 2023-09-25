@@ -239,7 +239,9 @@ class CarMovementController extends Controller
         $lastDayOfMonth = now()->setYear($selectedYear)->setMonth($selectedMonth)->endOfMonth();
 
         // Retrieve car movements for the selected month and year
-        $carMovements = CarMovement::whereBetween('date', [$firstDayOfMonth, $lastDayOfMonth])->get();
+        $carMovements = CarMovement::whereBetween('date', [$firstDayOfMonth, $lastDayOfMonth])
+            ->orderBy('date')
+            ->get();
 
         // You may want to modify the data to match your view requirements if necessary
 
