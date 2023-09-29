@@ -504,7 +504,8 @@ class MonthlyPlan extends Controller
         $lastWeekOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth()->subWeek();
         $lastDayOfMonth = Carbon::createFromDate($currentYear, $currentMonth)->endOfMonth();
 
-        if ($currentDate < $lastWeekOfMonth || $currentDate > $lastDayOfMonth) {
+
+        if (!(($currentDate->gt($lastWeekOfMonth) && $currentDate->lt($lastDayOfMonth)))) {
             if ($canOverrideLastWeek) {
                 try {
                     // Find the plan by ID and eager load the 'schools' relationship
@@ -523,18 +524,46 @@ class MonthlyPlan extends Controller
                     return view('employee.edit-plan', compact('plan','departmentId','existingPlans', 'schools', 'selectedSchool', 'canOverrideMultiDepartment', 'canOverrideDepartment', 'existingPlans'));
 
                 } catch (\Exception $e) {
+
                     // Handle any exceptions that occur during the process
                     return redirect()
                         ->back()
                         ->withErrors(['error'=>'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
                 }
             }
+            else{
+                return redirect()
+                    ->back()
+                    ->withErrors(['error'=>'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
+            }
+        }
+        else{
+            try {
+                // Find the plan by ID and eager load the 'schools' relationship
+                $plan = Plan::with('schools')->findOrFail($id);
 
+                // Retrieve the selected school for the plan
+                $selectedSchool = $plan->schools->pluck('id')->first();
+
+                // As we're not restricting the list of schools based on the plan's date, we can fetch all the schools
+                $schools = School::orderByRaw("FIELD(id, 34, 35, 3434343404, 3434343405, 34343406, 34343405) DESC, name ASC")->get();
+
+                // Retrieve all plans with the same start date as the plan being edited
+                $existingPlans = Plan::where('start', $plan->start)->get();
+
+                // Pass the plan, schools, selectedSchool, canOverrideMultiDepartment, canOverrideDepartment, and existingPlans to the view
+                return view('employee.edit-plan', compact('plan','departmentId','existingPlans', 'schools', 'selectedSchool', 'canOverrideMultiDepartment', 'canOverrideDepartment', 'existingPlans'));
+
+            } catch (\Exception $e) {
+
+                // Handle any exceptions that occur during the process
+                return redirect()
+                    ->back()
+                    ->withErrors(['error'=>'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
+            }
         }
 
-        return redirect()
-            ->back()
-            ->withErrors(['error'=>'لا يمكنك تعديل الخطة الشهرية في هذا الوقت.']);
+
     }
 
 
@@ -642,9 +671,15 @@ class MonthlyPlan extends Controller
             }
 
             $plan->save();
+            //parse $plan->start to get month and year
+            $selectedMonth = Carbon::parse($plan->start)->month;
+            $selectedYear = Carbon::parse($plan->start)->year;
 
             // Redirect to the view page or any other appropriate action
-            return redirect()->route('employee.show-plan')->with('success', 'تم تحديث الخطة الشهرية بنجاح!');
+          // return redirect()->route('employee.show-plan')->with('success', 'تم تحديث الخطة الشهرية بنجاح!');
+            return redirect()->route('employee.show-plan', ['month' => $selectedMonth, 'year' => $selectedYear])->with('success', 'تم تحديث الخطة الشهرية بنجاح!');
+
+
         } catch (\Exception $e) {
             // Handle any exceptions that occur during the update process
             return back()->with('error', 'حدث خطأ أثناء تحديث الخطة الشهرية. الرجاء المحاولة مرة أخرى.');
