@@ -260,13 +260,14 @@
             // Initialize DataTable with custom text options and hiding the "Show [number] entries" dropdown
             $('#ticketsTable').DataTable({
                 "searching": true, // Enable search functionality
-                "lengthChange": false, // Hide the "Show [number] entries" dropdown
+                "lengthChange": false, // Hide the "Show X entries" dropdown
+                "info": false, // Hide the table footer containing the table summary and pagination
+                "paging": false, // Disable table pagination
                 "language": {
                     "search": "البحث:",
                     "searchPlaceholder": "ابحث هنا..."
                 }
             });
-
              });
     </script>
 @endpush
