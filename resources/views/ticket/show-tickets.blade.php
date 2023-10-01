@@ -49,7 +49,7 @@
         @else
             <div class="container py-2">
                 <div class="card px-2">
-                    <table class="table">
+                    <table id="ticketsTable" class="table">
                         <thead>
                         <tr>
                             <th scope="col">رقم الطلب</th>
@@ -254,3 +254,19 @@
 {{--    </script>--}}
 {{--@endpush--}}
 
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable with custom text options and hiding the "Show [number] entries" dropdown
+            $('#ticketsTable').DataTable({
+                "searching": true, // Enable search functionality
+                "lengthChange": false, // Hide the "Show [number] entries" dropdown
+                "language": {
+                    "search": "البحث:",
+                    "searchPlaceholder": "ابحث هنا..."
+                }
+            });
+
+             });
+    </script>
+@endpush
