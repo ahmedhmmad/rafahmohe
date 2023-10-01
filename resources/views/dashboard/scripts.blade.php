@@ -51,6 +51,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<!-- Add DataTables CSS and JavaScript links -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
 
 <script src="{{url('/js/printout.min.js')}}"></script>
