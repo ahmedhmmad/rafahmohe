@@ -9,8 +9,7 @@
                 @if($tickets->isEmpty())
                     <div class="p-4">لا توجد تذاكر متاحة.</div>
                 @else
-                    <table class="table table-bordered table-hover">
-                        <thead class="table-primary">
+                    <table id="ticketsTable" class="table table-bordered table-hover">                        <thead class="table-primary">
                         <tr>
                             <th scope="col">رقم التذكرة</th>
                             <th scope="col">تاريخ الإنشاء</th>
@@ -137,6 +136,19 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+
+            $('#ticketsTable').DataTable({
+                "searching": true, // Enable search functionality
+                "lengthChange": false, // Hide the "Show X entries" dropdown
+                "info": false, // Hide the table footer containing the table summary and pagination
+                "paging": false, // Disable table pagination
+                "language": {
+                    "search": "البحث:",
+                    "searchPlaceholder": "ابحث هنا..."
+                }
+            });
+
+
             var delegateModal = new bootstrap.Modal(document.getElementById('delegateModal'), {
                 backdrop: 'static',
                 keyboard: false
