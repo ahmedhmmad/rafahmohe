@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicYear;
 use App\Models\Department;
 use App\Models\Plan;
 use App\Models\PlanRestriction;
 use App\Models\School;
+use App\Models\SchoolSemesterWorkingHour;
 use App\Models\SchoolVisit;
+use App\Models\Semester;
 use App\Models\User;
 use App\Models\UserActivity;
 use Carbon\Carbon;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
@@ -411,6 +415,46 @@ class AdminController extends Controller
         // users with plans, months, and selected month and year to a view
         return view('admin.department-plan-summary', compact('departmentsWithPlans', 'departmentsWithoutPlans', 'usersWithPlans', 'months', 'selectedMonth', 'selectedYear'));
     }
+
+    public function showSchoolWorkingHoursForm()
+    {
+        $academicYears = AcademicYear::all();
+        $semesters = Semester::all();
+        $schools = School::all();
+
+        return view('admin.schools-semester-settings', compact('academicYears', 'semesters', 'schools'));
+
+    }
+
+    public function storeSchoolWorkingHours(Request $request)
+    {
+        // Validate the form data
+        $request->validate([
+            'academic_year' => 'required|exists:academic_years,id',
+            'semester' => 'required|exists:semesters,id',
+            'working_hours' => 'required|array',
+        ]);
+
+        // Loop through the submitted data and store it in the database
+        foreach ($request->input('working_hours') as $schoolId => $workingHours) {
+            // Create or update the record in the 'school_semester_working_hours' table
+            SchoolSemesterWorkingHour::updateOrCreate(
+                [
+                    'school_id' => $schoolId,
+                    'academic_year_id'=>$request->input('academic_year')->academicYear(),
+                    'semester_id' => $request->input('semester'),
+                ],
+                [
+                    'morning' => isset($workingHours['morning']) ? 1 : 0,
+                    'afternoon' => isset($workingHours['afternoon']) ? 1 : 0,
+                ]
+            );
+        }
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'تم حفظ ساعات العمل بنجاح.');
+    }
+
 
 
 
