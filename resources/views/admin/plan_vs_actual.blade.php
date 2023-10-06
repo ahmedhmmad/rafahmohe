@@ -84,6 +84,7 @@
                                 <th>التاريخ</th>
                                 <th>المدارس المخططة</th>
                                 <th>الزيارات الفعلية</th>
+                                <th>النسبة</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -93,6 +94,9 @@
                                     $actualVisitsArray = explode(', ', $item['actual_visits']);
                                     $unmatchedSchools = array_diff($plannedSchoolsArray, $actualVisitsArray);
                                     $matchedSchools = array_intersect($plannedSchoolsArray, $actualVisitsArray);
+                                    $totalSchools = count($plannedSchoolsArray);
+                                    $visitedSchools = count($matchedSchools);
+                                    $percentage = $totalSchools > 0 ? ($visitedSchools / $totalSchools) * 100 : 0;
                                 @endphp
 
                                 <tr class="{{ empty($unmatchedSchools) ? 'full-match' : (empty($matchedSchools) ? 'no-match' : 'semi-match') }}">
@@ -107,7 +111,7 @@
                                             @endif
                                         @endforeach
                                     </td>
-                                    <td>
+                                    <td >
                                         @foreach ($actualVisitsArray as $visit)
                                             @if (in_array($visit, $unmatchedSchools))
                                                 <strong class="unmatched-school">{{ $visit }}</strong>,
@@ -115,7 +119,9 @@
                                                 {{ $visit }},
                                             @endif
                                         @endforeach
+
                                     </td>
+                                    <td class="percentage">{{ $percentage }}%</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -126,4 +132,28 @@
         </div>
     </div>
 
+
+    <script>
+        function updateTotalPercentage() {
+            const rows = document.querySelectorAll('.table tbody tr');
+            let totalVisited = 0;
+            let totalPlanned = 0;
+
+            rows.forEach(row => {
+                const percentageElement = row.querySelector('.percentage');
+                if (percentageElement) {
+                    const percentage = parseInt(percentageElement.innerText);
+                    totalVisited += percentage;
+                    totalPlanned += 100;
+                }
+            });
+
+            const totalPercentage = totalPlanned > 0 ? (totalVisited / totalPlanned) * 100 : 0;
+            const totalPercentageElement = document.getElementById('totalPercentage');
+            totalPercentageElement.innerText = totalPercentage.toFixed(2) + '%';
+        }
+
+        // Call the function to update total percentage initially
+        updateTotalPercentage();
+    </script>
 @endsection
