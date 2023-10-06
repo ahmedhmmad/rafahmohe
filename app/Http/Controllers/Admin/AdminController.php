@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicYear;
 use App\Models\Department;
 use App\Models\Plan;
 use App\Models\PlanRestriction;
 use App\Models\School;
+use App\Models\SchoolSemesterWorkingHour;
 use App\Models\SchoolVisit;
+use App\Models\Semester;
 use App\Models\User;
 use App\Models\UserActivity;
 use Carbon\Carbon;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
@@ -412,6 +416,108 @@ class AdminController extends Controller
         return view('admin.department-plan-summary', compact('departmentsWithPlans', 'departmentsWithoutPlans', 'usersWithPlans', 'months', 'selectedMonth', 'selectedYear'));
     }
 
+    public function showSchoolWorkingHoursForm()
+    {
+        $academicYears = AcademicYear::all();
+        $semesters = Semester::all();
+        $schools = School::all();
 
+        return view('admin.schools-semester-settings', compact('academicYears', 'semesters', 'schools'));
+
+    }
+
+    public function storeSchoolWorkingHours(Request $request)
+    {
+        // Validate the form data
+        $request->validate([
+            'academic_year' => 'required|exists:academic_years,id',
+            'semester' => 'required|exists:semesters,id',
+            'working_hours' => 'required|array',
+        ]);
+
+        // Loop through the submitted data and store it in the database
+        foreach ($request->input('working_hours') as $schoolId => $workingHours) {
+            // Create or update the record in the 'school_semester_working_hours' table
+            SchoolSemesterWorkingHour::updateOrCreate(
+                [
+                    'school_id' => $schoolId,
+                    'academic_year_id'=>$request->input('academic_year')->academicYear(),
+                    'semester_id' => $request->input('semester'),
+                ],
+                [
+                    'morning' => isset($workingHours['morning']) ? 1 : 0,
+                    'afternoon' => isset($workingHours['afternoon']) ? 1 : 0,
+                ]
+            );
+        }
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'تم حفظ ساعات العمل بنجاح.');
+    }
+
+
+    public function planVsActual(Request $request, $id) {
+
+        // Get the selected month and year from the request
+        $month = $request->input('month', now()->month);
+        $year = $request->input('year', now()->year);
+
+
+        // Define the day names array
+        $dayNames = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
+
+        // Rest of your code remains the same...
+        // Fetch planned plans for the selected month, year, and user ID
+        $plans = Plan::where('user_id', $id)
+            ->whereMonth('start', $month)
+            ->whereYear('start', $year)
+            ->orderBy('start')
+            ->get();
+
+        // Fetch actual visits for the selected month, year, and user ID
+        $visits = SchoolVisit::where('user_id', $id)
+            ->whereMonth('visit_date', $month)
+            ->whereYear('visit_date', $year)
+            ->with('school') // Load the related school data
+            ->orderBy('visit_date')
+            ->get();
+
+        // Create an associative array to store data for the blade view
+        $data = [];
+
+        // Iterate through each day in the month
+        for ($day = 1; $day <= 31; $day++) {
+            $date = sprintf('%04d-%02d-%02d', $year, $month, $day);
+            $plannedSchools = [];
+            $actualVisits = [];
+
+            // Loop through planned plans to find matching dates
+            foreach ($plans as $plan) {
+                if ($plan->start == $date) {
+                    $plannedSchools[] = $plan->schools->name;
+                }
+            }
+
+            // Loop through actual visits to find matching dates
+            foreach ($visits as $visit) {
+                if ($visit->visit_date == $date) {
+                    $actualVisits[] = $visit->school->name; // Get the school name from the related school model
+                }
+            }
+
+            // If there are planned schools or actual visits, add the data to the array
+            if (!empty($plannedSchools) || !empty($actualVisits)) {
+                $data[] = [
+                    'day' => $dayNames[date('N', strtotime($date)) - 1],
+                    'date' => $date,
+                    'planned_schools' => implode(', ', $plannedSchools),
+                    'actual_visits' => implode(', ', $actualVisits),
+                ];
+            }
+        }
+
+        // Pass the user ID and other data to the view
+        return view('admin.plan_vs_actual', compact('data', 'id'));
+    }
 
 }

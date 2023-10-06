@@ -55,6 +55,8 @@
                                     <td>{{ $employee->department->name }}</td>
                                     <td>
                                         <a href="{{ route('admin.show-plan', $employee->id) }}"><i class="bx bx-show me-2"></i></a>
+                                        <a href="{{ route('admin.plan-vs-actual', $employee->id) }}"><i class="bx bx-duplicate"></i></a>
+
                                     </td>
                                     {{-- Add more columns as needed --}}
                                 </tr>
