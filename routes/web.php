@@ -18,7 +18,8 @@ Route::middleware(['auth'])->group(function()
         return view('welcome');
     })->name('home');
 
-
+    Route::get('/plan-table', [\App\Http\Controllers\Report\ReportController::class,'generatePlanTable'])
+        ->name('plan.table');
 
     //Change Password
     Route::get('/change-password', [App\Http\Controllers\Auth\ChangePasswordController::class,'showChangePasswordForm'])
@@ -200,6 +201,9 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
     Route::get('/admin/showplan/{id}',[App\Http\Controllers\Admin\AdminController::class,'show'])
         ->name('admin.show-plan');
 
+    Route::get('/admin/planvsactual/{id}',[App\Http\Controllers\Admin\AdminController::class,'planVsActual'])
+        ->name('admin.plan-vs-actual');
+
     Route::get('/admin/search-plan-school', [App\Http\Controllers\Admin\AdminController::class, 'searchPlanBySchool'])->name('admin.search-plan-school');
 
     Route::get('/admin/search-plan-date', [App\Http\Controllers\Admin\AdminController::class, 'searchPlanByDate'])->name('admin.search-plan-date');
@@ -208,6 +212,11 @@ Route::middleware(['auth', 'role:Administrator'])->group(function ()
 
     Route::get('/admin/export-excel', [App\Http\Controllers\Report\ReportController::class,'adminExportExcel'])
         ->name('admin.export-schools-visits');
+
+    Route::get('/admin/school-working-hours', [AdminController::class, 'showSchoolWorkingHoursForm'])->name('admin.school-working-hours');
+    Route::post('/admin/school-working-hours', [AdminController::class, 'storeSchoolWorkingHours'])->name('admin.store-school-working-hours');
+
+
 
 });
 Route::middleware(['auth', 'role:School'])->group(function () {

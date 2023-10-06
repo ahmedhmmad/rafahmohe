@@ -456,6 +456,68 @@ class AdminController extends Controller
     }
 
 
+    public function planVsActual(Request $request, $id) {
 
+        // Get the selected month and year from the request
+        $month = $request->input('month', now()->month);
+        $year = $request->input('year', now()->year);
+
+
+        // Define the day names array
+        $dayNames = ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
+
+        // Rest of your code remains the same...
+        // Fetch planned plans for the selected month, year, and user ID
+        $plans = Plan::where('user_id', $id)
+            ->whereMonth('start', $month)
+            ->whereYear('start', $year)
+            ->orderBy('start')
+            ->get();
+
+        // Fetch actual visits for the selected month, year, and user ID
+        $visits = SchoolVisit::where('user_id', $id)
+            ->whereMonth('visit_date', $month)
+            ->whereYear('visit_date', $year)
+            ->with('school') // Load the related school data
+            ->orderBy('visit_date')
+            ->get();
+
+        // Create an associative array to store data for the blade view
+        $data = [];
+
+        // Iterate through each day in the month
+        for ($day = 1; $day <= 31; $day++) {
+            $date = sprintf('%04d-%02d-%02d', $year, $month, $day);
+            $plannedSchools = [];
+            $actualVisits = [];
+
+            // Loop through planned plans to find matching dates
+            foreach ($plans as $plan) {
+                if ($plan->start == $date) {
+                    $plannedSchools[] = $plan->schools->name;
+                }
+            }
+
+            // Loop through actual visits to find matching dates
+            foreach ($visits as $visit) {
+                if ($visit->visit_date == $date) {
+                    $actualVisits[] = $visit->school->name; // Get the school name from the related school model
+                }
+            }
+
+            // If there are planned schools or actual visits, add the data to the array
+            if (!empty($plannedSchools) || !empty($actualVisits)) {
+                $data[] = [
+                    'day' => $dayNames[date('N', strtotime($date)) - 1],
+                    'date' => $date,
+                    'planned_schools' => implode(', ', $plannedSchools),
+                    'actual_visits' => implode(', ', $actualVisits),
+                ];
+            }
+        }
+
+        // Pass the user ID and other data to the view
+        return view('admin.plan_vs_actual', compact('data', 'id'));
+    }
 
 }
