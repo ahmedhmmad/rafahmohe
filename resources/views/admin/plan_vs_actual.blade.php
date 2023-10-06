@@ -1,23 +1,27 @@
 @extends('layouts.master')
 
 @section('content')
-<style>
-    .row-unmatched {
-        background-color: #f2dede; /* Red background color for unmatched rows */
-        color: #a94442; /* Text color for unmatched rows */
-    }
+    <style>
 
-    .row-unmatched strong {
-        font-weight: bold;
-    }
-    .row-matched {
-     background-color: #d4edda; /* Light green background color for matched rows */
-     color: #155724; /* Text color for matched rows */
-      }
-    .unmatched-school {
-        font-weight: bold;
-    }
-</style>
+        .full-match {
+            background-color: #dff0d8; /* Green background color for visited rows */
+            color: #3c763d; /* Text color for visited rows */
+        }
+
+        /* Define styles for planned rows */
+        /* You can customize these styles according to your design */
+        .no-match {
+            background-color: #f2dede; /* Red background color for planned rows */
+            color: #a94442; /* Text color for planned rows */
+        }
+        .semi-match {
+            background-color: #ffffc3; /* Red background color for planned rows */
+            color: #425aa9; /* Text color for planned rows */
+        }
+        .unmatched-school {
+            font-weight: bold;
+        }
+    </style>
     <div class="container py-4">
         <div class="row">
             <div class="col-md-12">
@@ -73,8 +77,8 @@
 
                 <div class="card mt-2">
                     <div class="card-body">
-                        <table class="table">
-                            <thead>
+                        <table class="table table-bordered">
+                            <thead class="table-primary">
                             <tr>
                                 <th>اليوم</th>
                                 <th>التاريخ</th>
@@ -88,11 +92,12 @@
                                     $plannedSchoolsArray = explode(', ', $item['planned_schools']);
                                     $actualVisitsArray = explode(', ', $item['actual_visits']);
                                     $unmatchedSchools = array_diff($plannedSchoolsArray, $actualVisitsArray);
+                                    $matchedSchools = array_intersect($plannedSchoolsArray, $actualVisitsArray);
                                 @endphp
 
-                                <tr class="{{ empty($unmatchedSchools) ? 'row-matched' : 'row-unmatched' }}">
+                                <tr class="{{ empty($unmatchedSchools) ? 'full-match' : (empty($matchedSchools) ? 'no-match' : 'semi-match') }}">
                                     <td>{{ $item['day'] }}</td>
-                                    <td><strong>{{ $item['date'] }}</strong></td>
+                                    <td><strong style="font-size: small">{{ date('m-d',strtotime($item['date'])) }}</strong></td>
                                     <td>
                                         @foreach ($plannedSchoolsArray as $school)
                                             @if (in_array($school, $unmatchedSchools))
